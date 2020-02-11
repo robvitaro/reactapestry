@@ -1,4 +1,4 @@
-import React, {useState}  from 'react';
+import React  from 'react';
 import './App.css';
 import Track from "./components/Track";
 import { TRACKS } from './data/tracks';
@@ -8,7 +8,7 @@ function App() {
     <div>
       {
         TRACKS.map((track) => {
-          return <Track track={track} />
+          return <Track key={track.name} track={track} />
         })
       }
     </div>
