@@ -17,7 +17,7 @@ const Track = (props) => {
             {
               track.spaces.map((space, index) => {
                 let slot = index + 1
-                return <TrackSpace key={slot} space={space} slot={slot} currentSpace={currentSpace} />
+                return <TrackSpace key={slot} space={space} occupied={slot === currentSpace} />
               })
             }
           </tr>
