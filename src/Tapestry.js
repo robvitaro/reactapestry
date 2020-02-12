@@ -28,19 +28,30 @@ class Tapestry extends React.Component {
       houses_city: 0,
       markets_city: 0,
       armories_city: 0,
-      exploration_track_index: 0,
-      science_track_index: 0,
-      technology_track_index: 0,
-      military_track_index: 0,
+      trackIndex: [0,0,0,0]
     };
+    this.handleTrackAdvance = this.handleTrackAdvance.bind(this)
+  }
+
+  handleTrackAdvance(index) {
+    const newTrackIndex = [...this.state.trackIndex]; // copy so we don't mutate state directly
+    newTrackIndex[index] = this.state.trackIndex[index] + 1;
+    this.setState({ trackIndex: newTrackIndex });
+    console.log(this.state)
   }
 
   render() {
     return (
       <div>
         {
-          TRACKS.map((track) => {
-            return <Track key={track.name} track={track} />
+          TRACKS.map((track, index) => {
+            return <Track
+              key={track.name}
+              track={track}
+              index={index}
+              currentSpace={this.state.trackIndex[index]}
+              handleAdvance={this.handleTrackAdvance}
+            />
           })
         }
       </div>

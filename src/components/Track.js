@@ -1,10 +1,9 @@
-import React, {useState} from 'react';
+import React from 'react';
 import TrackHeaderRow from "./TrackHeaderRow";
 import TrackSpace from "./TrackSpace";
 
 const Track = (props) => {
-  const {track} = props
-  const [currentSpace, setCurrentSpace] = useState(0);
+  const {track, index, currentSpace, handleAdvance} = props
   return (
     <div>
       <h3>{track.name}</h3>
@@ -24,7 +23,7 @@ const Track = (props) => {
           </tr>
         </tbody>
       </table>
-      <button onClick={() => setCurrentSpace(currentSpace + 1)} >ADVANCE</button>
+      <button onClick={()=>handleAdvance(index)}>ADVANCE</button>
     </div>
   )
 }
