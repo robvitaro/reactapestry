@@ -3,10 +3,11 @@ export const TRACKS = [
     name: 'Exploration',
     resource: 'Food',
     spaces: [
+      {name: ''},
       {
         name: 'Scouting',
         gain: [
-          { type: 'territory', qty: 1 },
+          { type: 'territory', qty: 2 },
         ],
       },
       {
@@ -105,6 +106,7 @@ export const TRACKS = [
     name: 'Science',
     resource: 'Worker',
     spaces: [
+      {name: ''},
       {
         name: 'Astronomy',
         gain: [
@@ -198,6 +200,7 @@ export const TRACKS = [
     name: 'Technology',
     resource: 'Coin',
     spaces: [
+      {name: ''},
       {
         name: 'Pottery',
         gain: [
@@ -306,6 +309,7 @@ export const TRACKS = [
     name: 'Military',
     resource: 'Culture',
     spaces: [
+      {name: ''},
       {
         name: 'Archery',
         gain: [

@@ -13,11 +13,9 @@ const Track = (props) => {
         </thead>
         <tbody>
           <tr>
-            <td>{currentSpace === 0 ? 'X' : '_'}</td>
             {
               track.spaces.map((space, index) => {
-                let slot = index + 1
-                return <TrackSpace key={slot} space={space} occupied={slot === currentSpace} />
+                return <TrackSpace key={index} space={space} occupied={index === currentSpace} />
               })
             }
           </tr>
