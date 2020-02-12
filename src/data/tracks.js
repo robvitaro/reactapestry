@@ -31,7 +31,7 @@ export const TRACKS = [
           { type: 'explore', qty: 1 },
         ],
         gain_logic: 'AND',
-        first_building: '??'
+        building: 'Lighthouse'
       },
       {
         name: 'Ships',
@@ -56,7 +56,7 @@ export const TRACKS = [
           { type: 'explore', qty: 1 },
         ],
         gain_logic: 'AND',
-        first_building: '??'
+        building: 'Train Station'
       },
       {
         name: 'Cars',
@@ -82,7 +82,7 @@ export const TRACKS = [
           { type: 'VP', qty: 1, condition: 'tech_track_advances' },
         ],
         bonus: { cost: 'territory', cost_qty: 3, gain: 'tapestry', gain_qty: 10 },
-        first_building: '??'
+        building: 'Launch Pad'
       },
       {
         name: 'Interstellar Travel',
@@ -134,7 +134,7 @@ export const TRACKS = [
           { type: 'tapestry', qty: 1 },
         ],
         gain_logic: 'AND',
-        first_building: '??'
+        building: 'Apothecary'
       },
       {
         name: 'Chemistry',
@@ -156,7 +156,7 @@ export const TRACKS = [
         gain: [
           { type: 'regain_current_space_any_track', qty: 1 },
         ],
-        first_building: '??'
+        building: 'Academy'
       },
       {
         name: 'Nutrition',
@@ -177,7 +177,7 @@ export const TRACKS = [
         gain: [
           { type: 'regress', qty: 1, condition: ['military', 'technology'] },
         ],
-        first_building: '??'
+        building: 'Laboratory'
       },
       {
         name: 'Quantum Physics',
@@ -226,7 +226,7 @@ export const TRACKS = [
           { type: 'tech_card', qty: 1 },
         ],
         gain_logic: 'AND',
-        first_building: '??'
+        building: 'Forge'
       },
       {
         name: 'Glass',
@@ -254,7 +254,7 @@ export const TRACKS = [
           { type: 'tech_card', qty: 2 },
         ],
         gain_logic: 'AND',
-        first_building: '??'
+        building: 'Rubber Works'
       },
       {
         name: 'Plastic',
@@ -279,7 +279,7 @@ export const TRACKS = [
           { type: 'VP', qty: 1, condition: 'science_track_advances' }
         ],
         gain_logic: 'AND',
-        first_building: '??'
+        building: 'Tech Hub'
       },
       {
         name: 'Nanotechnology',
@@ -334,7 +334,7 @@ export const TRACKS = [
           { type: 'VP', qty: 1, condition: 'territory' },
         ],
         gain_logic: 'AND',
-        first_building: '??'
+        building: 'Barracks'
       },
       {
         name: 'Cavalry',
@@ -359,7 +359,7 @@ export const TRACKS = [
           { type: 'conquer_if_opp_both_dice', qty: 1 },
         ],
         gain_logic: 'AND',
-        first_building: '??'
+        building: 'Tank Factory'
       },
       {
         name: 'Warplanes',
@@ -383,7 +383,7 @@ export const TRACKS = [
           { type: 'new_tapestry_over_last', qty: 1 },
         ],
         gain_logic: 'AND',
-        first_building: '??'
+        building: 'Fusion Reactor'
       },
       {
         name: 'Drone Assassins',
