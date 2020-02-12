@@ -11,23 +11,23 @@ class Tapestry extends React.Component {
       workers: 0,
       coin: 0,
       culture: 0,
-      tapestry_hand: 0,
-      tapestry_mat: 0,
-      tech_card_bottom: 0,
-      tech_card_middle: 0,
-      tech_card_top: 0,
-      territories_owned: 0,
-      territories_controlled: 0,
-      space_tiles_owned: 0,
-      space_tiles_explored: 0,
-      farms_mat: 5,
-      houses_mat: 5,
-      markets_mat: 5,
-      armories_mat: 5,
-      farms_city: 0,
-      houses_city: 0,
-      markets_city: 0,
-      armories_city: 0,
+      tapestryHand: 0,
+      tapestryMat: 0,
+      techCardBottom: 0,
+      techCardMiddle: 0,
+      techCardTop: 0,
+      territoriesOwned: 0,
+      territoriesControlled: 0,
+      spaceTilesOwned: 0,
+      spaceTilesExplored: 0,
+      farmsMat: 5,
+      housesMat: 5,
+      marketsMat: 5,
+      armoriesMat: 5,
+      farmsCity: 0,
+      housesCity: 0,
+      marketsCity: 0,
+      armoriesCity: 0,
       trackIndex: [0,0,0,0]
     };
     this.handleTrackAdvance = this.handleTrackAdvance.bind(this)
@@ -37,7 +37,6 @@ class Tapestry extends React.Component {
     const newTrackIndex = [...this.state.trackIndex]; // copy so we don't mutate state directly
     newTrackIndex[index] = this.state.trackIndex[index] + 1;
     this.setState({ trackIndex: newTrackIndex });
-    console.log(this.state)
   }
 
   render() {
