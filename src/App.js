@@ -1,17 +1,10 @@
 import React  from 'react';
 import './App.css';
-import Track from "./components/Track";
-import { TRACKS } from './data/tracks';
+import Tapestry from "./Tapestry";
 
 function App() {
   return (
-    <div>
-      {
-        TRACKS.map((track) => {
-          return <Track key={track.name} track={track} />
-        })
-      }
-    </div>
+    <Tapestry />
   );
 }
 
