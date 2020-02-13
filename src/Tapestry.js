@@ -18,7 +18,7 @@ class Tapestry extends React.Component {
       techCardTop: 0,
       territoriesOwned: 0,
       territoriesExplored: 0,
-      territoriesControlled: 1,
+      territoriesControlled: 0,
       spaceTilesOwned: 0,
       spaceTilesExplored: 0,
       farmsOnMat: 5,
@@ -28,7 +28,7 @@ class Tapestry extends React.Component {
       farmsInCity: 0,
       housesInCity: 0,
       marketsInCity: 0,
-      armoriesCity: 0,
+      armoriesInCity: 0,
       trackIndex: [0,0,0,0]
     };
     this.handleTrackAdvance = this.handleTrackAdvance.bind(this)
@@ -36,12 +36,20 @@ class Tapestry extends React.Component {
     this.updateStateVar = this.updateStateVar.bind(this)
   }
 
+  // VP conditions
   explorationTrackAdvances() { return this.state.trackIndex[0]}
   scienceTrackAdvances() { return this.state.trackIndex[1]}
   technologyTrackAdvances() { return this.state.trackIndex[2]}
   militaryTrackAdvances() { return this.state.trackIndex[3]}
+  territoriesOwned() { return this.state.territoriesOwned}
   territoriesControlled() { return this.state.territoriesControlled}
   farmsInCity() { return this.state.farmsInCity}
+  housesInCity() { return this.state.housesInCity}
+  marketsInCity() { return this.state.marketsInCity}
+  armoriesInCity() { return this.state.armoriesInCity}
+  techCards() { return this.state.techCardBottom + this.state.techCardMiddle + this.state.techCardTop}
+  offTrackAdvancement() { return 0 }
+  tapestryAll() { return this.state.tapestryHand + this.state.tapestryMat }
 
   handleTrackAdvance(index) {
     const newTrackIndex = [...this.state.trackIndex]; // copy so we don't mutate state directly
@@ -107,31 +115,61 @@ class Tapestry extends React.Component {
     this.updateStateVar('marketsInCity', gain.qty)
   }
 
-/*
-roll_no_benefit
-house
-roll
-regain_current_space_any_track
-advance
-regress
-discard_face_up_tech_cards
-armory
-upgrade_tech
-square_tech_benefit
-coin
-worker
-culture
-food
-reset_tech_track
-conquer
-conquer_if_opp_both_dice
-conquer_anywhere
-new_tapestry_over_last
-score_city
-conquer_both_dice
-civ
- */
+  house(gain) {
+    this.updateStateVar('housesOnMat', gain.qty * -1)
+    this.updateStateVar('housesInCity', gain.qty)
+  }
 
+  armory(gain) {
+    this.updateStateVar('armoriesOnMat', gain.qty * -1)
+    this.updateStateVar('armoriesInCity', gain.qty)
+  }
+
+  coin(gain) {
+    this.updateStateVar('coin', gain.qty)
+  }
+
+  worker(gain) {
+    this.updateStateVar('workers', gain.qty)
+  }
+
+  food(gain) {
+    this.updateStateVar('food', gain.qty)
+  }
+
+  culture(gain) {
+    this.updateStateVar('culture', gain.qty)
+  }
+
+  conquer(gain) {
+    this.updateStateVar('territoriesControlled', gain.qty)
+  }
+
+  conquerIfOppBothDice(gain) {
+    this.updateStateVar('territoriesControlled', gain.qty)
+  }
+
+  conquerAnywhere(gain) {
+    this.updateStateVar('territoriesControlled', gain.qty)
+  }
+
+  conquerBothDice(gain) {
+    this.updateStateVar('territoriesControlled', gain.qty)
+  }
+
+  roll(gain) {}
+  rollNoBenefit(gain) {}
+  regainCurrentSpaceAnyTrack(gain) {}
+  advance(gain) {}
+  regress(gain) {}
+  discardFaceUpTechCards(gain) {}
+  upgradeTech(gain) {}
+  circleTechBenefit(gain) {}
+  squareTechBenefit(gain) {}
+  resetTechTrack(gain) {}
+  newTapestryOverLast(gain) {}
+  scoreCity(gain) {}
+  civ(gain) {}
 
   render() {
     return (
