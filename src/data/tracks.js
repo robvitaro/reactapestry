@@ -37,7 +37,7 @@ export const TRACKS = [
       {
         name: 'Ships',
         gain: [
-          { type: 'VP', qty: 1, condition: 'controlled_territory' }
+          { type: 'vp', qty: 1, condition: 'territoriesControlled' }
         ],
         bonus: { cost: 'wild', cost_qty: 1, gain: 'farm', gain_qty: 1 }
       },
@@ -63,16 +63,16 @@ export const TRACKS = [
         name: 'Cars',
         gain: [
           { type: 'farm', qty: 1 },
-          { type: 'VP', qty: 1, condition: 'farm' }
+          { type: 'vp', qty: 1, condition: 'farmsInCity' }
         ],
         gain_logic: 'AND',
-        bonus: { cost: 'territory', cost_qty: 2, gain: 'VP', gain_qty: 5 }
+        bonus: { cost: 'territory', cost_qty: 2, gain: 'vp', gain_qty: 5 }
       },
       {
         name: 'Airplanes',
         gain: [
           { type: 'territory', qty: 2 },
-          { type: 'explore_anywhere', qty: 1 }
+          { type: 'exploreAnywhere', qty: 1 }
         ],
         gain_logic: 'AND',
         bonus: { cost: 'wild', cost_qty: 1, gain: 'tapestry', gain_qty: 1 }
@@ -80,7 +80,7 @@ export const TRACKS = [
       {
         name: 'Space Shuttle',
         gain: [
-          { type: 'VP', qty: 1, condition: 'tech_track_advances' },
+          { type: 'vp', qty: 1, condition: 'tech_track_advances' },
         ],
         bonus: { cost: 'territory', cost_qty: 3, gain: 'tapestry', gain_qty: 10 },
         building: 'Launch Pad'
@@ -88,17 +88,17 @@ export const TRACKS = [
       {
         name: 'Interstellar Travel',
         gain: [
-          { type: 'space', qty: 3 },
-          { type: 'explore_space', qty: 1 }
+          { type: 'spaceTile', qty: 3 },
+          { type: 'exploreSpace', qty: 1 }
         ],
         gain_logic: 'AND'
       },
       {
         name: 'Warpgates',
         gain: [
-          { type: 'explore_space', qty: 1 }
+          { type: 'exploreSpace', qty: 1 }
         ],
-        bonus: { cost: 'wild', cost_qty: 1, gain: 'explore_space', gain_qty: 1 }
+        bonus: { cost: 'wild', cost_qty: 1, gain: 'exploreSpace', gain_qty: 1 }
       },
     ]
   },
@@ -132,7 +132,7 @@ export const TRACKS = [
       {
         name: 'Medicine',
         gain: [
-          { type: 'VP', qty: 1, condition: 'tech_card' },
+          { type: 'vp', qty: 1, condition: 'tech_card' },
           { type: 'tapestry', qty: 1 },
         ],
         gain_logic: 'AND',
@@ -143,7 +143,7 @@ export const TRACKS = [
         gain: [
           { type: 'roll', qty: 1 },
         ],
-        bonus: { cost: 'tapestry', cost_qty: 2, gain: 'VP', gain_qty: 5 }
+        bonus: { cost: 'tapestry', cost_qty: 2, gain: 'vp', gain_qty: 5 }
       },
       {
         name: 'Biology',
@@ -164,7 +164,7 @@ export const TRACKS = [
         name: 'Nutrition',
         gain: [
           { type: 'house', qty: 1 },
-          { type: 'VP', qty: 1, condition: 'house' }
+          { type: 'vp', qty: 1, condition: 'house' }
         ],
         gain_logic: 'AND',
       },
@@ -191,7 +191,7 @@ export const TRACKS = [
         name: 'Alien Biology',
         gain: [
           { type: 'roll_no_benefit', qty: 4 },
-          { type: 'VP', qty: 5, condition: 'off_track_advancement' },
+          { type: 'vp', qty: 5, condition: 'off_track_advancement' },
         ],
       },
     ]
@@ -244,7 +244,7 @@ export const TRACKS = [
       {
         name: 'Steel',
         gain: [
-          { type: 'VP', qty: 1, condition: 'armory' },
+          { type: 'vp', qty: 1, condition: 'armory' },
           { type: 'market', qty: 1 },
         ],
         gain_logic: 'AND',
@@ -263,7 +263,7 @@ export const TRACKS = [
         name: 'Plastic',
         gain: [
           { type: 'market', qty: 1 },
-          { type: 'VP', qty: 1, condition: 'market' }
+          { type: 'vp', qty: 1, condition: 'market' }
         ],
         gain_logic: 'AND',
         bonus: { cost: 'wild', cost_qty: 1, gain: 'upgrade_tech', gain_qty: 1 }
@@ -278,8 +278,8 @@ export const TRACKS = [
       {
         name: 'Computers',
         gain: [
-          { type: 'VP', qty: 1, condition: 'military_track_advances' },
-          { type: 'VP', qty: 1, condition: 'science_track_advances' }
+          { type: 'vp', qty: 1, condition: 'military_track_advances' },
+          { type: 'vp', qty: 1, condition: 'science_track_advances' }
         ],
         gain_logic: 'AND',
         building: 'Tech Hub'
@@ -290,7 +290,7 @@ export const TRACKS = [
           { type: 'upgrade_tech', qty: 1 },
           { type: 'square_tech_benefit', qty: 1, condition: 'top_row' }
         ],
-        bonus: { cost: 'tech_card', cost_qty: 3, gain: 'VP', gain_qty: 10 }
+        bonus: { cost: 'tech_card', cost_qty: 3, gain: 'vp', gain_qty: 10 }
       },
       {
         name: 'AI Singularity',
@@ -335,7 +335,7 @@ export const TRACKS = [
         name: 'Standing Army',
         gain: [
           { type: 'worker', qty: 1 },
-          { type: 'VP', qty: 1, condition: 'territory' },
+          { type: 'vp', qty: 1, condition: 'territory' },
         ],
         gain_logic: 'AND',
         building: 'Barracks'
@@ -376,14 +376,14 @@ export const TRACKS = [
         name: 'Anti-Aircraft Defense',
         gain: [
           { type: 'armory', qty: 1 },
-          { type: 'VP', qty: 1, condition: 'tapestry_all'},
+          { type: 'vp', qty: 1, condition: 'tapestry_all'},
         ],
         gain_logic: 'AND',
       },
       {
         name: 'Nuclear Bomb',
         gain: [
-          { type: 'VP', qty: 1, condition: 'exploration_track_advances' },
+          { type: 'vp', qty: 1, condition: 'exploration_track_advances' },
           { type: 'new_tapestry_over_last', qty: 1 },
         ],
         gain_logic: 'AND',
@@ -395,7 +395,7 @@ export const TRACKS = [
           { type: 'score_city', qty: 1 },
         ],
         gain_logic: 'AND',
-        bonus: { cost: 'tapestry', cost_qty: 3, gain: 'VP', gain_qty: 10 }
+        bonus: { cost: 'tapestry', cost_qty: 3, gain: 'vp', gain_qty: 10 }
       },
       {
         name: 'Mechs',

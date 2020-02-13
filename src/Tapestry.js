@@ -18,21 +18,22 @@ class Tapestry extends React.Component {
       techCardTop: 0,
       territoriesOwned: 0,
       territoriesExplored: 0,
-      territoriesControlled: 0,
+      territoriesControlled: 1,
       spaceTilesOwned: 0,
       spaceTilesExplored: 0,
-      farmsMat: 5,
-      housesMat: 5,
-      marketsMat: 5,
-      armoriesMat: 5,
-      farmsCity: 0,
-      housesCity: 0,
-      marketsCity: 0,
+      farmsOnMat: 5,
+      housesOnMat: 5,
+      marketsOnMat: 5,
+      armoriesOnMat: 5,
+      farmsInCity: 0,
+      housesInCity: 0,
+      marketsInCity: 0,
       armoriesCity: 0,
       trackIndex: [0,0,0,0]
     };
     this.handleTrackAdvance = this.handleTrackAdvance.bind(this)
     this.gainBenefitFromAdvancement = this.gainBenefitFromAdvancement.bind(this)
+    this.updateStateVar = this.updateStateVar.bind(this)
   }
 
   handleTrackAdvance(index) {
@@ -45,22 +46,47 @@ class Tapestry extends React.Component {
     const track = TRACKS[index]
     const space = track.spaces[this.state.trackIndex[index]]
     const gains = space.gain
-    console.log(track)
-    console.log(space)
-    console.log(gains)
     gains.map((gain) => {
-      console.log(gain.type)
-      if(gain.type === 'territory') {
-        this.setState(prevState => { return { territoriesOwned: prevState['territoriesOwned'] + gain.qty}})
-      }
+      this[gain.type](gain) // calls function with same name as type
+    })
+  }
+
+  updateStateVar(field, value) {
+    this.setState(prevState => { return { [field]: prevState[field] + value}})
+  }
+
+  territory(gain) {
+    this.updateStateVar('territoriesOwned', gain.qty)
+  }
+
+  explore(gain) {
+    this.updateStateVar('territoriesOwned', gain.qty * -1)
+    this.updateStateVar('territoriesExplored', gain.qty)
+  }
+
+  exploreAnywhere(gain) {
+    this.updateStateVar('territoriesOwned', gain.qty * -1)
+    this.updateStateVar('territoriesExplored', gain.qty)
+  }
+
+  farm(gain) {
+    this.updateStateVar('farmsOnMat', gain.qty * -1)
+    this.updateStateVar('farmsInCity', gain.qty)
+  }
+
+  vp(gain) {
+    this.updateStateVar('vp', gain.qty * this.state[gain.condition])
+  }
+
+  spaceTile(gain) {
+    this.updateStateVar('spaceTilesOwned', gain.qty)
+  }
+
+  exploreSpace(gain) {
+    this.updateStateVar('spaceTilesOwned', gain.qty * -1)
+    this.updateStateVar('spaceTilesExplored', gain.qty)
+  }
 /*
-territory
-explore
-farm
-VP
-explore_anywhere
-space
-explore_space
 roll_no_benefit
 tapestry
 house
@@ -87,9 +113,7 @@ score_city
 conquer_both_dice
 civ
  */
-    })
 
-  }
 
   render() {
     return (

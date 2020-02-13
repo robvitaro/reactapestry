@@ -21,7 +21,7 @@ const Track = (props) => {
           </tr>
         </tbody>
       </table>
-      <button onClick={()=>handleAdvance(index)}>ADVANCE</button>
+      <button onClick={()=>handleAdvance(index)} disabled={currentSpace > 11}>ADVANCE</button>
     </div>
   )
 }
