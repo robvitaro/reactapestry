@@ -93,16 +93,27 @@ class Tapestry extends React.Component {
     this.updateStateVar('spaceTilesOwned', gain.qty * -1)
     this.updateStateVar('spaceTilesExplored', gain.qty)
   }
+
+  techCard(gain) {
+    this.updateStateVar('techCardBottom', gain.qty)
+  }
+
+  tapestry(gain) {
+    this.updateStateVar('tapestryHand', gain.qty)
+  }
+
+  market(gain) {
+    this.updateStateVar('marketsOnMat', gain.qty * -1)
+    this.updateStateVar('marketsInCity', gain.qty)
+  }
+
 /*
 roll_no_benefit
-tapestry
 house
 roll
 regain_current_space_any_track
 advance
 regress
-tech_card
-market
 discard_face_up_tech_cards
 armory
 upgrade_tech

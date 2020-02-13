@@ -132,7 +132,7 @@ export const TRACKS = [
       {
         name: 'Medicine',
         gain: [
-          { type: 'vp', qty: 1, condition: 'tech_card' },
+          { type: 'vp', qty: 1, condition: 'techCard' },
           { type: 'tapestry', qty: 1 },
         ],
         gain_logic: 'AND',
@@ -204,7 +204,7 @@ export const TRACKS = [
       {
         name: 'Pottery',
         gain: [
-          { type: 'tech_card', qty: 1 }
+          { type: 'techCard', qty: 1 }
         ],
       },
       {
@@ -217,7 +217,7 @@ export const TRACKS = [
       {
         name: 'Stone Tools',
         gain: [
-          { type: 'tech_card', qty: 1 },
+          { type: 'techCard', qty: 1 },
           { type: 'market', qty: 1 },
         ],
         gain_logic: 'OR',
@@ -225,8 +225,8 @@ export const TRACKS = [
       {
         name: 'Metallurgy',
         gain: [
-          { type: 'discard_face_up_tech_cards', qty: 3 },
-          { type: 'tech_card', qty: 1 },
+          { type: 'discard_face_up_techCards', qty: 3 },
+          { type: 'techCard', qty: 1 },
         ],
         gain_logic: 'AND',
         building: 'Forge'
@@ -248,13 +248,13 @@ export const TRACKS = [
           { type: 'market', qty: 1 },
         ],
         gain_logic: 'AND',
-        bonus: { cost: 'wild', cost_qty: 1, gain: 'tech_card', gain_qty: 1 }
+        bonus: { cost: 'wild', cost_qty: 1, gain: 'techCard', gain_qty: 1 }
       },
       {
         name: 'Rubber',
         gain: [
-          { type: 'discard_face_up_tech_cards', qty: 3 },
-          { type: 'tech_card', qty: 2 },
+          { type: 'discard_face_up_techCards', qty: 3 },
+          { type: 'techCard', qty: 2 },
         ],
         gain_logic: 'AND',
         building: 'Rubber Works'
@@ -290,7 +290,7 @@ export const TRACKS = [
           { type: 'upgrade_tech', qty: 1 },
           { type: 'square_tech_benefit', qty: 1, condition: 'top_row' }
         ],
-        bonus: { cost: 'tech_card', cost_qty: 3, gain: 'vp', gain_qty: 10 }
+        bonus: { cost: 'techCard', cost_qty: 3, gain: 'vp', gain_qty: 10 }
       },
       {
         name: 'AI Singularity',
