@@ -36,6 +36,13 @@ class Tapestry extends React.Component {
     this.updateStateVar = this.updateStateVar.bind(this)
   }
 
+  explorationTrackAdvances() { return this.state.trackIndex[0]}
+  scienceTrackAdvances() { return this.state.trackIndex[1]}
+  technologyTrackAdvances() { return this.state.trackIndex[2]}
+  militaryTrackAdvances() { return this.state.trackIndex[3]}
+  territoriesControlled() { return this.state.territoriesControlled}
+  farmsInCity() { return this.state.farmsInCity}
+
   handleTrackAdvance(index) {
     const newTrackIndex = [...this.state.trackIndex]; // copy so we don't mutate state directly
     newTrackIndex[index] = this.state.trackIndex[index] + 1;
@@ -75,7 +82,7 @@ class Tapestry extends React.Component {
   }
 
   vp(gain) {
-    this.updateStateVar('vp', gain.qty * this.state[gain.condition])
+    this.updateStateVar('vp', gain.qty * this[gain.condition]())
   }
 
   spaceTile(gain) {

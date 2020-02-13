@@ -80,7 +80,7 @@ export const TRACKS = [
       {
         name: 'Space Shuttle',
         gain: [
-          { type: 'vp', qty: 1, condition: 'tech_track_advances' },
+          { type: 'vp', qty: 1, condition: 'technologyTrackAdvances' },
         ],
         bonus: { cost: 'territory', cost_qty: 3, gain: 'tapestry', gain_qty: 10 },
         building: 'Launch Pad'
@@ -278,8 +278,8 @@ export const TRACKS = [
       {
         name: 'Computers',
         gain: [
-          { type: 'vp', qty: 1, condition: 'military_track_advances' },
-          { type: 'vp', qty: 1, condition: 'science_track_advances' }
+          { type: 'vp', qty: 1, condition: 'militaryTrackAdvances' },
+          { type: 'vp', qty: 1, condition: 'scienceTrackAdvances' }
         ],
         gain_logic: 'AND',
         building: 'Tech Hub'
@@ -383,7 +383,7 @@ export const TRACKS = [
       {
         name: 'Nuclear Bomb',
         gain: [
-          { type: 'vp', qty: 1, condition: 'exploration_track_advances' },
+          { type: 'vp', qty: 1, condition: 'explorationTrackAdvances' },
           { type: 'new_tapestry_over_last', qty: 1 },
         ],
         gain_logic: 'AND',
