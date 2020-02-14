@@ -102,11 +102,54 @@ table {
 }
 
 .city td {
-    padding: 8px;
+    width: 25px;
+    height: 25px;
+    max-width: 25px;
+    max-height: 25px;
+    background-color: #ffedbd;
 }
 
+.city td div{
+    margin: 0 auto;
+}
+
+/* dot */
 .city td div.d{
-    border-radius: 10px;
-    background-color: red;
+    width: 35%;
+    height: 35%;
+    border-radius: 50%;
+    background-color: #ff4a3b;
+}
+
+/* farm */
+.city td div.f{
+    width: 90%;
+    height: 90%;
+    border-radius: 15%;
+    background-color: #422820;
+}
+
+/* house */
+.city td div.h{
+    width: 90%;
+    height: 90%;
+    border-radius: 15%;
+    background-color: dimgray;
+}
+
+/* market */
+.city td div.m{
+    width: 90%;
+    height: 90%;
+    border-radius: 50%;
+    background-color: #c2ae1f;
+}
+
+/* armory */
+.city td div.a{
+    width: 90%;
+    height: 90%;
+    border-radius: 50%;
+    background-color: #640d0f;
 }
 

@@ -4,7 +4,7 @@ const City = (props) => {
   const {city, index} = props
   const cityWidth = 9
   const cityHeight = 9
-  const grid = Array(cityWidth)
+  const grid = new Array(cityWidth)
 
   for (let i = 0; i < cityWidth; i++) {
     grid[i] = new Array(cityHeight);
