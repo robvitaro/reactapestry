@@ -124,7 +124,7 @@ table {
 }
 
 /* farm */
-.city td div.f{
+.city td div.f, .incomeMat td div.f{
     width: 90%;
     height: 90%;
     border-radius: 15%;
@@ -132,7 +132,7 @@ table {
 }
 
 /* house */
-.city td div.h{
+.city td div.h, .incomeMat td div.h{
     width: 90%;
     height: 90%;
     border-radius: 15%;
@@ -140,7 +140,7 @@ table {
 }
 
 /* market */
-.city td div.m{
+.city td div.m, .incomeMat td div.m{
     width: 90%;
     height: 90%;
     border-radius: 50%;
@@ -148,7 +148,7 @@ table {
 }
 
 /* armory */
-.city td div.a{
+.city td div.a, .incomeMat td div.a{
     width: 90%;
     height: 90%;
     border-radius: 50%;
@@ -169,12 +169,14 @@ table {
 .incomeMat td {
     text-align: center;
     border-left: 1px solid black;
+    background-color: #ffedbd;
 }
 
 .incomeMat td div.space{
-    min-width: 80px;
-    max-width: 80px;
-    min-height: 50px;
+    min-width: 65px;
+    max-width: 65px;
+    min-height: 65px;
+    max-height: 65px;
     text-align: center;
     font-size: 8pt;
 }
