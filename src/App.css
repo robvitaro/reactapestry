@@ -1,22 +1,91 @@
-.App {
-  text-align: center;
+table {
+    border-collapse: collapse;
 }
 
-.App-logo {
-  height: 40vmin;
+table, th, td {
+    border: 1px solid black;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.track {
+    margin: 20px;
 }
 
-.App-link {
-  color: #09d3ac;
+.track table {
+    border: 3px solid black;
 }
+
+.track td {
+    vertical-align: top;
+    text-align: center;
+}
+
+.track td div{
+    min-width: 18px;
+    min-height: 18px;
+    text-align: center;
+}
+
+.track td div.space{
+    min-width: 90px;
+    max-width: 90px;
+    min-height: 50px;
+    text-align: center;
+    font-size: 9pt;
+}
+
+.track td div.header {
+    font-weight: bold;
+    font-size: 14pt;
+    min-width: 100px;
+    margin: 5px;
+}
+
+.track thead td {
+    border: 3px solid black;
+}
+
+.track td:nth-child(3n-1) {
+    border-left: 3px solid black;
+}
+
+.track div.occupied {
+    margin: 0 auto;
+    background-color: dodgerblue;
+    width: 7px;
+    height: 7px;
+}
+
+.city {
+    margin: 20px;
+}
+
+.city td div{
+    min-width: 7px;
+    min-height: 7px;
+}
+
+.city tr:first-child td {
+    border-top: 3px solid black;
+}
+
+.city tr:nth-child(3n+3) td {
+    border-bottom: 3px solid black;
+}
+
+.city td:first-child {
+    border-left: 3px solid black;
+}
+
+.city td:nth-child(3n+3) {
+    border-right: 3px solid black;
+}
+
+.city td {
+    padding: 8px;
+}
+
+.city td div.d{
+    border-radius: 10px;
+    background-color: red;
+}
+

@@ -21,7 +21,7 @@ const City = (props) => {
       <tr>
         {
           grid.map((x, index) =>{
-            return <td>{grid[index][y] ? grid[index][y] : '_'}</td>
+            return <td><div className={grid[index][y]}></div></td>
           })
         }
       </tr>
@@ -29,9 +29,9 @@ const City = (props) => {
   }
 
   return (
-    <div>
+    <div className='city'>
       <h3>{index}: {city.name}</h3>
-      <table border={1}>
+      <table>
         <tbody>
           {rows}
         </tbody>

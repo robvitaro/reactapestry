@@ -5,9 +5,8 @@ import TrackSpace from "./TrackSpace";
 const Track = (props) => {
   const {track, index, currentSpace, handleAdvance} = props
   return (
-    <div>
-      <h3>{track.name}</h3>
-      <table border={1}>
+    <div className='track'>
+      <table>
         <thead>
           <TrackHeaderRow track={track} />
         </thead>
