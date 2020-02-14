@@ -18,10 +18,10 @@ const City = (props) => {
 
   for (let y = 0; y < cityHeight; y++) {
     rows.push (
-      <tr>
+      <tr key={`cityRow_${y}`}>
         {
           grid.map((x, index) =>{
-            return <td><div className={grid[index][y]}></div></td>
+            return <td key={`cityCell_${grid[index]}_${y}`}><div className={grid[index][y]}></div></td>
           })
         }
       </tr>
