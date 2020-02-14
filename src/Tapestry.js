@@ -1,5 +1,7 @@
 import React  from 'react';
+import City from "./components/City";
 import Track from "./components/Track";
+import { CITIES } from './data/cities';
 import { TRACKS } from './data/tracks';
 
 class Tapestry extends React.Component {
@@ -62,7 +64,7 @@ class Tapestry extends React.Component {
     const space = track.spaces[this.state.trackIndex[index]]
     const gains = space.gain
     gains.map((gain) => {
-      this[gain.type](gain) // calls function with same name as type
+      return this[gain.type](gain) // calls function with same name as type
     })
   }
 
@@ -174,17 +176,22 @@ class Tapestry extends React.Component {
   render() {
     return (
       <div>
-        {
-          TRACKS.map((track, index) => {
-            return <Track
-              key={track.name}
-              track={track}
-              index={index}
-              currentSpace={this.state.trackIndex[index]}
-              handleAdvance={this.handleTrackAdvance}
-            />
-          })
-        }
+        <div>
+          {
+            TRACKS.map((track, index) => {
+              return <Track
+                key={track.name}
+                track={track}
+                index={index}
+                currentSpace={this.state.trackIndex[index]}
+                handleAdvance={this.handleTrackAdvance}
+              />
+            })
+          }
+        </div>
+        <div>
+          <City city={CITIES[4]} index={4}/>
+        </div>
       </div>
     )
   }
