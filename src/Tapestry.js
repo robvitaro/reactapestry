@@ -24,15 +24,8 @@ class Tapestry extends React.Component {
       territoriesControlled: 0,
       spaceTilesOwned: 0,
       spaceTilesExplored: 0,
-      farmsOnMat: 5,
-      housesOnMat: 5,
-      marketsOnMat: 5,
-      armoriesOnMat: 5,
-      farmsInCity: 0,
-      housesInCity: 0,
-      marketsInCity: 0,
-      armoriesInCity: 0,
-      trackIndex: [0,0,0,0]
+      trackIndex: [0,0,0,0],
+      incomeIndex: [5,5,5,5]
     };
     this.handleTrackAdvance = this.handleTrackAdvance.bind(this)
     this.gainBenefitFromAdvancement = this.gainBenefitFromAdvancement.bind(this)
@@ -46,10 +39,10 @@ class Tapestry extends React.Component {
   militaryTrackAdvances() { return this.state.trackIndex[3]}
   territoriesOwned() { return this.state.territoriesOwned}
   territoriesControlled() { return this.state.territoriesControlled}
-  farmsInCity() { return this.state.farmsInCity}
-  housesInCity() { return this.state.housesInCity}
-  marketsInCity() { return this.state.marketsInCity}
-  armoriesInCity() { return this.state.armoriesInCity}
+  marketsInCity() { return 5 - this.state.incomeIndex[0]}
+  housesInCity() { return 5 - this.state.incomeIndex[1]}
+  farmsInCity() { return 5 - this.state.incomeIndex[2]}
+  armoriesInCity() { return 5 - this.state.incomeIndex[3]}
   techCards() { return this.state.techCardBottom + this.state.techCardMiddle + this.state.techCardTop}
   offTrackAdvancement() { return 0 }
   tapestryAll() { return this.state.tapestryHand + this.state.tapestryMat }
@@ -88,11 +81,6 @@ class Tapestry extends React.Component {
     this.updateStateVar('territoriesExplored', gain.qty)
   }
 
-  farm(gain) {
-    this.updateStateVar('farmsOnMat', gain.qty * -1)
-    this.updateStateVar('farmsInCity', gain.qty)
-  }
-
   vp(gain) {
     this.updateStateVar('vp', gain.qty * this[gain.condition]())
   }
@@ -114,19 +102,26 @@ class Tapestry extends React.Component {
     this.updateStateVar('tapestryHand', gain.qty)
   }
 
+  updateIncomeIndex(index, qty) {
+    const newIncomeIndex = [...this.state.incomeIndex]; // copy so we don't mutate state directly
+    newIncomeIndex[index] = this.state.incomeIndex[index] - qty;
+    this.setState({ incomeIndex: newIncomeIndex });
+  }
+
   market(gain) {
-    this.updateStateVar('marketsOnMat', gain.qty * -1)
-    this.updateStateVar('marketsInCity', gain.qty)
+    this.updateIncomeIndex(0, gain.qty)
   }
 
   house(gain) {
-    this.updateStateVar('housesOnMat', gain.qty * -1)
-    this.updateStateVar('housesInCity', gain.qty)
+    this.updateIncomeIndex(1, gain.qty)
+  }
+
+  farm(gain) {
+    this.updateIncomeIndex(2, gain.qty)
   }
 
   armory(gain) {
-    this.updateStateVar('armoriesOnMat', gain.qty * -1)
-    this.updateStateVar('armoriesInCity', gain.qty)
+    this.updateIncomeIndex(3, gain.qty)
   }
 
   coin(gain) {
