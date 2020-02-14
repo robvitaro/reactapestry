@@ -30,12 +30,12 @@ const City = (props) => {
 
   return (
     <div className='city'>
-      <h3>{index}: {city.name}</h3>
       <table>
         <tbody>
-          {rows}
+        {rows}
         </tbody>
       </table>
+      <h4>{index}: {city.name}</h4>
     </div>
   )
 }

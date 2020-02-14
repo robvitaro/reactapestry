@@ -73,7 +73,9 @@ table {
 }
 
 .city {
-    margin: 20px;
+    float: left;
+    margin-left: 20px;
+    text-align: center;
 }
 
 .city td {
@@ -153,3 +155,26 @@ table {
     background-color: #640d0f;
 }
 
+.incomeMat {
+    float: left;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.incomeMat table {
+    border: 3px solid black;
+    margin-bottom: 10px;
+}
+
+.incomeMat td {
+    text-align: center;
+    border-left: 1px solid black;
+}
+
+.incomeMat td div.space{
+    min-width: 80px;
+    max-width: 80px;
+    min-height: 50px;
+    text-align: center;
+    font-size: 8pt;
+}

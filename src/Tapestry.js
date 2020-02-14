@@ -1,6 +1,7 @@
 import React  from 'react';
 import City from "./components/City";
 import Track from "./components/Track";
+import IncomeMat from "./components/IncomeMat";
 import { CITIES } from './data/cities';
 import { TRACKS } from './data/tracks';
 
@@ -52,6 +53,7 @@ class Tapestry extends React.Component {
   techCards() { return this.state.techCardBottom + this.state.techCardMiddle + this.state.techCardTop}
   offTrackAdvancement() { return 0 }
   tapestryAll() { return this.state.tapestryHand + this.state.tapestryMat }
+  flat() { return 1 }
 
   handleTrackAdvance(index) {
     const newTrackIndex = [...this.state.trackIndex]; // copy so we don't mutate state directly
@@ -190,6 +192,7 @@ class Tapestry extends React.Component {
           }
         </div>
         <div>
+          <IncomeMat/>
           <City city={CITIES[4]} index={4}/>
         </div>
       </div>
