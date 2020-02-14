@@ -14,7 +14,14 @@ const Track = (props) => {
           <tr>
             {
               track.spaces.map((space, index) => {
-                return <TrackSpace key={index} space={space} occupied={index === currentSpace} />
+                return (
+                  <TrackSpace
+                    key={index}
+                    space={space}
+                    occupied={index === currentSpace}
+                    className={index === 0 ? track.name.toLowerCase() : ''}
+                  />
+                )
               })
             }
           </tr>
