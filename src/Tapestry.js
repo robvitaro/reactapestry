@@ -2,6 +2,7 @@ import React  from 'react';
 import City from "./components/City";
 import Track from "./components/Track";
 import IncomeMat from "./components/IncomeMat";
+import SmallHexMap from "./components/SmallHexMap";
 import { CITIES } from './data/cities';
 import { TRACKS } from './data/tracks';
 
@@ -190,6 +191,7 @@ class Tapestry extends React.Component {
           <IncomeMat incomeTracks={this.state.incomeIndex}/>
           <City city={CITIES[4]} index={4}/>
         </div>
+        <SmallHexMap />
       </div>
     )
   }
