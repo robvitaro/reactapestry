@@ -1,6 +1,7 @@
 import React from 'react'
 import Hex from './Hex'
 import {HexGrid, Layout} from "react-hexgrid";
+import {HEX_MAP_SMALL} from "../data/hex_map_small";
 
 class SmallHexMap extends React.Component {
   constructor(props) {
@@ -38,7 +39,7 @@ class SmallHexMap extends React.Component {
 
   render() {
 
-    const tiles = []
+    const displayedTiles = []
 
     for (let q = -3; q <= 3; q++) {
       let r1 = Math.max(-3, -q - 3);
@@ -48,8 +49,22 @@ class SmallHexMap extends React.Component {
         if (this.checkUnwantedTiles(q,r,s)) {
           let x = q + 3
           let y = r + 3
-          tiles.push(
-            <Hex q={q} r={r} s={s} x={x} y={y} start={this.checkStartTiles(x,y)} show={this.state.show} />
+          let sides = [[],[],[],[],[],[]]
+
+          HEX_MAP_SMALL.visible.map((tile) => {
+            if(tile.x === x && tile.y === y) {
+              sides = []
+              tile.sides.map((side) => {
+                sides.push(side)
+              })
+            }
+          })
+
+          displayedTiles.push(
+            <Hex q={q} r={r} s={s} x={x} y={y}
+                 start={this.checkStartTiles(x,y)}
+                 sides={sides}
+                 show={this.state.show} />
           )
         }
       }
@@ -72,7 +87,7 @@ class SmallHexMap extends React.Component {
       <div>
         <HexGrid width={450} height={450} viewBox="-50 -50 100 100">
           <Layout size={hexagonSize} flat={true} spacing={1.0} origin={{ x: 0, y: 0 }}>
-            {tiles}
+            {displayedTiles}
           </Layout>
         </HexGrid>
         {debugMenu}

@@ -11,6 +11,7 @@ class Hex extends React.Component {
       x: props.x,
       y: props.y,
       start: props.start,
+      sides: props.sides
     }
   }
 
@@ -24,24 +25,18 @@ class Hex extends React.Component {
     }else if(this.props.show === 'land') {
       return (
         <g>
-          {/* 0 */}
-          <Text x={-2} y={-5}>W</Text>
-          <Text x={2} y={-5}>M</Text>
-          {/* 1 */}
-          <Text x={4} y={-4}>O</Text>
-          <Text x={6} y={-1}>F</Text>
-          {/* 2 */}
-          <Text x={6} y={2}>D</Text>
-          <Text x={4} y={5}>G</Text>
-          {/* 3 */}
-          <Text x={-2} y={6}>O</Text>
-          <Text x={2} y={6}>F</Text>
-          {/* 4 */}
-          <Text x={-6} y={2}>D</Text>
-          <Text x={-4} y={5}>G</Text>
-          {/* 5 */}
-          <Text x={-4} y={-4}>W</Text>
-          <Text x={-6} y={-1}>M</Text>
+          <Text x={-2} y={-5}>{this.state.sides[0][0] || 'W'}</Text>
+          <Text x={2} y={-5}>{this.state.sides[0][1] || 'M'}</Text>
+          <Text x={4} y={-4}>{this.state.sides[1][0] || 'O'}</Text>
+          <Text x={6} y={-1}>{this.state.sides[1][1] || 'F'}</Text>
+          <Text x={6} y={2}>{this.state.sides[2][0] || 'D'}</Text>
+          <Text x={4} y={5}>{this.state.sides[2][1] || 'G'}</Text>
+          <Text x={2} y={6}>{this.state.sides[3][0] || 'O'}</Text>
+          <Text x={-2} y={6}>{this.state.sides[3][1] || 'F'}</Text>
+          <Text x={-4} y={5}>{this.state.sides[4][0] || 'D'}</Text>
+          <Text x={-6} y={2}>{this.state.sides[4][1] || 'G'}</Text>
+          <Text x={-6} y={-1}>{this.state.sides[5][0] || 'W'}</Text>
+          <Text x={-4} y={-4}>{this.state.sides[5][1] || 'M'}</Text>
         </g>
       )
     }
