@@ -1,5 +1,6 @@
 import React from 'react'
-import {Hexagon, HexGrid, Layout, Text} from "react-hexgrid";
+import Hex from './Hex'
+import {HexGrid, Layout} from "react-hexgrid";
 
 class SmallHexMap extends React.Component {
   constructor(props) {
@@ -47,51 +48,26 @@ class SmallHexMap extends React.Component {
         if (this.checkUnwantedTiles(q,r,s)) {
           let x = q + 3
           let y = r + 3
-
-          let text
-
-          if(this.state.show === 'axial') {
-            text = <Text>{`${x}, ${y}`}</Text>
-          }else if(this.state.show === 'cube') {
-            text = <Text>{`${q}, ${r}, ${s}`}</Text>
-          }else if(this.state.show === 'start') {
-            text = <Text>{this.checkStartTiles(x,y)}</Text>
-          }else if(this.state.show === 'land') {
-            text = (
-              <g>
-                {/* 0 */}
-                <Text x={-2} y={-5}>W</Text>
-                <Text x={2} y={-5}>M</Text>
-                {/* 1 */}
-                <Text x={4} y={-4}>O</Text>
-                <Text x={6} y={-1}>F</Text>
-                {/* 2 */}
-                <Text x={6} y={2}>D</Text>
-                <Text x={4} y={5}>G</Text>
-                {/* 3 */}
-                <Text x={-2} y={6}>O</Text>
-                <Text x={2} y={6}>F</Text>
-                {/* 4 */}
-                <Text x={-6} y={2}>D</Text>
-                <Text x={-4} y={5}>G</Text>
-                {/* 5 */}
-                <Text x={-4} y={-4}>W</Text>
-                <Text x={-6} y={-1}>M</Text>
-              </g>
-            )
-          }
-
           tiles.push(
-            <Hexagon q={q} r={r} s={s}>
-              {text}
-            </Hexagon>
+            <Hex q={q} r={r} s={s} x={x} y={y} start={this.checkStartTiles(x,y)} show={this.state.show} />
           )
         }
       }
     }
 
+    const debugMenu = (
+      <div>
+        <select onChange={this.updateMap}>
+          <option value={'cube'}>Cube Coords</option>
+          <option value={'axial'}>Axial Coords</option>
+          <option value={'land'}>Land Values</option>
+          <option value={'start'}>Start Tiles</option>
+        </select>
+      </div>
+    )
 
     const hexagonSize = { x: 8, y: 8 };
+
     return(
       <div>
         <HexGrid width={450} height={450} viewBox="-50 -50 100 100">
@@ -99,14 +75,7 @@ class SmallHexMap extends React.Component {
             {tiles}
           </Layout>
         </HexGrid>
-        <div>
-          <select onChange={this.updateMap}>
-            <option value={'cube'}>Cube Coords</option>
-            <option value={'axial'}>Axial Coords</option>
-            <option value={'land'}>Land Values</option>
-            <option value={'start'}>Start Tiles</option>
-          </select>
-        </div>
+        {debugMenu}
       </div>
     )
   }
