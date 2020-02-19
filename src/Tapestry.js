@@ -26,11 +26,13 @@ class Tapestry extends React.Component {
       spaceTilesOwned: 0,
       spaceTilesExplored: 0,
       trackIndex: [0,0,0,0],
-      incomeIndex: [5,5,5,5]
+      incomeIndex: [5,5,5,5],
+      mode: '',
     };
     this.handleTrackAdvance = this.handleTrackAdvance.bind(this)
     this.gainBenefitFromAdvancement = this.gainBenefitFromAdvancement.bind(this)
     this.updateStateVar = this.updateStateVar.bind(this)
+    this.buildingAdded = this.buildingAdded.bind(this)
   }
 
   // VP conditions
@@ -62,6 +64,10 @@ class Tapestry extends React.Component {
     gains.map((gain) => {
       return this[gain.type](gain) // calls function with same name as type
     })
+  }
+
+  buildingAdded() {
+    this.setState({mode: ''})
   }
 
   updateStateVar(field, value) {
@@ -111,18 +117,22 @@ class Tapestry extends React.Component {
 
   market(gain) {
     this.updateIncomeIndex(0, gain.qty)
+    this.setState({mode: 'adding-m'})
   }
 
   house(gain) {
     this.updateIncomeIndex(1, gain.qty)
+    this.setState({mode: 'adding-h'})
   }
 
   farm(gain) {
     this.updateIncomeIndex(2, gain.qty)
+    this.setState({mode: 'adding-f'})
   }
 
   armory(gain) {
     this.updateIncomeIndex(3, gain.qty)
+    this.setState({mode: 'adding-a'})
   }
 
   coin(gain) {
@@ -189,7 +199,12 @@ class Tapestry extends React.Component {
         </div>
         <div>
           <IncomeMat incomeTracks={this.state.incomeIndex}/>
-          <City city={CITIES[4]} index={4} mode={'adding-m'}/>
+          <City
+            city={CITIES[4]}
+            index={4}
+            mode={this.state.mode}
+            buildingAdded={this.buildingAdded}
+          />
         </div>
         <SmallHexMap />
       </div>

@@ -9,7 +9,7 @@ class City extends React.Component {
       cityWidth: 9,
       cityHeight: 9,
       grid: null,
-      mode: props.mode
+      buildingAdded: props.buildingAdded
     }
     this.addBuilding = this.addBuilding.bind(this)
   }
@@ -31,12 +31,13 @@ class City extends React.Component {
   }
 
   addBuilding(event) {
-    if (this.state.mode != '') {
+    if (this.props.mode !== '') {
       const [x,y] = event.target.id.split('_')
-      const building = this.state.mode.split('-')[1]
+      const building = this.props.mode.split('-')[1]
       const newGrid = [...this.state.grid];
       newGrid[x][y] = building
       this.setState({grid: newGrid})
+      this.state.buildingAdded()
     }
   }
 
@@ -52,7 +53,7 @@ class City extends React.Component {
                 <td key={`cityCell_${index}_${y}`}>
                   <div
                     id={`${index}_${y}`}
-                    className={this.state.grid[index][y] ? this.state.grid[index][y] : this.state.mode}
+                    className={this.state.grid[index][y] ? this.state.grid[index][y] : this.props.mode}
                     onClick={this.addBuilding}
                   />
                 </td>
