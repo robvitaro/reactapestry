@@ -26,17 +26,6 @@ class SmallHexMap extends React.Component {
     return ok
   }
 
-  checkStartTiles(x,y) {
-    const startTiles = [[3,1],[1,5],[5,3]]
-    let className = ''
-    startTiles.map((tile) => {
-      if(tile[0] === x && tile[1] === y) {
-        className = 'start'
-      }
-    })
-    return className
-  }
-
   render() {
 
     const displayedTiles = []
@@ -50,9 +39,11 @@ class SmallHexMap extends React.Component {
           let x = q + 3
           let y = r + 3
           let sides = [[],[],[],[],[],[]]
+          let start = null
 
           HEX_MAP_SMALL.visible.map((tile) => {
             if(tile.x === x && tile.y === y) {
+              if (tile.start) { start = tile.start }
               sides = []
               tile.sides.map((side) => {
                 sides.push(side)
@@ -62,7 +53,7 @@ class SmallHexMap extends React.Component {
 
           displayedTiles.push(
             <Hex q={q} r={r} s={s} x={x} y={y}
-                 start={this.checkStartTiles(x,y)}
+                 start={start}
                  sides={sides}
                  show={this.state.show} />
           )
