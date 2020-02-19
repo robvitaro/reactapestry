@@ -156,6 +156,28 @@ table {
     cursor: pointer;
 }
 
+.animated {
+    animation-duration: 2.5s;
+    animation-fill-mode: both;
+    animation-iteration-count: infinite;
+}
+
+@keyframes pulse {
+    0% {transform: scale(1);}
+    50% {transform: scale(1.1);}
+    100% {transform: scale(1);}
+}
+
+.pulse {
+    animation-name: pulse;
+    animation-duration: 2.5s;
+}
+
+.city p.smallMessage {
+    margin-top: 0px;
+    font-size: 10pt;
+}
+
 .incomeMat {
     float: left;
     margin-left: 10px;

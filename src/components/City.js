@@ -41,6 +41,16 @@ class City extends React.Component {
     }
   }
 
+  modeMessage() {
+    switch (this.props.mode) {
+      case 'adding-m': return <span>Please add a market to your city</span>
+      case 'adding-f': return <span>Please add a farm to your city</span>
+      case 'adding-h': return <span>Please add a house to your city</span>
+      case 'adding-a': return <span>Please add an armory to your city</span>
+      default: return <span>&nbsp;</span>
+    }
+  }
+
   render() {
     const rows = []
 
@@ -66,6 +76,7 @@ class City extends React.Component {
 
     return (
       <div className='city'>
+        <p className={'smallMessage animated pulse'}>{this.modeMessage()}</p>
         <table>
           <tbody>
           {rows}
