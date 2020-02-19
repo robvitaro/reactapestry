@@ -2,37 +2,44 @@ import React from 'react';
 
 class City extends React.Component {
   constructor(props) {
-    super();
+    super(props);
     this.state = {
       city: props.city,
       index: props.index,
+      cityWidth: 9,
+      cityHeight: 9,
+      grid: null,
       transientClass: props.mode
     }
   }
 
-  render() {
-    const cityWidth = 9
-    const cityHeight = 9
-    const grid = new Array(cityWidth)
+  componentWillMount() {
+    if (!this.state.grid) {
+      const theGrid = new Array(this.state.cityWidth)
 
-    for (let i = 0; i < cityWidth; i++) {
-      grid[i] = new Array(cityHeight);
+      for (let i = 0; i < this.state.cityWidth; i++) {
+        theGrid[i] = new Array(this.state.cityHeight);
+      }
+
+      this.state.city.dots.map((dot) => {
+        return theGrid[dot[0]][[dot[1]]] = 'd'
+      })
+
+      this.setState({grid: theGrid})
     }
+  }
 
-    this.state.city.dots.map((dot) => {
-      return grid[dot[0]][[dot[1]]] = 'd'
-    })
-
+  render() {
     const rows = []
 
-    for (let y = 0; y < cityHeight; y++) {
+    for (let y = 0; y < this.state.cityHeight; y++) {
       rows.push(
         <tr key={`cityRow_${y}`}>
           {
-            grid.map((x, index) => {
+            this.state.grid.map((x, index) => {
               return (
-                <td key={`cityCell_${grid[index]}_${y}`}>
-                  <div className={grid[index][y] ? grid[index][y] : this.state.transientClass} />
+                <td key={`cityCell_${this.state.grid[index]}_${y}`}>
+                  <div className={this.state.grid[index][y] ? this.state.grid[index][y] : this.state.transientClass} />
                 </td>
               )
             })
