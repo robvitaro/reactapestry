@@ -6,7 +6,7 @@ import {HEX_MAP_SMALL} from "../data/hex_map_small";
 class SmallHexMap extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {show: 'cube'}
+    this.state = {show: 'axial'}
     this.updateMap = this.updateMap.bind(this)
   }
 
@@ -64,8 +64,8 @@ class SmallHexMap extends React.Component {
     const debugMenu = (
       <div>
         <select onChange={this.updateMap}>
-          <option value={'cube'}>Cube Coords</option>
           <option value={'axial'}>Axial Coords</option>
+          <option value={'cube'}>Cube Coords</option>
           <option value={'land'}>Land Values</option>
           <option value={'start'}>Start Tiles</option>
         </select>
