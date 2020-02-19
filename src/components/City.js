@@ -9,8 +9,9 @@ class City extends React.Component {
       cityWidth: 9,
       cityHeight: 9,
       grid: null,
-      transientClass: props.mode
+      mode: props.mode
     }
+    this.addBuilding = this.addBuilding.bind(this)
   }
 
   componentWillMount() {
@@ -29,6 +30,16 @@ class City extends React.Component {
     }
   }
 
+  addBuilding(event) {
+    if (this.state.mode != '') {
+      const [x,y] = event.target.id.split('_')
+      const building = this.state.mode.split('-')[1]
+      const newGrid = [...this.state.grid];
+      newGrid[x][y] = building
+      this.setState({grid: newGrid})
+    }
+  }
+
   render() {
     const rows = []
 
@@ -38,8 +49,12 @@ class City extends React.Component {
           {
             this.state.grid.map((x, index) => {
               return (
-                <td key={`cityCell_${this.state.grid[index]}_${y}`}>
-                  <div className={this.state.grid[index][y] ? this.state.grid[index][y] : this.state.transientClass} />
+                <td key={`cityCell_${index}_${y}`}>
+                  <div
+                    id={`${index}_${y}`}
+                    className={this.state.grid[index][y] ? this.state.grid[index][y] : this.state.mode}
+                    onClick={this.addBuilding}
+                  />
                 </td>
               )
             })
