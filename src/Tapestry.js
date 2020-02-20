@@ -198,7 +198,14 @@ class Tapestry extends React.Component {
           }
         </div>
         <div>
-          <IncomeMat incomeTracks={this.state.incomeIndex}/>
+          <IncomeMat
+            incomeTracks={this.state.incomeIndex}
+            resources={{food: this.state.food,
+                        workers: this.state.workers,
+                        coin: this.state.coin,
+                        culture: this.state.culture
+                      }}
+          />
           <City
             city={CITIES[4]}
             index={4}

@@ -236,3 +236,14 @@ svg g text {
     /*transition: fill-opacity .5s;*/
 }
 
+.resourceTrack {
+    margin-left: 50px;
+}
+
+.resourceTrack .resource{
+    float: left;
+    min-width: 40px;
+    max-width: 40px;
+    min-height: 40px;
+    max-height: 40px;
+}

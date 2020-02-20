@@ -1,9 +1,10 @@
 import React from 'react';
 import {INCOME_MAT} from "../data/income_mat";
 import IncomeTrack from "./IncomeTrack";
+import ResourceTrack from "./ResourceTrack";
 
 const IncomeMat = (props) => {
-  const {incomeTracks} = props
+  const {incomeTracks, resources} = props
 
   return (
     <div className='incomeMat'>
@@ -34,6 +35,9 @@ const IncomeMat = (props) => {
           buildingsOnTrack={incomeTracks[3]}
           className={'a'}
         />
+      </div>
+      <div>
+        <ResourceTrack resources={resources}/>
       </div>
     </div>
   )
