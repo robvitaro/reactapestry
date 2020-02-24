@@ -66,6 +66,34 @@ class Tapestry extends React.Component {
     })
   }
 
+  checkAnyResource(minimum, exclude) {
+    console.log(`Exclude: ${exclude}`)
+    let totalResources = 0
+    if(exclude !== 'food') { totalResources += this.state.food }
+    if(exclude !== 'workers') { totalResources += this.state.workers }
+    if(exclude !== 'coin') { totalResources += this.state.coin }
+    if(exclude !== 'culture') { totalResources += this.state.culture }
+    return totalResources >= minimum
+  }
+
+  checkTrackAdvancePermitted(trackIndex, trackResource) {
+    if(this.state.trackIndex[trackIndex] < 3) {
+      /* Age 1 requires 1 resource of any kind */
+      return this.checkAnyResource(1, '')
+    } else if(this.state.trackIndex[trackIndex] < 6) {
+      /* Age 2 requires 1 track resource and 1 resource of any kind */
+      return this.state[trackResource] >= 2 || (this.state[trackResource] === 1 && this.checkAnyResource(1, trackResource))
+    } else if(this.state.trackIndex[trackIndex] < 9) {
+      /* Age 3 requires 1 track resource and 2 resources of any kind */
+      return this.state[trackResource] >= 3 ||
+            (this.state[trackResource] === 2 && this.checkAnyResource(1, trackResource)) ||
+            (this.state[trackResource] === 1 && this.checkAnyResource(2, trackResource))
+    } else if(this.state.trackIndex[trackIndex] < 12) {
+      /* Age 4 requires 2 track resources */
+      return this.state[trackResource] > 1
+    }
+  }
+
   buildingAdded() {
     this.setState({mode: ''})
   }
@@ -193,6 +221,7 @@ class Tapestry extends React.Component {
                 index={index}
                 currentSpace={this.state.trackIndex[index]}
                 handleAdvance={this.handleTrackAdvance}
+                advancePermitted={this.checkTrackAdvancePermitted(index, track.resource)}
               />
             })
           }

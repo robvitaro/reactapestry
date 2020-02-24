@@ -3,7 +3,9 @@ import TrackHeaderRow from "./TrackHeaderRow";
 import TrackSpace from "./TrackSpace";
 
 const Track = (props) => {
-  const {track, index, currentSpace, handleAdvance} = props
+  const {track, index, currentSpace, handleAdvance, advancePermitted} = props
+  const disabled = !advancePermitted || currentSpace > 11
+
   return (
     <div className='track'>
       <table>
@@ -27,7 +29,7 @@ const Track = (props) => {
           </tr>
         </tbody>
       </table>
-      <button onClick={()=>handleAdvance(index)} disabled={currentSpace > 11}>ADVANCE</button>
+      <button onClick={()=>handleAdvance(index)} disabled={disabled}>ADVANCE</button>
     </div>
   )
 }

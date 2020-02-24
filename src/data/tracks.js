@@ -1,7 +1,7 @@
 export const TRACKS = [
   {
     name: 'Exploration',
-    resource: 'Food',
+    resource: 'food',
     spaces: [
       {name: ''},
       {
@@ -104,7 +104,7 @@ export const TRACKS = [
   },
   {
     name: 'Science',
-    resource: 'Worker',
+    resource: 'workers',
     spaces: [
       {name: ''},
       {
@@ -198,7 +198,7 @@ export const TRACKS = [
   },
   {
     name: 'Technology',
-    resource: 'Coin',
+    resource: 'coin',
     spaces: [
       {name: ''},
       {
@@ -307,7 +307,7 @@ export const TRACKS = [
   },
   {
     name: 'Military',
-    resource: 'Culture',
+    resource: 'culture',
     spaces: [
       {name: ''},
       {
