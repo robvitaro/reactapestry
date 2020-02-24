@@ -1,6 +1,16 @@
 export const CITIES = [
   {name: 'Blank', dots: []},
-  {name: 'Mountain', dots: []},
+  {name: 'Mountain', dots: [
+    [0,1],
+    [1,1],[1,5],
+    [2,5],[2,6],[2,8],
+    [3,2],[3,3],[3,5],
+    [4,2],[4,3],
+    [5,1],[5,2],[5,3],[5,4],
+    [6,1],[6,3],[6,4],
+    [7,1],[7,3],[7,7],
+    [8,5]
+    ]},
   {name: 'Wetland', dots: []},
   {name: 'Tropical', dots: []},
   {

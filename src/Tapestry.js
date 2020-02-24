@@ -207,8 +207,8 @@ class Tapestry extends React.Component {
                       }}
           />
           <City
-            city={CITIES[4]}
-            index={4}
+            city={CITIES[1]}
+            index={1}
             mode={this.state.mode}
             buildingAdded={this.buildingAdded}
           />
