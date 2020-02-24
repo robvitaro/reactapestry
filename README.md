@@ -66,3 +66,33 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/de
 ### `npm run build` fails to minify
 
 This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+
+
+
+### TODO
+
+
+- Income phase
+  - Electing when to do it
+  - gaining resources, points
+- City
+  - choosing at start, affects start location
+  - placing large buildings in city (rotating, off edge)
+  - choosing free resource at 3x3 completion
+  - knowing when rows/columns are complete
+- Tapestry cards
+  - data
+  - obtaining
+  - playing
+  - effects
+- Map
+  - exploring (next to conquested tiles, rotating hex, getting bonus)
+  - conquering (pawns, toppling, rolling dice)
+  - center tile conquer bonus
+- Tracks
+  - require payment for advancing, otherwise button disabled
+  - missing effects
+- Civs
+  - data
+  - choosing at start
+  - effects    
