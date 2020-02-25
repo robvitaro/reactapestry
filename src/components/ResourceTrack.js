@@ -6,7 +6,15 @@ import cultureToken from '../img/culture.png';
 
 const ResourceTrack = (props) => {
   const {food, workers, coin, culture} = props.resources
+  const {mode} = props
   const maxValue = 8
+
+  const modeMessage = () => {
+    switch (mode) {
+      case 'zeroResources': return <span>You're out of resources. Time to take an income turn?</span>
+      default: return <span>&nbsp;</span>
+    }
+  }
 
   const spaces = []
 
@@ -28,6 +36,7 @@ const ResourceTrack = (props) => {
 
   return (
     <div className={'resourceTrack'}>
+      <p className={'smallMessage animated pulse'}>{modeMessage()}</p>
       <table>
         <tbody>
           <tr>

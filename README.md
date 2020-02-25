@@ -91,6 +91,7 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/tr
   - center tile conquer bonus
 - Tracks
   - require payment for advancing, otherwise button disabled
+  - optional bonus payment
   - missing effects
 - Civs
   - data

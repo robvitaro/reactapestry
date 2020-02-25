@@ -237,10 +237,12 @@ svg g text {
 }
 
 .resourceTrack {
+    clear: both;
+    text-align: center;
     margin-left: 50px;
 }
 
-.resourceTrack .resource{
+.resource{
     float: left;
     min-width: 40px;
     max-width: 40px;

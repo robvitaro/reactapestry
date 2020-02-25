@@ -27,7 +27,7 @@ class Tapestry extends React.Component {
       spaceTilesExplored: 0,
       trackIndex: [0,0,0,0],
       incomeIndex: [5,5,5,5],
-      mode: '',
+      mode: 'zeroResources',
     };
     this.handleTrackAdvance = this.handleTrackAdvance.bind(this)
     this.gainBenefitFromAdvancement = this.gainBenefitFromAdvancement.bind(this)
@@ -234,6 +234,7 @@ class Tapestry extends React.Component {
                         coin: this.state.coin,
                         culture: this.state.culture
                       }}
+            mode={this.state.mode}
           />
           <City
             city={CITIES[1]}
