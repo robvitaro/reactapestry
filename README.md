@@ -89,7 +89,7 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/tr
   - conquering (pawns, toppling, rolling dice)
   - center tile conquer bonus
 - Tracks
-  - require payment for advancing, otherwise button disabled
+  - choosing resources for payment
   - optional bonus payment
   - missing effects
 - Civs
