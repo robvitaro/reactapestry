@@ -1,7 +1,7 @@
 import React from 'react';
 
 const TrackSpace = (props) => {
-  const {space, occupied, className} = props
+  const {space, occupied, className, advanceButton} = props
   const classOccupied = occupied ? 'occupied' : ''
   const title = space.name ? space.name : <span>&nbsp;</span>;
 
@@ -10,6 +10,7 @@ const TrackSpace = (props) => {
       <div className='space'>
         {title}
         <div className={classOccupied}/>
+        {advanceButton}
       </div>
     </td>
   )

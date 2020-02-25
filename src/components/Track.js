@@ -6,6 +6,8 @@ const Track = (props) => {
   const {track, index, currentSpace, handleAdvance, advancePermitted} = props
   const disabled = !advancePermitted || currentSpace > 11
 
+  const advanceButton =  <button onClick={()=>handleAdvance(index)} disabled={disabled}>ADVANCE</button>
+
   return (
     <div className='track'>
       <table>
@@ -22,6 +24,7 @@ const Track = (props) => {
                     space={space}
                     occupied={index === currentSpace}
                     className={index === 0 ? track.name.toLowerCase() : ''}
+                    advanceButton={index === 0 ? advanceButton : undefined}
                   />
                 )
               })
@@ -29,7 +32,6 @@ const Track = (props) => {
           </tr>
         </tbody>
       </table>
-      <button onClick={()=>handleAdvance(index)} disabled={disabled}>ADVANCE</button>
     </div>
   )
 }
