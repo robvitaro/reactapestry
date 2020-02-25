@@ -5,6 +5,10 @@ import IncomeMat from "./components/IncomeMat";
 import SmallHexMap from "./components/SmallHexMap";
 import { CITIES } from './data/cities';
 import { TRACKS } from './data/tracks';
+import { INCOME_MAT } from "./data/income_mat";
+
+const MAX_INCOME_TURNS = 5
+const MAX_INCOME_SPACES = 6
 
 class Tapestry extends React.Component {
   constructor(props) {
@@ -28,11 +32,15 @@ class Tapestry extends React.Component {
       trackIndex: [0,0,0,0],
       incomeIndex: [5,5,5,5],
       mode: 'zeroResources',
+      incomeTurns: 0
     };
     this.handleTrackAdvance = this.handleTrackAdvance.bind(this)
     this.gainBenefitFromAdvancement = this.gainBenefitFromAdvancement.bind(this)
     this.updateStateVar = this.updateStateVar.bind(this)
     this.buildingAdded = this.buildingAdded.bind(this)
+    this.handleIncomeTurn = this.handleIncomeTurn.bind(this)
+    this.takeIncomeTurn = this.takeIncomeTurn.bind(this)
+    this.gainIncome = this.gainIncome.bind(this)
   }
 
   // VP conditions
@@ -51,6 +59,35 @@ class Tapestry extends React.Component {
   tapestryAll() { return this.state.tapestryHand + this.state.tapestryMat }
   flat() { return 1 }
 
+  handleIncomeTurn() {
+    if(this.state.incomeTurns < MAX_INCOME_TURNS) {
+      this.setState(prevState => { return { incomeTurns: prevState.incomeTurns + 1}}, ()=> this.takeIncomeTurn())
+    }
+  }
+
+  takeIncomeTurn() {
+    switch(this.state.incomeTurns) {
+      case 1:
+        this.gainIncome()
+        break
+      default: return null
+    }
+  }
+
+  gainIncome() {
+    INCOME_MAT.map((track, index) => {
+      const openSpaces = MAX_INCOME_SPACES - this.state.incomeIndex[index]
+      for(let i = 0; i < openSpaces; i++) {
+        track.spaces[i].gain.map((gain) => {
+          if(gain.type !== 'vp' && gain.type !== 'scoreCity') {
+            return this[gain.type](gain) // calls function with same name as type
+          }
+        })
+      }
+    })
+    this.setState({mode: ''})
+  }
+
   handleTrackAdvance(index) {
     const newTrackIndex = [...this.state.trackIndex]; // copy so we don't mutate state directly
     newTrackIndex[index] = this.state.trackIndex[index] + 1;
@@ -67,7 +104,6 @@ class Tapestry extends React.Component {
   }
 
   checkAnyResource(minimum, exclude) {
-    console.log(`Exclude: ${exclude}`)
     let totalResources = 0
     if(exclude !== 'food') { totalResources += this.state.food }
     if(exclude !== 'workers') { totalResources += this.state.workers }
@@ -225,6 +261,9 @@ class Tapestry extends React.Component {
               />
             })
           }
+        </div>
+        <div>
+          <button onClick={()=>this.handleIncomeTurn()}>Take Income Turn</button>
         </div>
         <div>
           <IncomeMat

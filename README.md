@@ -73,8 +73,7 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/tr
 
 
 - Income phase
-  - Electing when to do it
-  - gaining resources, points
+  - gaining points
 - City
   - choosing at start, affects start location
   - placing large buildings in city (rotating, off edge)
