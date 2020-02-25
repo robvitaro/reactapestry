@@ -41,6 +41,8 @@ class Tapestry extends React.Component {
     this.handleIncomeTurn = this.handleIncomeTurn.bind(this)
     this.takeIncomeTurn = this.takeIncomeTurn.bind(this)
     this.gainIncome = this.gainIncome.bind(this)
+    this.resourceChosen = this.resourceChosen.bind(this)
+    this.checkForZeroResources = this.checkForZeroResources.bind(this)
   }
 
   // VP conditions
@@ -85,7 +87,20 @@ class Tapestry extends React.Component {
         })
       }
     })
-    this.setState({mode: ''})
+    this.setState({mode: 'chooseResourceAny1'})
+  }
+
+  resourceChosen(resource) {
+    switch (resource) {
+      case 'food': return this.updateStateVar('food', -1, ()=> this.checkForZeroResources())
+      case 'worker': return this.updateStateVar('workers', -1, ()=> this.checkForZeroResources())
+      case 'coin': return this.updateStateVar('coin', -1, ()=> this.checkForZeroResources())
+      case 'culture': return this.updateStateVar('culture', -1, ()=> this.checkForZeroResources())
+    }
+  }
+
+  checkForZeroResources() {
+    if (!this.checkAnyResource(1)) {this.setState({mode: 'zeroResources'})}
   }
 
   handleTrackAdvance(index) {
@@ -134,8 +149,8 @@ class Tapestry extends React.Component {
     this.setState({mode: ''})
   }
 
-  updateStateVar(field, value) {
-    this.setState(prevState => { return { [field]: prevState[field] + value}})
+  updateStateVar(field, value, callback) {
+    this.setState(prevState => { return { [field]: prevState[field] + value}}, callback)
   }
 
   territory(gain) {
@@ -274,6 +289,7 @@ class Tapestry extends React.Component {
                         culture: this.state.culture
                       }}
             mode={this.state.mode}
+            resourceChosen={this.resourceChosen}
           />
           <City
             city={CITIES[1]}
