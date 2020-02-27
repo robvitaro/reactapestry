@@ -1,8 +1,8 @@
 import { Machine } from 'xstate';
-import AdvanceTurnStateMachine from './AdvanceTurnStateMachine';
-import IncomeTurnStateMachine from './IncomeTurnStateMachine';
+import { advanceTurnStateMachine } from './AdvanceTurnStateMachine';
+import { incomeTurnStateMachine } from './IncomeTurnStateMachine';
 
-const TapestryGameStateMachine = Machine(
+export const tapestryGameStateMachine = Machine(
   {
     id: 'TapestryGameState',
     context: {
@@ -24,11 +24,11 @@ const TapestryGameStateMachine = Machine(
         },
       },
       TakingAdvanceTurn: {
-        invoke: { id: 'advanceTurn', src: AdvanceTurnStateMachine },
+        invoke: { id: 'advanceTurn', src: advanceTurnStateMachine },
         onDone: 'Idle'
       },
       TakingIncomeTurn: {
-        invoke: { id: 'incomeTurn', src: IncomeTurnStateMachine },
+        invoke: { id: 'incomeTurn', src: incomeTurnStateMachine },
         exit: 'incrementIncomeTurns',
         onDone: 'Idle'
       },
@@ -49,6 +49,5 @@ const TapestryGameStateMachine = Machine(
         return context.incomeTurns < 5;
       },
     }
-  });
-
-export default TapestryGameStateMachine
+  }
+);

@@ -1,6 +1,6 @@
 import {Machine} from "xstate";
 
-const AdvanceTurnStateMachine = Machine({
+export const advanceTurnStateMachine = Machine({
   id: 'advanceTurnMachine',
   initial: 'PayingCost',
   states: {
@@ -42,6 +42,4 @@ const AdvanceTurnStateMachine = Machine({
     },
     AdvanceTurnOver: {type: 'final'}
   }
-})
-
-export default AdvanceTurnStateMachine
+});

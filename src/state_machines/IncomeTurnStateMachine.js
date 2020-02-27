@@ -1,6 +1,6 @@
 import {Machine} from "xstate";
 
-const IncomeTurnStateMachine = Machine({
+export const incomeTurnStateMachine = Machine({
   id: 'incomeTurnMachine',
   initial: 'ActivateCivAbilities',
   states: {
@@ -22,5 +22,3 @@ const IncomeTurnStateMachine = Machine({
     IncomeTurnOver: {type: 'final'}
   }
 });
-
-export default IncomeTurnStateMachine
