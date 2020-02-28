@@ -61,6 +61,7 @@ class Tapestry extends React.Component {
       case 'worker': return this.updateStateVar('workers', -1, ()=> this.checkForZeroResources())
       case 'coin': return this.updateStateVar('coin', -1, ()=> this.checkForZeroResources())
       case 'culture': return this.updateStateVar('culture', -1, ()=> this.checkForZeroResources())
+      default: return null
     }
   }
 

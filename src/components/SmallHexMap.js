@@ -17,17 +17,13 @@ class SmallHexMap extends React.Component {
 
   checkUnwantedTiles(q,r,s) {
     const unwantedTiles = [[-3,0,3],[3,-3,0],[0,3,-3]]
-    let ok = true
-    unwantedTiles.map((tile) => {
-      if(tile[0] === q && tile[1] === r && tile[2] === s) {
-        ok = false
-      }
+    // check that EVERY unwanted tile's coords != q r s
+    return unwantedTiles.every((tile) => {
+      return !(tile[0] === q && tile[1] === r && tile[2] === s)
     })
-    return ok
   }
 
   render() {
-
     const displayedTiles = []
 
     for (let q = -3; q <= 3; q++) {
@@ -41,18 +37,19 @@ class SmallHexMap extends React.Component {
           let sides = [[],[],[],[],[],[]]
           let start = null
 
-          HEX_MAP_SMALL.visible.map((tile) => {
+          HEX_MAP_SMALL.visible.forEach((tile) => {
             if(tile.x === x && tile.y === y) {
               if (tile.start) { start = tile.start }
               sides = []
-              tile.sides.map((side) => {
+              tile.sides.forEach((side) => {
                 sides.push(side)
               })
             }
           })
 
           displayedTiles.push(
-            <Hex q={q} r={r} s={s} x={x} y={y}
+            <Hex key={`${q}_${r}_${s}_${x}_${y}`}
+                 q={q} r={r} s={s} x={x} y={y}
                  start={start}
                  sides={sides}
                  show={this.state.show} />

@@ -27,21 +27,21 @@ const ResourceTrack = (props) => {
 
   for(let i = 0; i <= maxValue; i++) {
     spaces.push(
-      <td>
+      <td key={i}>
         <div>
           <div className={'resource food'}>
-            {food === i ? <img src={foodToken} onClick={()=> takeResource('food')}/> : ''}
+            {food === i ? <img alt="food" src={foodToken} onClick={()=> takeResource('food')}/> : ''}
           </div>
           <div className={'resource worker'}>
-            {workers === i ? <img src={workerToken} onClick={()=> takeResource('worker')}/> : ''}
+            {workers === i ? <img alt="worker" src={workerToken} onClick={()=> takeResource('worker')}/> : ''}
           </div>
         </div>
         <div>
           <div className={'resource coin'}>
-            {coin === i ? <img src={coinToken} onClick={()=> takeResource('coin')}/> : ''}
+            {coin === i ? <img alt="coin" src={coinToken} onClick={()=> takeResource('coin')}/> : ''}
           </div>
           <div className={'resource culture'}>
-            {culture === i ? <img src={cultureToken} onClick={()=> takeResource('culture')}/> : ''}
+            {culture === i ? <img alt="culture" src={cultureToken} onClick={()=> takeResource('culture')}/> : ''}
           </div>
         </div>
         <div>{i}</div>

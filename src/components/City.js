@@ -14,7 +14,7 @@ class City extends React.Component {
     this.addBuilding = this.addBuilding.bind(this)
   }
 
-  componentWillMount() {
+  componentDidMount() {
     if (!this.state.grid) {
       const theGrid = new Array(this.state.cityWidth)
 
@@ -54,24 +54,26 @@ class City extends React.Component {
   render() {
     const rows = []
 
-    for (let y = 0; y < this.state.cityHeight; y++) {
-      rows.push(
-        <tr key={`cityRow_${y}`}>
-          {
-            this.state.grid.map((x, index) => {
-              return (
-                <td key={`cityCell_${index}_${y}`}>
-                  <div
-                    id={`${index}_${y}`}
-                    className={this.state.grid[index][y] ? this.state.grid[index][y] : this.props.mode}
-                    onClick={this.addBuilding}
-                  />
-                </td>
-              )
-            })
-          }
-        </tr>
-      )
+    if(this.state.grid != null) {
+      for (let y = 0; y < this.state.cityHeight; y++) {
+        rows.push(
+          <tr key={`cityRow_${y}`}>
+            {
+              this.state.grid.map((x, index) => {
+                return (
+                  <td key={`cityCell_${index}_${y}`}>
+                    <div
+                      id={`${index}_${y}`}
+                      className={this.state.grid[index][y] ? this.state.grid[index][y] : this.props.mode}
+                      onClick={this.addBuilding}
+                    />
+                  </td>
+                )
+              })
+            }
+          </tr>
+        )
+      }
     }
 
     return (

@@ -6,10 +6,10 @@ const MAX_INCOME_SPACES = 6
 const gainIncome = (incomeIndex) => {
   let income = {type: 'gainIncome'}
 
-  INCOME_MAT.map((track, index) => {
+  INCOME_MAT.forEach((track, index) => {
     const openSpaces = MAX_INCOME_SPACES - incomeIndex[index]
     for(let i = 0; i < openSpaces; i++) {
-      track.spaces[i].gain.map((gain) => {
+      track.spaces[i].gain.forEach((gain) => {
         if(gain.type !== 'vp' && gain.type !== 'scoreCity') {
           income[gain.type] = gain.qty
         }
