@@ -227,7 +227,7 @@ class Tapestry extends React.Component {
   civ(gain) {}
 
   render() {
-    const {trackIndex, incomeIndex, food, workers, coin, culture, mode} = this.state.current.context
+    const {trackIndex, incomeIndex, food, workers, coin, culture, mode, canTakeIncomeTurn} = this.state.current.context
     return (
       <div>
         <div>
@@ -245,7 +245,7 @@ class Tapestry extends React.Component {
           }
         </div>
         <div>
-          <button onClick={()=>this.handleIncomeTurn()}>Take Income Turn</button>
+          <button onClick={()=>this.handleIncomeTurn()} disabled={!canTakeIncomeTurn}>Take Income Turn</button>
         </div>
         <div>
           <IncomeMat

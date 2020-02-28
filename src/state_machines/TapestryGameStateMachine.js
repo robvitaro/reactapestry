@@ -27,7 +27,7 @@ export const tapestryGameStateMachine = Machine(
       incomeIndex: [5,5,5,5],
       mode: 'zeroResources',
       incomeTurns: 0,
-      // to delete
+      canTakeIncomeTurn: true,
       canAdvance: true,
     },
     initial: 'Idle',
@@ -60,7 +60,7 @@ export const tapestryGameStateMachine = Machine(
           }),
           onDone: 'Idle'
         },
-        exit: 'incrementIncomeTurns',
+        exit: ['incrementIncomeTurns', 'checkCanTakeIncomeTurn'],
         on: {
           gainIncome: {
             actions: assign((context, event) => {
@@ -80,18 +80,12 @@ export const tapestryGameStateMachine = Machine(
   },
   {
     actions: {
-      incrementIncomeTurns: (context, event) => {
-        return context.incomeTurns = context.incomeTurns + 1
-      },
+      incrementIncomeTurns: assign({ incomeTurns: context => context.incomeTurns + 1 }),
+      checkCanTakeIncomeTurn: assign({ canTakeIncomeTurn: context=> context.incomeTurns < MAX_INCOME_TURNS}),
     },
     guards: {
-      advanceTurnPossible: (context, event) => {
-        // return context.canSearch && event.query && event.query.length > 0;
-        return context.canAdvance;
-      },
-      incomeTurnPossible: (context, event) => {
-        return context.incomeTurns < MAX_INCOME_TURNS;
-      },
+      advanceTurnPossible: context => context.canAdvance,
+      incomeTurnPossible: context => context.canTakeIncomeTurn
     }
   }
 );
