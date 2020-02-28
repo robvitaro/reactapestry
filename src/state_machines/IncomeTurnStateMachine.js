@@ -1,24 +1,58 @@
-import {Machine} from "xstate";
+import {Machine, sendParent} from "xstate";
 
-export const incomeTurnStateMachine = Machine({
-  id: 'incomeTurnMachine',
-  initial: 'ActivateCivAbilities',
-  states: {
-    ActivateCivAbilities: {
-      on: { CivAbilityActivated: 'PlayTapestryCard' },
+import {INCOME_MAT} from "../data/income_mat";
+const MAX_INCOME_SPACES = 6
+
+const gainIncome = (incomeIndex) => {
+  let income = {type: 'gainIncome'}
+
+  INCOME_MAT.map((track, index) => {
+    const openSpaces = MAX_INCOME_SPACES - incomeIndex[index]
+    for(let i = 0; i < openSpaces; i++) {
+      track.spaces[i].gain.map((gain) => {
+        if(gain.type !== 'vp' && gain.type !== 'scoreCity') {
+          income[gain.type] = gain.qty
+        }
+      })
+    }
+  })
+  console.log(income)
+  return income
+}
+
+export const incomeTurnStateMachine = Machine(
+  {
+    id: 'incomeTurnMachine',
+    // initial: 'ActivateCivAbilities',
+    context: {
+      incomeIndex: [],
     },
-    PlayTapestryCard: {
-      on: { TapestryCardPlayed: 'UpgradeOneTechCard' },
-    },
-    UpgradeOneTechCard: {
-      on: { TechCardUpgraded: 'GainVP' },
-    },
-    GainVP: {
-      on: { VPGained: 'GainIncome' },
-    },
-    GainIncome: {
-      on: { IncomeGained: 'IncomeTurnOver' },
-    },
-    IncomeTurnOver: {type: 'final'}
-  }
-});
+    initial: 'GainIncome',
+    states: {
+      ActivateCivAbilities: {
+        on: { CivAbilityActivated: 'PlayTapestryCard' },
+      },
+      PlayTapestryCard: {
+        on: { TapestryCardPlayed: 'UpgradeOneTechCard' },
+      },
+      UpgradeOneTechCard: {
+        on: { TechCardUpgraded: 'GainVP' },
+      },
+      GainVP: {
+        on: { VPGained: 'GainIncome' },
+      },
+      GainIncome: {
+        on: {
+          '': {
+            actions: [
+              sendParent((context, event) => (gainIncome(context.incomeIndex))),
+            ],
+            target: 'IncomeTurnOver'
+          },
+          IncomeGained: 'IncomeTurnOver'
+        },
+      },
+      IncomeTurnOver: {type: 'final'}
+    }
+  },
+);

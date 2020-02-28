@@ -1,93 +1,67 @@
 import React  from 'react';
+import { interpret } from 'xstate';
 import City from "./components/City";
 import Track from "./components/Track";
 import IncomeMat from "./components/IncomeMat";
 import SmallHexMap from "./components/SmallHexMap";
+import { tapestryGameStateMachine } from "./state_machines/TapestryGameStateMachine";
 import { CITIES } from './data/cities';
 import { TRACKS } from './data/tracks';
 import { INCOME_MAT } from "./data/income_mat";
 
 const MAX_INCOME_TURNS = 5
-const MAX_INCOME_SPACES = 6
+
 
 class Tapestry extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      vp: 0,
-      food: 0,
-      workers: 0,
-      coin: 0,
-      culture: 0,
-      tapestryHand: 0,
-      tapestryMat: 0,
-      techCardBottom: 0,
-      techCardMiddle: 0,
-      techCardTop: 0,
-      territoriesOwned: 0,
-      territoriesExplored: 0,
-      territoriesControlled: 0,
-      spaceTilesOwned: 0,
-      spaceTilesExplored: 0,
-      trackIndex: [0,0,0,0],
-      incomeIndex: [5,5,5,5],
-      mode: 'zeroResources',
-      incomeTurns: 0
-    };
+
+    this.state = { current: tapestryGameStateMachine.initialState };
+
+    this.gameStateService = interpret(tapestryGameStateMachine).onTransition(current =>
+      this.setState({ current })
+    );
+
     this.handleTrackAdvance = this.handleTrackAdvance.bind(this)
     this.gainBenefitFromAdvancement = this.gainBenefitFromAdvancement.bind(this)
     this.updateStateVar = this.updateStateVar.bind(this)
     this.buildingAdded = this.buildingAdded.bind(this)
     this.handleIncomeTurn = this.handleIncomeTurn.bind(this)
-    this.takeIncomeTurn = this.takeIncomeTurn.bind(this)
-    this.gainIncome = this.gainIncome.bind(this)
+    // this.takeIncomeTurn = this.takeIncomeTurn.bind(this)
+    // this.gainIncome = this.gainIncome.bind(this)
     this.resourceChosen = this.resourceChosen.bind(this)
     this.checkForZeroResources = this.checkForZeroResources.bind(this)
   }
 
+  componentDidMount() {
+    this.gameStateService.start();
+  }
+
+  componentWillUnmount() {
+    this.gameStateService.stop();
+  }
+
   // VP conditions
-  explorationTrackAdvances() { return this.state.trackIndex[0]}
-  scienceTrackAdvances() { return this.state.trackIndex[1]}
-  technologyTrackAdvances() { return this.state.trackIndex[2]}
-  militaryTrackAdvances() { return this.state.trackIndex[3]}
-  territoriesOwned() { return this.state.territoriesOwned}
-  territoriesControlled() { return this.state.territoriesControlled}
-  marketsInCity() { return 5 - this.state.incomeIndex[0]}
-  housesInCity() { return 5 - this.state.incomeIndex[1]}
-  farmsInCity() { return 5 - this.state.incomeIndex[2]}
-  armoriesInCity() { return 5 - this.state.incomeIndex[3]}
-  techCards() { return this.state.techCardBottom + this.state.techCardMiddle + this.state.techCardTop}
+  explorationTrackAdvances() { return this.state.current.context.trackIndex[0]}
+  scienceTrackAdvances() { return this.state.current.context.trackIndex[1]}
+  technologyTrackAdvances() { return this.state.current.context.trackIndex[2]}
+  militaryTrackAdvances() { return this.state.current.context.trackIndex[3]}
+  territoriesOwned() { return this.state.current.context.territoriesOwned}
+  territoriesControlled() { return this.state.current.context.territoriesControlled}
+  marketsInCity() { return 5 - this.state.current.context.incomeIndex[0]}
+  housesInCity() { return 5 - this.state.current.context.incomeIndex[1]}
+  farmsInCity() { return 5 - this.state.current.context.incomeIndex[2]}
+  armoriesInCity() { return 5 - this.state.current.context.incomeIndex[3]}
+  techCards() { return this.state.current.context.techCardBottom + this.state.current.context.techCardMiddle + this.state.current.context.techCardTop}
   offTrackAdvancement() { return 0 }
-  tapestryAll() { return this.state.tapestryHand + this.state.tapestryMat }
+  tapestryAll() { return this.state.current.context.tapestryHand + this.state.current.context.tapestryMat }
   flat() { return 1 }
 
   handleIncomeTurn() {
-    if(this.state.incomeTurns < MAX_INCOME_TURNS) {
-      this.setState(prevState => { return { incomeTurns: prevState.incomeTurns + 1}}, ()=> this.takeIncomeTurn())
-    }
-  }
-
-  takeIncomeTurn() {
-    switch(this.state.incomeTurns) {
-      case 1:
-        this.gainIncome()
-        break
-      default: return null
-    }
-  }
-
-  gainIncome() {
-    INCOME_MAT.map((track, index) => {
-      const openSpaces = MAX_INCOME_SPACES - this.state.incomeIndex[index]
-      for(let i = 0; i < openSpaces; i++) {
-        track.spaces[i].gain.map((gain) => {
-          if(gain.type !== 'vp' && gain.type !== 'scoreCity') {
-            return this[gain.type](gain) // calls function with same name as type
-          }
-        })
-      }
-    })
-    this.setState({mode: 'chooseResourceAny1'})
+    this.gameStateService.send('IncomeTurn')
+    // if(this.state.current.context.incomeTurns < MAX_INCOME_TURNS) {
+    //   this.setState(prevState => { return { incomeTurns: prevState.incomeTurns + 1}}, ()=> this.takeIncomeTurn())
+    // }
   }
 
   resourceChosen(resource) {
@@ -104,14 +78,14 @@ class Tapestry extends React.Component {
   }
 
   handleTrackAdvance(index) {
-    const newTrackIndex = [...this.state.trackIndex]; // copy so we don't mutate state directly
-    newTrackIndex[index] = this.state.trackIndex[index] + 1;
+    const newTrackIndex = [...this.state.current.context.trackIndex]; // copy so we don't mutate state directly
+    newTrackIndex[index] = this.state.current.context.trackIndex[index] + 1;
     this.setState({ trackIndex: newTrackIndex }, ()=> this.gainBenefitFromAdvancement(index));
   }
 
   gainBenefitFromAdvancement(index) {
     const track = TRACKS[index]
-    const space = track.spaces[this.state.trackIndex[index]]
+    const space = track.spaces[this.state.current.context.trackIndex[index]]
     const gains = space.gain
     gains.map((gain) => {
       return this[gain.type](gain) // calls function with same name as type
@@ -120,28 +94,28 @@ class Tapestry extends React.Component {
 
   checkAnyResource(minimum, exclude) {
     let totalResources = 0
-    if(exclude !== 'food') { totalResources += this.state.food }
-    if(exclude !== 'workers') { totalResources += this.state.workers }
-    if(exclude !== 'coin') { totalResources += this.state.coin }
-    if(exclude !== 'culture') { totalResources += this.state.culture }
+    if(exclude !== 'food') { totalResources += this.state.current.context.food }
+    if(exclude !== 'workers') { totalResources += this.state.current.context.workers }
+    if(exclude !== 'coin') { totalResources += this.state.current.context.coin }
+    if(exclude !== 'culture') { totalResources += this.state.current.context.culture }
     return totalResources >= minimum
   }
 
   checkTrackAdvancePermitted(trackIndex, trackResource) {
-    if(this.state.trackIndex[trackIndex] < 3) {
+    if(this.state.current.context.trackIndex[trackIndex] < 3) {
       /* Age 1 requires 1 resource of any kind */
       return this.checkAnyResource(1, '')
-    } else if(this.state.trackIndex[trackIndex] < 6) {
+    } else if(this.state.current.context.trackIndex[trackIndex] < 6) {
       /* Age 2 requires 1 track resource and 1 resource of any kind */
-      return this.state[trackResource] >= 2 || (this.state[trackResource] === 1 && this.checkAnyResource(1, trackResource))
-    } else if(this.state.trackIndex[trackIndex] < 9) {
+      return this.state.current.context[trackResource] >= 2 || (this.state.current.context[trackResource] === 1 && this.checkAnyResource(1, trackResource))
+    } else if(this.state.current.context.trackIndex[trackIndex] < 9) {
       /* Age 3 requires 1 track resource and 2 resources of any kind */
-      return this.state[trackResource] >= 3 ||
-            (this.state[trackResource] === 2 && this.checkAnyResource(1, trackResource)) ||
-            (this.state[trackResource] === 1 && this.checkAnyResource(2, trackResource))
-    } else if(this.state.trackIndex[trackIndex] < 12) {
+      return this.state.current.context[trackResource] >= 3 ||
+            (this.state.current.context[trackResource] === 2 && this.checkAnyResource(1, trackResource)) ||
+            (this.state.current.context[trackResource] === 1 && this.checkAnyResource(2, trackResource))
+    } else if(this.state.current.context.trackIndex[trackIndex] < 12) {
       /* Age 4 requires 2 track resources */
-      return this.state[trackResource] > 1
+      return this.state.current.context[trackResource] > 1
     }
   }
 
@@ -189,8 +163,8 @@ class Tapestry extends React.Component {
   }
 
   updateIncomeIndex(index, qty) {
-    const newIncomeIndex = [...this.state.incomeIndex]; // copy so we don't mutate state directly
-    newIncomeIndex[index] = this.state.incomeIndex[index] - qty;
+    const newIncomeIndex = [...this.state.current.context.incomeIndex]; // copy so we don't mutate state directly
+    newIncomeIndex[index] = this.state.current.context.incomeIndex[index] - qty;
     this.setState({ incomeIndex: newIncomeIndex });
   }
 
@@ -261,6 +235,7 @@ class Tapestry extends React.Component {
   civ(gain) {}
 
   render() {
+    const {trackIndex, incomeIndex, food, workers, coin, culture, mode} = this.state.current.context
     return (
       <div>
         <div>
@@ -270,7 +245,7 @@ class Tapestry extends React.Component {
                 key={track.name}
                 track={track}
                 index={index}
-                currentSpace={this.state.trackIndex[index]}
+                currentSpace={trackIndex[index]}
                 handleAdvance={this.handleTrackAdvance}
                 advancePermitted={this.checkTrackAdvancePermitted(index, track.resource)}
               />
@@ -282,19 +257,19 @@ class Tapestry extends React.Component {
         </div>
         <div>
           <IncomeMat
-            incomeTracks={this.state.incomeIndex}
-            resources={{food: this.state.food,
-                        workers: this.state.workers,
-                        coin: this.state.coin,
-                        culture: this.state.culture
+            incomeTracks={incomeIndex}
+            resources={{food: food,
+                        workers: workers,
+                        coin: coin,
+                        culture: culture
                       }}
-            mode={this.state.mode}
+            mode={mode}
             resourceChosen={this.resourceChosen}
           />
           <City
             city={CITIES[1]}
             index={1}
-            mode={this.state.mode}
+            mode={mode}
             buildingAdded={this.buildingAdded}
           />
         </div>

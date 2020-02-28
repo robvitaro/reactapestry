@@ -1,4 +1,4 @@
-import { Machine } from 'xstate';
+import { Machine, assign } from 'xstate';
 import { advanceTurnStateMachine } from './AdvanceTurnStateMachine';
 import { incomeTurnStateMachine } from './IncomeTurnStateMachine';
 
@@ -6,8 +6,27 @@ export const tapestryGameStateMachine = Machine(
   {
     id: 'TapestryGameState',
     context: {
+      vp: 0,
+      food: 0,
+      workers: 0,
+      coin: 0,
+      culture: 0,
+      tapestryHand: 0,
+      tapestryMat: 0,
+      techCardBottom: 0,
+      techCardMiddle: 0,
+      techCardTop: 0,
+      territoriesOwned: 0,
+      territoriesExplored: 0,
+      territoriesControlled: 0,
+      spaceTilesOwned: 0,
+      spaceTilesExplored: 0,
+      trackIndex: [0,0,0,0],
+      incomeIndex: [5,5,5,5],
+      mode: 'zeroResources',
+      incomeTurns: 0,
+      // to delete
       canAdvance: true,
-      incomeTurns: 0
     },
     initial: 'Idle',
     states: {
@@ -28,9 +47,29 @@ export const tapestryGameStateMachine = Machine(
         onDone: 'Idle'
       },
       TakingIncomeTurn: {
-        invoke: { id: 'incomeTurn', src: incomeTurnStateMachine },
+        invoke: {
+          id: 'incomeTurn',
+          src: incomeTurnStateMachine,
+          data: (context, event) => ({
+            incomeIndex: context.incomeIndex,
+          })
+        },
         exit: 'incrementIncomeTurns',
-        onDone: 'Idle'
+        onDone: 'Idle',
+        on: {
+          gainIncome: {
+            actions: assign((context, event) => {
+              return {
+                food: context.food + event.food,
+                workers: context.workers + event.worker,
+                coin: context.coin + event.coin,
+                culture: context.culture + event.culture,
+                tapestryHand: context.tapestryHand + event.tapestry,
+                territoriesOwned: context.territoriesOwned + event.territory,
+              }
+            }),
+          }
+        }
       },
     },
   },
