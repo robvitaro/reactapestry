@@ -2,6 +2,8 @@ import { Machine, assign } from 'xstate';
 import { advanceTurnStateMachine } from './AdvanceTurnStateMachine';
 import { incomeTurnStateMachine } from './IncomeTurnStateMachine';
 
+const MAX_INCOME_TURNS = 5
+
 export const tapestryGameStateMachine = Machine(
   {
     id: 'TapestryGameState',
@@ -85,7 +87,7 @@ export const tapestryGameStateMachine = Machine(
         return context.canAdvance;
       },
       incomeTurnPossible: (context, event) => {
-        return context.incomeTurns < 5;
+        return context.incomeTurns < MAX_INCOME_TURNS;
       },
     }
   }

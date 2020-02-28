@@ -1,6 +1,6 @@
 import {Machine, sendParent} from "xstate";
-
 import {INCOME_MAT} from "../data/income_mat";
+
 const MAX_INCOME_SPACES = 6
 
 const gainIncome = (incomeIndex) => {

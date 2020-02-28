@@ -7,10 +7,6 @@ import SmallHexMap from "./components/SmallHexMap";
 import { tapestryGameStateMachine } from "./state_machines/TapestryGameStateMachine";
 import { CITIES } from './data/cities';
 import { TRACKS } from './data/tracks';
-import { INCOME_MAT } from "./data/income_mat";
-
-const MAX_INCOME_TURNS = 5
-
 
 class Tapestry extends React.Component {
   constructor(props) {
@@ -27,8 +23,6 @@ class Tapestry extends React.Component {
     this.updateStateVar = this.updateStateVar.bind(this)
     this.buildingAdded = this.buildingAdded.bind(this)
     this.handleIncomeTurn = this.handleIncomeTurn.bind(this)
-    // this.takeIncomeTurn = this.takeIncomeTurn.bind(this)
-    // this.gainIncome = this.gainIncome.bind(this)
     this.resourceChosen = this.resourceChosen.bind(this)
     this.checkForZeroResources = this.checkForZeroResources.bind(this)
   }
@@ -59,9 +53,6 @@ class Tapestry extends React.Component {
 
   handleIncomeTurn() {
     this.gameStateService.send('IncomeTurn')
-    // if(this.state.current.context.incomeTurns < MAX_INCOME_TURNS) {
-    //   this.setState(prevState => { return { incomeTurns: prevState.incomeTurns + 1}}, ()=> this.takeIncomeTurn())
-    // }
   }
 
   resourceChosen(resource) {
