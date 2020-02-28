@@ -45,8 +45,11 @@ export const tapestryGameStateMachine = Machine(
         },
       },
       TakingAdvanceTurn: {
-        invoke: { id: 'advanceTurn', src: advanceTurnStateMachine },
-        onDone: 'Idle'
+        invoke: {
+          id: 'advanceTurn',
+          src: advanceTurnStateMachine,
+          onDone: 'Idle'
+        }
       },
       TakingIncomeTurn: {
         invoke: {
@@ -54,10 +57,10 @@ export const tapestryGameStateMachine = Machine(
           src: incomeTurnStateMachine,
           data: (context, event) => ({
             incomeIndex: context.incomeIndex,
-          })
+          }),
+          onDone: 'Idle'
         },
         exit: 'incrementIncomeTurns',
-        onDone: 'Idle',
         on: {
           gainIncome: {
             actions: assign((context, event) => {
