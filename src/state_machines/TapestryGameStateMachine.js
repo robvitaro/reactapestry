@@ -48,7 +48,22 @@ export const tapestryGameStateMachine = Machine(
         invoke: {
           id: 'advanceTurn',
           src: advanceTurnStateMachine,
+          data: (context, event) => ({
+            trackIndex: event.index,
+            spaceIndex: context.trackIndex[event.index] + 1
+          }),
           onDone: 'Idle'
+        },
+        on: {
+          AdvanceToken: {
+            actions: assign({ trackIndex: (context, event) => AdvanceToken(context.trackIndex, event.trackIndex) })
+          },
+          territory: { actions: 'gainTerritory' },
+          coin: { actions: 'gainCoin' },
+          culture: { actions: 'gainCulture' },
+          food: { actions: 'gainFood' },
+          worker: { actions: 'gainWorkers' },
+
         }
       },
       TakingIncomeTurn: {
@@ -82,6 +97,11 @@ export const tapestryGameStateMachine = Machine(
     actions: {
       incrementIncomeTurns: assign({ incomeTurns: context => context.incomeTurns + 1 }),
       checkCanTakeIncomeTurn: assign({ canTakeIncomeTurn: context=> context.incomeTurns < MAX_INCOME_TURNS}),
+      gainTerritory: assign({ territoriesOwned: (context, event) => context.territoriesOwned + event.qty }),
+      gainCoin: assign({ coin: (context, event) => context.coin + event.qty }),
+      gainCulture: assign({ culture: (context, event) => context.culture + event.qty }),
+      gainFood: assign({ food: (context, event) => context.food + event.qty }),
+      gainWorkers: assign({ workers: (context, event) => context.workers + event.qty }),
     },
     guards: {
       advanceTurnPossible: context => context.canAdvance,
@@ -89,3 +109,9 @@ export const tapestryGameStateMachine = Machine(
     }
   }
 );
+
+const AdvanceToken = (trackIndex, index) => {
+  const newTrackIndex = [...trackIndex]; // copy so we don't mutate state directly
+  newTrackIndex[index] = trackIndex[index] + 1;
+  return newTrackIndex
+}

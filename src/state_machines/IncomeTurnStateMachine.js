@@ -16,7 +16,6 @@ const gainIncome = (incomeIndex) => {
       })
     }
   })
-  console.log(income)
   return income
 }
 

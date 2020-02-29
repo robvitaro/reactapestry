@@ -18,8 +18,7 @@ class Tapestry extends React.Component {
       this.setState({ current })
     );
 
-    this.handleTrackAdvance = this.handleTrackAdvance.bind(this)
-    this.gainBenefitFromAdvancement = this.gainBenefitFromAdvancement.bind(this)
+    this.handleAdvanceTurn = this.handleAdvanceTurn.bind(this)
     this.updateStateVar = this.updateStateVar.bind(this)
     this.buildingAdded = this.buildingAdded.bind(this)
     this.handleIncomeTurn = this.handleIncomeTurn.bind(this)
@@ -69,20 +68,10 @@ class Tapestry extends React.Component {
     if (!this.checkAnyResource(1)) {this.setState({mode: 'zeroResources'})}
   }
 
-  handleTrackAdvance(index) {
-    const newTrackIndex = [...this.state.current.context.trackIndex]; // copy so we don't mutate state directly
-    newTrackIndex[index] = this.state.current.context.trackIndex[index] + 1;
-    this.setState({ trackIndex: newTrackIndex }, ()=> this.gainBenefitFromAdvancement(index));
+  handleAdvanceTurn(index) {
+    this.gameStateService.send({type: 'AdvanceTurn', index: index})
   }
 
-  gainBenefitFromAdvancement(index) {
-    const track = TRACKS[index]
-    const space = track.spaces[this.state.current.context.trackIndex[index]]
-    const gains = space.gain
-    gains.map((gain) => {
-      return this[gain.type](gain) // calls function with same name as type
-    })
-  }
 
   checkAnyResource(minimum, exclude) {
     let totalResources = 0
@@ -238,7 +227,7 @@ class Tapestry extends React.Component {
                 track={track}
                 index={index}
                 currentSpace={trackIndex[index]}
-                handleAdvance={this.handleTrackAdvance}
+                handleAdvance={this.handleAdvanceTurn}
                 advancePermitted={this.checkTrackAdvancePermitted(index, track.resource)}
               />
             })
