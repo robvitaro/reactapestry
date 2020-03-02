@@ -6,19 +6,20 @@ import cultureToken from '../img/culture.png';
 
 const ResourceTrack = (props) => {
   const {food, workers, coin, culture} = props.resources
-  const {mode, resourceChosen} = props
+  const {advanceTurnState, resourceChosen} = props
   const maxValue = 8
 
   const modeMessage = () => {
-    switch (mode) {
-      case 'zeroResources': return <span>You're out of resources. Time to take an income turn?</span>
-      case 'chooseResourceAny1': return <span>Choose any 1 resource</span>
-      default: return <span>&nbsp;</span>
-    }
+    // switch (mode) {
+    //   case 'zeroResources': return <span>You're out of resources. Time to take an income turn?</span>
+    //   case 'chooseResourceAny1': return <span>Choose any 1 resource</span>
+    //   default: return <span>&nbsp;</span>
+    // }
+    return (advanceTurnState && advanceTurnState.state && advanceTurnState.state.matches('PayingCost')) ? <span>Choose any 1 resource</span> : <span>&nbsp;</span>
   }
 
   const takeResource = (resource) => {
-    if (mode === 'chooseResourceAny1') {
+    if (advanceTurnState && advanceTurnState.state && advanceTurnState.state && advanceTurnState.state.matches('PayingCost')) {
       resourceChosen(resource)
     }
   }

@@ -8,7 +8,7 @@ export const advanceTurnStateMachine = Machine({
     spaceIndex: -1,
     gains: [],
   },
-  initial: 'AdvanceToken',
+  initial: 'PayingCost',
   states: {
     PayingCost: {
       on: {ChooseResources: 'ChoosingResources'},

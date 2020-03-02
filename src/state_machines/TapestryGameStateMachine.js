@@ -1,4 +1,4 @@
-import { Machine, assign } from 'xstate';
+import { Machine, assign, send } from 'xstate';
 import { advanceTurnStateMachine } from './AdvanceTurnStateMachine';
 import { incomeTurnStateMachine } from './IncomeTurnStateMachine';
 
@@ -59,6 +59,10 @@ export const tapestryGameStateMachine = Machine(
             actions: assign({ trackIndex: (context, event) => AdvanceToken(context.trackIndex, event.trackIndex) })
           },
           gainFromAdvance: { actions: 'gainFromAdvance' },
+          payFood: {actions: ['payFood', send('ChooseResources', { to: 'advanceTurn' }), send('CostPaidForAdvancing', { to: 'advanceTurn' })] },
+          payCoin: {actions: ['payCoin', send('ChooseResources', { to: 'advanceTurn' }), send('CostPaidForAdvancing', { to: 'advanceTurn' })] },
+          payWorker: {actions: ['payWorker', send('ChooseResources', { to: 'advanceTurn' }), send('CostPaidForAdvancing', { to: 'advanceTurn' })] },
+          payCulture: {actions: ['payCulture', send('ChooseResources', { to: 'advanceTurn' }), send('CostPaidForAdvancing', { to: 'advanceTurn' })] },
 
         }
       },
@@ -99,9 +103,14 @@ export const tapestryGameStateMachine = Machine(
           event.gains.forEach(gain => {
             formattedGains[gain.type] = context[gain.type] + gain.qty
           })
+          console.log(formattedGains)
           return formattedGains
         }
       ),
+      payFood: assign({ food: context => context.food -1 }),
+      payCoin: assign({ coin: context => context.coin -1 }),
+      payWorker: assign({ workers: context => context.workers -1 }),
+      payCulture: assign({ culture: context => context.culture -1 }),
     },
     guards: {
       advanceTurnPossible: context => context.canAdvance,

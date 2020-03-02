@@ -24,6 +24,7 @@ class Tapestry extends React.Component {
     this.handleIncomeTurn = this.handleIncomeTurn.bind(this)
     this.resourceChosen = this.resourceChosen.bind(this)
     this.checkForZeroResources = this.checkForZeroResources.bind(this)
+    this.advanceTurnState = this.advanceTurnState.bind(this)
   }
 
   componentDidMount() {
@@ -54,12 +55,20 @@ class Tapestry extends React.Component {
     this.gameStateService.send('IncomeTurn')
   }
 
+  handleAdvanceTurn(index) {
+    this.gameStateService.send({type: 'AdvanceTurn', index: index})
+  }
+
+  advanceTurnState() {
+    return this.state.current.children.advanceTurn
+  }
+
   resourceChosen(resource) {
     switch (resource) {
-      case 'food': return this.updateStateVar('food', -1, ()=> this.checkForZeroResources())
-      case 'worker': return this.updateStateVar('workers', -1, ()=> this.checkForZeroResources())
-      case 'coin': return this.updateStateVar('coin', -1, ()=> this.checkForZeroResources())
-      case 'culture': return this.updateStateVar('culture', -1, ()=> this.checkForZeroResources())
+      case 'food': return this.gameStateService.send({type: 'payFood'})
+      case 'worker': return this.gameStateService.send({type: 'payWorker'})
+      case 'coin': return this.gameStateService.send({type: 'payCoin'})
+      case 'culture': return this.gameStateService.send({type: 'payCulture'})
       default: return null
     }
   }
@@ -68,9 +77,6 @@ class Tapestry extends React.Component {
     if (!this.checkAnyResource(1)) {this.setState({mode: 'zeroResources'})}
   }
 
-  handleAdvanceTurn(index) {
-    this.gameStateService.send({type: 'AdvanceTurn', index: index})
-  }
 
 
   checkAnyResource(minimum, exclude) {
@@ -244,7 +250,7 @@ class Tapestry extends React.Component {
                         coin: coin,
                         culture: culture
                       }}
-            mode={mode}
+            advanceTurnState={this.advanceTurnState()}
             resourceChosen={this.resourceChosen}
           />
           <City
