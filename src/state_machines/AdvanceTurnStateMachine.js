@@ -31,75 +31,12 @@ export const advanceTurnStateMachine = Machine({
     GainingBenefits: {
       entry: 'assignGains',
       on: {
-        '': [
-            // Transitions are tested one at a time.
-            // The first valid transition will be taken.
-            { target: 'Gain1Benefit', cond: { type: 'benefitCount', benefits: 1} },
-            { target: 'Gain2Benefits', cond: { type: 'benefitCount', benefits: 2} },
-            { target: 'Gain3Benefits', cond: { type: 'benefitCount', benefits: 3} },
-            { target: 'Gain4Benefits', cond: { type: 'benefitCount', benefits: 4} },
-            { target: 'Gain5Benefits', cond: { type: 'benefitCount', benefits: 5} },
-          ],
+        '': {
+          actions: sendParent(context => ({ type: 'gainFromAdvance', gains: context.gains})),
+          target: 'AdvanceTurnOver'
+        },
         ChooseBenefit: 'ChoosingBenefits',
         GainBenefit: 'GainedBenefit'
-      }
-    },
-    Gain1Benefit: {
-      on: {
-        '': {
-          actions: sendParent(context => context.gains[0]),
-          target: 'AdvanceTurnOver'
-        }
-      }
-    },
-    Gain2Benefits: {
-      on: {
-        '': {
-          actions: [
-            sendParent(context => context.gains[0]),
-            sendParent(context => context.gains[1])
-          ],
-          target: 'AdvanceTurnOver'
-        }
-      }
-    },
-    Gain3Benefits: {
-      on: {
-        '': {
-          actions: [
-            sendParent(context => context.gains[0]),
-            sendParent(context => context.gains[1]),
-            sendParent(context => context.gains[2])
-          ],
-          target: 'AdvanceTurnOver'
-        }
-      }
-    },
-    Gain4Benefits: {
-      on: {
-        '': {
-          actions: [
-            sendParent(context => context.gains[0]),
-            sendParent(context => context.gains[1]),
-            sendParent(context => context.gains[2]),
-            sendParent(context => context.gains[3])
-          ],
-          target: 'AdvanceTurnOver'
-        }
-      }
-    },
-    Gain5Benefits: {
-      on: {
-        '': {
-          actions: [
-            sendParent(context => context.gains[0]),
-            sendParent(context => context.gains[1]),
-            sendParent(context => context.gains[2]),
-            sendParent(context => context.gains[3]),
-            sendParent(context => context.gains[4])
-          ],
-          target: 'AdvanceTurnOver'
-        }
       }
     },
     ChoosingBenefits: {
@@ -125,11 +62,6 @@ export const advanceTurnStateMachine = Machine({
   {
     actions: {
       assignGains: assign({ gains: context => TRACKS[context.trackIndex].spaces[context.spaceIndex].gain }),
-    },
-    guards: {
-      benefitCount: (context, event, { cond }) => {
-        return context.gains.length === cond.benefits
-      }
     }
   }
 );

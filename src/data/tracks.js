@@ -296,7 +296,7 @@ export const TRACKS = [
         name: 'AI Singularity',
         gain: [
           { type: 'coin', qty: 1 },
-          { type: 'worker', qty: 1 },
+          { type: 'workers', qty: 1 },
           { type: 'culture', qty: 1 },
           { type: 'food', qty: 1 },
           { type: 'resetTechTrack', qty: 1 },
@@ -334,7 +334,7 @@ export const TRACKS = [
       {
         name: 'Standing Army',
         gain: [
-          { type: 'worker', qty: 1 },
+          { type: 'workers', qty: 1 },
           { type: 'vp', qty: 1, condition: 'territoriesOwned' },
         ],
         gain_logic: 'AND',
