@@ -82,7 +82,7 @@ export const TRACKS = [
         gain: [
           { type: 'vp', qty: 1, condition: 'technologyTrackAdvances' },
         ],
-        bonus: { cost: 'territory', cost_qty: 3, gain: 'tapestry', gain_qty: 10 },
+        bonus: { cost: 'territory', cost_qty: 3, gain: 'vp', gain_qty: 10 },
         building: 'Launch Pad'
       },
       {

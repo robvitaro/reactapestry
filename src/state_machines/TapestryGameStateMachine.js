@@ -15,13 +15,13 @@ export const tapestryGameStateMachine = Machine(
       culture: 0,
       tapestry: 0,
       tapestryMat: 0,
-      techCardBottom: 0,
+      techCard: 0,
       techCardMiddle: 0,
       techCardTop: 0,
       territory: 0,
       territoriesExplored: 0,
       territoriesControlled: 0,
-      spaceTilesOwned: 0,
+      spaceTile: 0,
       spaceTilesExplored: 0,
       trackIndex: [0,0,0,0],
       incomeIndex: [5,5,5,5],
@@ -123,3 +123,47 @@ const AdvanceToken = (trackIndex, index) => {
   newTrackIndex[index] = trackIndex[index] + 1;
   return newTrackIndex
 }
+
+/*
+
+coin
+workers
+culture
+food
+territory
+tapestry
+spaceTile
+techCard
+
+farm
+house
+market
+armory
+
+vp
+scoreCity
+
+explore
+exploreAnywhere
+exploreSpace
+conquer
+conquerIfOppBothDice
+conquerAnywhere
+conquerBothDice
+
+rollNoBenefit
+roll
+regainCurrentSpaceAnyTrack
+advance
+regress
+
+discardFaceUpTechCards
+upgradeTech
+circleTechBenefit
+squareTechBenefit
+resetTechTrack
+
+newTapestryOverLast
+civ
+
+ */
