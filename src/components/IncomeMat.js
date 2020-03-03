@@ -13,13 +13,13 @@ const IncomeMat = (props) => {
           key={INCOME_MAT[0].name}
           incomeTrack={INCOME_MAT[0]}
           buildingsOnTrack={incomeTracks[0]}
-          className={'m'}
+          building={'market'}
         />
         <IncomeTrack
           key={INCOME_MAT[1].name}
           incomeTrack={INCOME_MAT[1]}
           buildingsOnTrack={incomeTracks[1]}
-          className={'h'}
+          building={'house'}
         />
       </div>
       <div className='incomeMat'>
@@ -27,13 +27,13 @@ const IncomeMat = (props) => {
           key={INCOME_MAT[2].name}
           incomeTrack={INCOME_MAT[2]}
           buildingsOnTrack={incomeTracks[2]}
-          className={'f'}
+          building={'farm'}
         />
         <IncomeTrack
           key={INCOME_MAT[3].name}
           incomeTrack={INCOME_MAT[3]}
           buildingsOnTrack={incomeTracks[3]}
-          className={'a'}
+          building={'armory'}
         />
       </div>
       <ResourceTrack resources={resources} advanceTurnState={advanceTurnState} resourceChosen={resourceChosen}/>

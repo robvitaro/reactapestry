@@ -127,26 +127,26 @@ table {
 
 /* farm */
 .city td div.f, .city td div.adding-f:hover, .incomeMat td div.f{
-    border-radius: 15%;
-    background-color: #422820;
+    /*border-radius: 15%;*/
+    /*background-color: #422820;*/
 }
 
 /* house */
 .city td div.h, .city td div.adding-h:hover, .incomeMat td div.h{
-    border-radius: 15%;
-    background-color: dimgray;
+    /*border-radius: 15%;*/
+    /*background-color: dimgray;*/
 }
 
 /* market */
 .city td div.m, .city td div.adding-m:hover, .incomeMat td div.m{
-    border-radius: 50%;
-    background-color: #c2ae1f;
+    /*border-radius: 50%;*/
+    /*background-color: #c2ae1f;*/
 }
 
 /* armory */
 .city td div.a, .city td div.adding-a:hover, .incomeMat td div.a{
-    border-radius: 50%;
-    background-color: #640d0f;
+    /*border-radius: 50%;*/
+    /*background-color: #640d0f;*/
 }
 
 .city td div.adding-f:hover,
@@ -202,6 +202,12 @@ table {
     max-height: 65px;
     text-align: center;
     font-size: 8pt;
+}
+
+.space img{
+    max-width: 90%;
+    margin-left: 4px;
+    display: block;
 }
 
 text.hidden {

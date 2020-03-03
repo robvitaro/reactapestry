@@ -2,7 +2,7 @@ import React from 'react';
 import IncomeTrackSpace from "./IncomeTrackSpace";
 
 const IncomeTrack = (props) => {
-  const {incomeTrack, buildingsOnTrack, className} = props
+  const {incomeTrack, buildingsOnTrack, building} = props
 
   return (
     <div>
@@ -17,7 +17,7 @@ const IncomeTrack = (props) => {
                     key={index}
                     space={space}
                     openSpace={openSpace}
-                    className={className}
+                    building={building}
                   />
                 )
               })
