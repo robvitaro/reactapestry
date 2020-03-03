@@ -249,3 +249,7 @@ svg g text {
     min-height: 40px;
     max-height: 40px;
 }
+
+.resource.choosing {
+    cursor: pointer;
+}
