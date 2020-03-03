@@ -66,7 +66,7 @@ class Tapestry extends React.Component {
   resourceChosen(resource) {
     switch (resource) {
       case 'food': return this.gameStateService.send({type: 'payFood'})
-      case 'worker': return this.gameStateService.send({type: 'payWorker'})
+      case 'workers': return this.gameStateService.send({type: 'payWorker'})
       case 'coin': return this.gameStateService.send({type: 'payCoin'})
       case 'culture': return this.gameStateService.send({type: 'payCulture'})
       default: return null
@@ -76,8 +76,6 @@ class Tapestry extends React.Component {
   checkForZeroResources() {
     if (!this.checkAnyResource(1)) {this.setState({mode: 'zeroResources'})}
   }
-
-
 
   checkAnyResource(minimum, exclude) {
     let totalResources = 0
@@ -114,10 +112,6 @@ class Tapestry extends React.Component {
     this.setState(prevState => { return { [field]: prevState[field] + value}}, callback)
   }
 
-  territory(gain) {
-    this.updateStateVar('territoriesOwned', gain.qty)
-  }
-
   explore(gain) {
     this.updateStateVar('territoriesOwned', gain.qty * -1)
     this.updateStateVar('territoriesExplored', gain.qty)
@@ -145,10 +139,6 @@ class Tapestry extends React.Component {
     this.updateStateVar('techCardBottom', gain.qty)
   }
 
-  tapestry(gain) {
-    this.updateStateVar('tapestryHand', gain.qty)
-  }
-
   updateIncomeIndex(index, qty) {
     const newIncomeIndex = [...this.state.current.context.incomeIndex]; // copy so we don't mutate state directly
     newIncomeIndex[index] = this.state.current.context.incomeIndex[index] - qty;
@@ -173,22 +163,6 @@ class Tapestry extends React.Component {
   armory(gain) {
     this.updateIncomeIndex(3, gain.qty)
     this.setState({mode: 'adding-a'})
-  }
-
-  coin(gain) {
-    this.updateStateVar('coin', gain.qty)
-  }
-
-  worker(gain) {
-    this.updateStateVar('workers', gain.qty)
-  }
-
-  food(gain) {
-    this.updateStateVar('food', gain.qty)
-  }
-
-  culture(gain) {
-    this.updateStateVar('culture', gain.qty)
   }
 
   conquer(gain) {

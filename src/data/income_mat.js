@@ -48,14 +48,14 @@ export const INCOME_MAT = [
       {
         name: 'Symbology',
         gain: [
-          { type: 'worker', qty: 1 },
+          { type: 'workers', qty: 1 },
           { type: 'scoreCity', qty: 1}
         ],
       },
       {
         name: 'Language',
         gain: [
-          { type: 'worker', qty: 1 },
+          { type: 'workers', qty: 1 },
         ],
       },
       {
@@ -67,13 +67,13 @@ export const INCOME_MAT = [
       {
         name: 'Telephone',
         gain: [
-          { type: 'worker', qty: 1 },
+          { type: 'workers', qty: 1 },
         ],
       },
       {
         name: 'Email',
         gain: [
-          { type: 'worker', qty: 1 },
+          { type: 'workers', qty: 1 },
           { type: 'scoreCity', qty: 1}
         ],
       },

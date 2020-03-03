@@ -49,7 +49,7 @@ const ResourceTrack = (props) => {
             {food === i ? <img alt="food" src={foodToken} onClick={()=> takeResource('food')}/> : ''}
           </div>
           <div className={`resource worker ${payingCostClass(workers === i)}`}>
-            {workers === i ? <img alt="worker" src={workerToken} onClick={()=> takeResource('worker')}/> : ''}
+            {workers === i ? <img alt="worker" src={workerToken} onClick={()=> takeResource('workers')}/> : ''}
           </div>
         </div>
         <div>

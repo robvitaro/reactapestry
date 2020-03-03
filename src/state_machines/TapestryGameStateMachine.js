@@ -61,7 +61,7 @@ export const tapestryGameStateMachine = Machine(
           gainFromAdvance: { actions: 'gainFromAdvance' },
           payFood: {actions: ['payFood', send({ type: 'PaidResource', payment: 'food'}, { to: 'advanceTurn' })]},
           payCoin: {actions: ['payCoin', send({ type: 'PaidResource', payment: 'coin'}, { to: 'advanceTurn' })]},
-          payWorker: {actions: ['payWorker', send({ type: 'PaidResource', payment: 'worker'}, { to: 'advanceTurn' })]},
+          payWorker: {actions: ['payWorker', send({ type: 'PaidResource', payment: 'workers'}, { to: 'advanceTurn' })]},
           payCulture: {actions: ['payCulture', send({ type: 'PaidResource', payment: 'culture'}, { to: 'advanceTurn' })]},
 
         }
@@ -81,7 +81,7 @@ export const tapestryGameStateMachine = Machine(
             actions: assign((context, event) => {
               return {
                 food: context.food + event.food,
-                workers: context.workers + event.worker,
+                workers: context.workers + event.workers,
                 coin: context.coin + event.coin,
                 culture: context.culture + event.culture,
                 tapestry: context.tapestry + event.tapestry,
