@@ -55,9 +55,7 @@ export const tapestryGameStateMachine = Machine(
           onDone: 'Idle'
         },
         on: {
-          AdvanceToken: {
-            actions: assign({ trackIndex: (context, event) => AdvanceToken(context.trackIndex, event.trackIndex) })
-          },
+          advanceToken: { actions: 'advanceToken' },
           gainFromAdvance: { actions: 'gainFromAdvance' },
           payFood: {actions: ['payFood', send({ type: 'PaidResource', payment: 'food'}, { to: 'advanceTurn' })]},
           payCoin: {actions: ['payCoin', send({ type: 'PaidResource', payment: 'coin'}, { to: 'advanceTurn' })]},
@@ -96,13 +94,16 @@ export const tapestryGameStateMachine = Machine(
     actions: {
       incrementIncomeTurns: assign({ incomeTurns: context => context.incomeTurns + 1 }),
       checkCanTakeIncomeTurn: assign({ canTakeIncomeTurn: context=> context.incomeTurns < MAX_INCOME_TURNS}),
-      gainFromAdvance: assign((context, event) =>
-        {
+      advanceToken: assign({ trackIndex: (context, event) => {
+          const newTrackIndex = [...context.trackIndex]; // copy so we don't mutate state directly
+          newTrackIndex[event.trackIndex] = context.trackIndex[event.trackIndex] + 1;
+          return newTrackIndex
+        } }),
+      gainFromAdvance: assign((context, event) => {
           const formattedGains = {}
           event.gains.forEach(gain => {
             formattedGains[gain.type] = context[gain.type] + gain.qty
           })
-          console.log(formattedGains)
           return formattedGains
         }
       ),
@@ -117,12 +118,6 @@ export const tapestryGameStateMachine = Machine(
     }
   }
 );
-
-const AdvanceToken = (trackIndex, index) => {
-  const newTrackIndex = [...trackIndex]; // copy so we don't mutate state directly
-  newTrackIndex[index] = trackIndex[index] + 1;
-  return newTrackIndex
-}
 
 /*
 

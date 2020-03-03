@@ -14,6 +14,7 @@ const IncomeTrackSpace = (props) => {
       case 'house': return houseToken;
       case 'farm': return farmToken;
       case 'armory': return armoryToken;
+      default: return null
     }
   }
 

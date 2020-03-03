@@ -35,7 +35,7 @@ export const advanceTurnStateMachine = Machine({
     AdvanceToken: {
       on: {
         '': {
-          actions: sendParent(context => ({ type: 'AdvanceToken', trackIndex: context.trackIndex, spaceIndex: context.spaceIndex })),
+          actions: sendParent(context => ({ type: 'advanceToken', trackIndex: context.trackIndex, spaceIndex: context.spaceIndex })),
           target: 'GainingBenefits'
         }
       }
@@ -97,7 +97,6 @@ export const advanceTurnStateMachine = Machine({
       ),
       capturePayment: assign((context, event) => {
         const newCost = context.advancementCost.map((x) => x)
-        console.log(newCost)
         const payment = event.payment
         let paymentIndex = newCost.indexOf(payment)
 
@@ -112,7 +111,6 @@ export const advanceTurnStateMachine = Machine({
           }
 
         }
-        console.log(newCost)
         return {advancementCost: newCost}
         }
       ),
