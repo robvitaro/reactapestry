@@ -59,10 +59,10 @@ export const tapestryGameStateMachine = Machine(
             actions: assign({ trackIndex: (context, event) => AdvanceToken(context.trackIndex, event.trackIndex) })
           },
           gainFromAdvance: { actions: 'gainFromAdvance' },
-          payFood: {actions: ['payFood', send('ChooseResources', { to: 'advanceTurn' }), send('CostPaidForAdvancing', { to: 'advanceTurn' })] },
-          payCoin: {actions: ['payCoin', send('ChooseResources', { to: 'advanceTurn' }), send('CostPaidForAdvancing', { to: 'advanceTurn' })] },
-          payWorker: {actions: ['payWorker', send('ChooseResources', { to: 'advanceTurn' }), send('CostPaidForAdvancing', { to: 'advanceTurn' })] },
-          payCulture: {actions: ['payCulture', send('ChooseResources', { to: 'advanceTurn' }), send('CostPaidForAdvancing', { to: 'advanceTurn' })] },
+          payFood: {actions: ['payFood', send({ type: 'PaidResource', payment: 'food'}, { to: 'advanceTurn' })]},
+          payCoin: {actions: ['payCoin', send({ type: 'PaidResource', payment: 'coin'}, { to: 'advanceTurn' })]},
+          payWorker: {actions: ['payWorker', send({ type: 'PaidResource', payment: 'worker'}, { to: 'advanceTurn' })]},
+          payCulture: {actions: ['payCulture', send({ type: 'PaidResource', payment: 'culture'}, { to: 'advanceTurn' })]},
 
         }
       },
