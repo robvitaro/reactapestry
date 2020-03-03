@@ -31,9 +31,9 @@ class City extends React.Component {
   }
 
   addBuilding(event) {
-    if (this.props.mode !== '') {
+    if (this.props.advanceTurnState && this.props.advanceTurnState.state.matches('PlacingBuilding')) {
       const [x,y] = event.target.id.split('_')
-      const building = this.props.mode.split('-')[1]
+      const building = this.props.advanceTurnState.state.context.building.charAt(0)
       const newGrid = [...this.state.grid];
       newGrid[x][y] = building
       this.setState({grid: newGrid})
@@ -41,13 +41,26 @@ class City extends React.Component {
     }
   }
 
-  modeMessage() {
-    switch (this.props.mode) {
-      case 'adding-m': return <span>Please add a market to your city</span>
-      case 'adding-f': return <span>Please add a farm to your city</span>
-      case 'adding-h': return <span>Please add a house to your city</span>
-      case 'adding-a': return <span>Please add an armory to your city</span>
-      default: return <span>&nbsp;</span>
+  message() {
+    if (this.props.advanceTurnState && this.props.advanceTurnState.state.matches('PlacingBuilding')) {
+      switch (this.props.advanceTurnState.state.context.building) {
+        case 'market': return <span>Please add a market to your city</span>
+        case 'farm': return <span>Please add a farm to your city</span>
+        case 'house': return <span>Please add a house to your city</span>
+        case 'armory': return <span>Please add an armory to your city</span>
+        default: return <span>&nbsp;</span>
+      }
+    } else {
+      return <span>&nbsp;</span>
+    }
+  }
+
+  addingBuildingClass() {
+    if (this.props.advanceTurnState && this.props.advanceTurnState.state.matches('PlacingBuilding')) {
+      const building = this.props.advanceTurnState.state.context.building.charAt(0)
+      return `adding-${building}`
+    } else {
+      return ''
     }
   }
 
@@ -64,7 +77,7 @@ class City extends React.Component {
                   <td key={`cityCell_${index}_${y}`}>
                     <div
                       id={`${index}_${y}`}
-                      className={this.state.grid[index][y] ? this.state.grid[index][y] : this.props.mode}
+                      className={this.state.grid[index][y] ? this.state.grid[index][y] : this.addingBuildingClass()}
                       onClick={this.addBuilding}
                     />
                   </td>
@@ -78,7 +91,7 @@ class City extends React.Component {
 
     return (
       <div className='city'>
-        <p className={'smallMessage animated pulse'}>{this.modeMessage()}</p>
+        <p className={'smallMessage animated pulse'}>{this.message()}</p>
         <table>
           <tbody>
           {rows}

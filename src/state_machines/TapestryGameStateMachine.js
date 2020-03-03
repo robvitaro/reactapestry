@@ -23,8 +23,8 @@ export const tapestryGameStateMachine = Machine(
       territoriesControlled: 0,
       spaceTile: 0,
       spaceTilesExplored: 0,
-      trackIndex: [0,0,0,0],
-      incomeIndex: [5,5,5,5],
+      trackIndex: [0,0,0,0],  // expl, sci, tech, mil
+      incomeIndex: [5,5,5,5], // markets, houses, farms, armories
       mode: 'zeroResources',
       incomeTurns: 0,
       canTakeIncomeTurn: true,
@@ -56,7 +56,9 @@ export const tapestryGameStateMachine = Machine(
         },
         on: {
           advanceToken: { actions: 'advanceToken' },
-          gainFromAdvance: { actions: 'gainFromAdvance' },
+          gainsFromAdvance: { actions: 'statGainsFromAdvance' },
+          updateIncomeIndex: { actions: 'updateIncomeIndex'},
+          buildingPlaced: {actions: 'placedBuilding' },
           payFood: {actions: ['payFood', send({ type: 'PaidResource', payment: 'food'}, { to: 'advanceTurn' })]},
           payCoin: {actions: ['payCoin', send({ type: 'PaidResource', payment: 'coin'}, { to: 'advanceTurn' })]},
           payWorker: {actions: ['payWorker', send({ type: 'PaidResource', payment: 'workers'}, { to: 'advanceTurn' })]},
@@ -94,23 +96,34 @@ export const tapestryGameStateMachine = Machine(
     actions: {
       incrementIncomeTurns: assign({ incomeTurns: context => context.incomeTurns + 1 }),
       checkCanTakeIncomeTurn: assign({ canTakeIncomeTurn: context=> context.incomeTurns < MAX_INCOME_TURNS}),
-      advanceToken: assign({ trackIndex: (context, event) => {
-          const newTrackIndex = [...context.trackIndex]; // copy so we don't mutate state directly
-          newTrackIndex[event.trackIndex] = context.trackIndex[event.trackIndex] + 1;
-          return newTrackIndex
-        } }),
-      gainFromAdvance: assign((context, event) => {
-          const formattedGains = {}
-          event.gains.forEach(gain => {
-            formattedGains[gain.type] = context[gain.type] + gain.qty
-          })
-          return formattedGains
-        }
-      ),
       payFood: assign({ food: context => context.food -1 }),
       payCoin: assign({ coin: context => context.coin -1 }),
       payWorker: assign({ workers: context => context.workers -1 }),
       payCulture: assign({ culture: context => context.culture -1 }),
+      advanceToken: assign({ trackIndex: (context, event) => {
+        const newTrackIndex = [...context.trackIndex]; // copy so we don't mutate state directly
+        newTrackIndex[event.trackIndex] = context.trackIndex[event.trackIndex] + 1;
+        return newTrackIndex
+      } }),
+      statGainsFromAdvance: assign((context, event) => {
+        console.log('statGainsFromAdvance')
+        const formattedGains = {}
+        event.gains.forEach(gain => {
+          if(statGains.includes(gain.type)) {
+            formattedGains[gain.type] = context[gain.type] + gain.qty
+          }
+        })
+        return formattedGains
+      }),
+      updateIncomeIndex: assign({ incomeIndex: (context, event) => {
+        const buildings = ['market', 'house', 'farm', 'armory']
+        let index = buildings.indexOf(event.building)
+        const newIncomeIndex = [...context.incomeIndex]; // copy so we don't mutate state directly
+        newIncomeIndex[index] = context.incomeIndex[index] - 1;
+        return newIncomeIndex
+      }}),
+      placedBuilding: send({ type: 'PlacedBuilding'}, { to: 'advanceTurn' }),
+      endAdvance: send({ type: 'EndAdvance'}, { to: 'advanceTurn' })
     },
     guards: {
       advanceTurnPossible: context => context.canAdvance,
@@ -119,22 +132,20 @@ export const tapestryGameStateMachine = Machine(
   }
 );
 
+const statGains = [
+  'coin',
+  'workers',
+  'culture',
+  'food',
+  'territory',
+  'tapestry',
+  'spaceTile',
+  'techCard'
+]
+
+
+
 /*
-
-coin
-workers
-culture
-food
-territory
-tapestry
-spaceTile
-techCard
-
-farm
-house
-market
-armory
-
 vp
 scoreCity
 

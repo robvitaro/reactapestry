@@ -10,9 +10,7 @@ const gainIncome = (incomeIndex) => {
     const openSpaces = MAX_INCOME_SPACES - incomeIndex[index]
     for(let i = 0; i < openSpaces; i++) {
       track.spaces[i].gain.forEach((gain) => {
-        if(gain.type !== 'vp' && gain.type !== 'scoreCity') {
-          income[gain.type] = gain.qty
-        }
+        income[gain.type] = income[gain.type] ? income[gain.type] + gain.qty : gain.qty
       })
     }
   })

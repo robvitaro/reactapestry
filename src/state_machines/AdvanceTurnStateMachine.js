@@ -8,6 +8,7 @@ export const advanceTurnStateMachine = Machine({
     spaceIndex: -1,
     gains: [],
     advancementCost: [],
+    building: ''
   },
   initial: 'DeterminingCost',
   states: {
@@ -44,28 +45,36 @@ export const advanceTurnStateMachine = Machine({
       entry: 'assignGains',
       on: {
         '': {
-          actions: sendParent(context => ({ type: 'gainFromAdvance', gains: context.gains})),
-          target: 'AdvanceTurnOver'
+          actions: sendParent(context => ({ type: 'gainsFromAdvance', gains: context.gains})),
+          target: 'GainedBenefits'
         },
         ChooseBenefit: 'ChoosingBenefits',
-        GainBenefit: 'GainedBenefit'
+        GainBenefit: 'GainedBenefits'
       }
     },
     ChoosingBenefits: {
       on: {
-        GainBenefit: 'GainedBenefit'
+        GainBenefit: 'GainedBenefits'
       }
     },
-    GainedBenefit: {
+    GainedBenefits: {
       on: {
+        '': [
+          { target: 'PlacingBuilding', cond: 'buildingGainsExist' },
+          { target: 'AdvanceTurnOver' }
+        ],
         PlaceBuilding: 'PlacingBuilding',
         OptForBonus: 'PayingCost',
         EndAdvance: 'AdvanceTurnOver'
       }
     },
     PlacingBuilding: {
+      entry: ['setBuilding', 'updateIncomeIndex'],
       on: {
-        PlacedBuilding: 'GainedBenefit'
+        PlacedBuilding: {
+          actions: 'placedBuilding',
+          target: 'GainedBenefits',
+        }
       }
     },
     AdvanceTurnOver: {type: 'final'}
@@ -75,26 +84,25 @@ export const advanceTurnStateMachine = Machine({
     actions: {
       assignGains: assign({gains: context => TRACKS[context.trackIndex].spaces[context.spaceIndex].gain}),
       determineCost: assign({advancementCost: (context, event) => {
-          const trackSpace = context.spaceIndex
-          const trackResource = TRACKS[context.trackIndex].resource
-          const advancementCost = []
+        const trackSpace = context.spaceIndex
+        const trackResource = TRACKS[context.trackIndex].resource
+        const advancementCost = []
 
-          if (trackSpace < 4) {
-            /* Age 1 requires 1 resource of any kind */
-            advancementCost.push('wild')
-          } else if (trackSpace < 7) {
-            /* Age 2 requires 1 track resource and 1 resource of any kind */
-            advancementCost.push(trackResource, 'wild')
-          } else if (trackSpace < 10) {
-            /* Age 3 requires 1 track resource and 2 resources of any kind */
-            advancementCost.push(trackResource, 'wild', 'wild')
-          } else if (trackSpace < 12) {
-            advancementCost.push(trackResource, trackResource)
-          }
-
-          return advancementCost}
+        if (trackSpace < 4) {
+          /* Age 1 requires 1 resource of any kind */
+          advancementCost.push('wild')
+        } else if (trackSpace < 7) {
+          /* Age 2 requires 1 track resource and 1 resource of any kind */
+          advancementCost.push(trackResource, 'wild')
+        } else if (trackSpace < 10) {
+          /* Age 3 requires 1 track resource and 2 resources of any kind */
+          advancementCost.push(trackResource, 'wild', 'wild')
+        } else if (trackSpace < 12) {
+          advancementCost.push(trackResource, trackResource)
         }
-      ),
+
+        return advancementCost
+      }}),
       capturePayment: assign((context, event) => {
         const newCost = context.advancementCost.map((x) => x)
         const payment = event.payment
@@ -112,13 +120,49 @@ export const advanceTurnStateMachine = Machine({
 
         }
         return {advancementCost: newCost}
+      }),
+      setBuilding: assign({building: (context, event) => {
+        let building = ''
+        context.gains.forEach(gain => {
+          if (buildingGains.includes(gain.type)) {
+            building = gain.type
+          }
+        })
+        return building
+      }}),
+      updateIncomeIndex: sendParent(context => ({ type: 'updateIncomeIndex', building: context.building })),
+      placedBuilding: assign(context => {
+        let newGains = []
+        context.gains.forEach(gain => {
+          if (gain.type !== context.building) {
+            newGains.push(gain)
+          }
+        })
+        return {
+          gains: newGains,
+          building: ''
         }
-      ),
+      }),
     },
     guards: {
       moreToPay: context => context.advancementCost.length > 0,
-      paidInFull: context => context.advancementCost.length === 0
+      paidInFull: context => context.advancementCost.length === 0,
+      buildingGainsExist: context => {
+        let thing = false
+        context.gains.forEach(gain => {
+          if (buildingGains.includes(gain.type)) {
+            thing = true
+          }
+        })
+        return thing
+      }
     }
   }
 );
 
+const buildingGains = [
+  'farm',
+  'house',
+  'market',
+  'armory'
+]

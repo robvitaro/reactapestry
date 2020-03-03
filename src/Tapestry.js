@@ -105,7 +105,7 @@ class Tapestry extends React.Component {
   }
 
   buildingAdded() {
-    this.setState({mode: ''})
+    this.gameStateService.send({type: 'buildingPlaced'})
   }
 
   updateStateVar(field, value, callback) {
@@ -230,7 +230,7 @@ class Tapestry extends React.Component {
           <City
             city={CITIES[1]}
             index={1}
-            mode={mode}
+            advanceTurnState={this.advanceTurnState()}
             buildingAdded={this.buildingAdded}
           />
         </div>
