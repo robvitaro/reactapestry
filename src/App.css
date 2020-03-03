@@ -108,7 +108,7 @@ table {
     height: 25px;
     max-width: 25px;
     max-height: 25px;
-    background-color: #ffedbd;
+    background-color: #fff0d4;
 }
 
 .city td div{
@@ -192,7 +192,7 @@ table {
 .incomeMat td {
     text-align: center;
     border-left: 1px solid black;
-    background-color: #ffedbd;
+    background-color: #fff0d4;
 }
 
 .incomeMat td div.space{
