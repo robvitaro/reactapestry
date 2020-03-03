@@ -256,6 +256,12 @@ svg g text {
     max-height: 40px;
 }
 
+.resource img{
+    max-width: 90%;
+    margin-left: 4px;
+    display: block;
+}
+
 .resource.choosing {
     cursor: pointer;
 }

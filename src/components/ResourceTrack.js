@@ -45,16 +45,16 @@ const ResourceTrack = (props) => {
     spaces.push(
       <td key={i}>
         <div>
+          <div className={`resource coin ${payingCostClass(coin === i)}`}>
+            {coin === i ? <img alt="coin" src={coinToken} onClick={()=> takeResource('coin')}/> : ''}
+          </div>
           <div className={`resource food ${payingCostClass(food === i)}`}>
             {food === i ? <img alt="food" src={foodToken} onClick={()=> takeResource('food')}/> : ''}
           </div>
-          <div className={`resource worker ${payingCostClass(workers === i)}`}>
-            {workers === i ? <img alt="worker" src={workerToken} onClick={()=> takeResource('workers')}/> : ''}
-          </div>
         </div>
         <div>
-          <div className={`resource coin ${payingCostClass(coin === i)}`}>
-            {coin === i ? <img alt="coin" src={coinToken} onClick={()=> takeResource('coin')}/> : ''}
+          <div className={`resource worker ${payingCostClass(workers === i)}`}>
+            {workers === i ? <img alt="worker" src={workerToken} onClick={()=> takeResource('workers')}/> : ''}
           </div>
           <div className={`resource culture ${payingCostClass(culture === i)}`}>
             {culture === i ? <img alt="culture" src={cultureToken} onClick={()=> takeResource('culture')}/> : ''}
