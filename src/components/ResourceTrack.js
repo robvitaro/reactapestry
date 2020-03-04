@@ -37,17 +37,32 @@ const ResourceTrack = (props) => {
         }
       }
       return <span>To advance, pay: {costImages}</span>
+    } else if(advanceTurnState && advanceTurnState.state.matches('SelectFreeResource') ) {
+      return <span>You have completed a district! Select a free resource! </span>
     }
     return <span>&nbsp;</span>
   }
 
-  const takeResource = (resource) => {
-    if (advanceTurnState && advanceTurnState.state.matches('PayingCost')) {
-      resourceChosen(resource)
+  const chooseResource = (resource) => {
+    const payingCost = advanceTurnState && advanceTurnState.state.matches('PayingCost')
+    const selectingFreeResource = advanceTurnState && advanceTurnState.state.matches('SelectFreeResource')
+    if (payingCost || selectingFreeResource) {
+      if (payingCost) {
+        resourceChosen(resource, 'pay')
+      } else if(selectingFreeResource) {
+        resourceChosen(resource, 'free')
+      }
     }
   }
 
-  const payingCostClass = (atIcon) => (atIcon && advanceTurnState && advanceTurnState.state.matches('PayingCost')) ? 'choosing' : ''
+  const choosingResourceClass = (atIcon) => {
+    if(atIcon && advanceTurnState &&
+      (advanceTurnState.state.matches('PayingCost') ||
+        advanceTurnState.state.matches('SelectFreeResource') )) {
+      return 'choosing'
+    }
+    return ''
+  }
 
   const spaces = []
 
@@ -55,19 +70,19 @@ const ResourceTrack = (props) => {
     spaces.push(
       <td key={i}>
         <div>
-          <div className={`resource coin ${payingCostClass(coin === i)}`}>
-            {coin === i ? <img alt="coin" src={images['coin']} onClick={()=> takeResource('coin')}/> : ''}
+          <div className={`resource coin ${choosingResourceClass(coin === i)}`}>
+            {coin === i ? <img alt="coin" src={images['coin']} onClick={()=> chooseResource('coin')}/> : ''}
           </div>
-          <div className={`resource food ${payingCostClass(food === i)}`}>
-            {food === i ? <img alt="food" src={images['food']} onClick={()=> takeResource('food')}/> : ''}
+          <div className={`resource food ${choosingResourceClass(food === i)}`}>
+            {food === i ? <img alt="food" src={images['food']} onClick={()=> chooseResource('food')}/> : ''}
           </div>
         </div>
         <div>
-          <div className={`resource worker ${payingCostClass(workers === i)}`}>
-            {workers === i ? <img alt="worker" src={images['workers']} onClick={()=> takeResource('workers')}/> : ''}
+          <div className={`resource worker ${choosingResourceClass(workers === i)}`}>
+            {workers === i ? <img alt="worker" src={images['workers']} onClick={()=> chooseResource('workers')}/> : ''}
           </div>
-          <div className={`resource culture ${payingCostClass(culture === i)}`}>
-            {culture === i ? <img alt="culture" src={images['culture']} onClick={()=> takeResource('culture')}/> : ''}
+          <div className={`resource culture ${choosingResourceClass(culture === i)}`}>
+            {culture === i ? <img alt="culture" src={images['culture']} onClick={()=> chooseResource('culture')}/> : ''}
           </div>
         </div>
         <div>{i}</div>

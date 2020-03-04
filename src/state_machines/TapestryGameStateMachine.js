@@ -1,4 +1,4 @@
-import { Machine, assign, send } from 'xstate';
+import { Machine, assign, send, forwardTo } from 'xstate';
 import { advanceTurnStateMachine } from './AdvanceTurnStateMachine';
 import { incomeTurnStateMachine } from './IncomeTurnStateMachine';
 
@@ -58,11 +58,15 @@ export const tapestryGameStateMachine = Machine(
           advanceToken: { actions: 'advanceToken' },
           gainsFromAdvance: { actions: 'statGainsFromAdvance' },
           updateIncomeIndex: { actions: 'updateIncomeIndex'},
-          buildingPlaced: {actions: 'placedBuilding' },
+          placedBuilding: {actions: forwardTo('advanceTurn') },
           payFood: {actions: ['payFood', send({ type: 'PaidResource', payment: 'food'}, { to: 'advanceTurn' })]},
+          freeFood: {actions: ['gainFood', send({ type: 'SelectedFreeResource'}, { to: 'advanceTurn' })]},
           payCoin: {actions: ['payCoin', send({ type: 'PaidResource', payment: 'coin'}, { to: 'advanceTurn' })]},
+          freeCoin: {actions: ['gainCoin', send({ type: 'SelectedFreeResource'}, { to: 'advanceTurn' })]},
           payWorker: {actions: ['payWorker', send({ type: 'PaidResource', payment: 'workers'}, { to: 'advanceTurn' })]},
+          freeWorker: {actions: ['gainWorker', send({ type: 'SelectedFreeResource'}, { to: 'advanceTurn' })]},
           payCulture: {actions: ['payCulture', send({ type: 'PaidResource', payment: 'culture'}, { to: 'advanceTurn' })]},
+          freeCulture: {actions: ['gainCulture', send({ type: 'SelectedFreeResource'}, { to: 'advanceTurn' })]},
         }
       },
       TakingIncomeTurn: {
@@ -96,10 +100,14 @@ export const tapestryGameStateMachine = Machine(
     actions: {
       incrementIncomeTurns: assign({ incomeTurns: context => context.incomeTurns + 1 }),
       checkCanTakeIncomeTurn: assign({ canTakeIncomeTurn: context=> context.incomeTurns < MAX_INCOME_TURNS}),
-      payFood: assign({ food: context => context.food -1 }),
-      payCoin: assign({ coin: context => context.coin -1 }),
-      payWorker: assign({ workers: context => context.workers -1 }),
-      payCulture: assign({ culture: context => context.culture -1 }),
+      payFood: assign({ food: context => context.food - 1 }),
+      gainFood: assign({ food: context => context.food + 1 }),
+      payCoin: assign({ coin: context => context.coin - 1 }),
+      gainCoin: assign({ coin: context => context.coin + 1 }),
+      payWorker: assign({ workers: context => context.workers - 1 }),
+      gainWorker: assign({ workers: context => context.workers + 1 }),
+      payCulture: assign({ culture: context => context.culture - 1 }),
+      gainCulture: assign({ culture: context => context.culture + 1 }),
       advanceToken: assign({ trackIndex: (context, event) => {
         const newTrackIndex = [...context.trackIndex]; // copy so we don't mutate state directly
         newTrackIndex[event.trackIndex] = context.trackIndex[event.trackIndex] + 1;

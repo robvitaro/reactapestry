@@ -8,7 +8,8 @@ export const advanceTurnStateMachine = Machine({
     spaceIndex: -1,
     gains: [],
     advancementCost: [],
-    building: ''
+    building: '',
+    freeResource: false
   },
   initial: 'DeterminingCost',
   states: {
@@ -61,6 +62,7 @@ export const advanceTurnStateMachine = Machine({
       on: {
         '': [
           { target: 'PlacingBuilding', cond: 'buildingGainsExist' },
+          { target: 'SelectFreeResource', cond: 'freeResourceToChoose' },
           { target: 'AdvanceTurnOver' }
         ],
         PlaceBuilding: 'PlacingBuilding',
@@ -71,9 +73,17 @@ export const advanceTurnStateMachine = Machine({
     PlacingBuilding: {
       entry: ['setBuilding', 'updateIncomeIndex'],
       on: {
-        PlacedBuilding: {
+        placedBuilding: {
           actions: 'placedBuilding',
           target: 'GainedBenefits',
+        }
+      }
+    },
+    SelectFreeResource: {
+      on: {
+        SelectedFreeResource: {
+          actions: assign({ freeResource: false }),
+          target: 'GainedBenefits'
         }
       }
     },
@@ -131,7 +141,7 @@ export const advanceTurnStateMachine = Machine({
         return building
       }}),
       updateIncomeIndex: sendParent(context => ({ type: 'updateIncomeIndex', building: context.building })),
-      placedBuilding: assign(context => {
+      placedBuilding: assign((context, event) => {
         let newGains = []
         context.gains.forEach(gain => {
           if (gain.type !== context.building) {
@@ -140,7 +150,8 @@ export const advanceTurnStateMachine = Machine({
         })
         return {
           gains: newGains,
-          building: ''
+          building: '',
+          freeResource: event.freeResource
         }
       }),
     },
@@ -155,7 +166,8 @@ export const advanceTurnStateMachine = Machine({
           }
         })
         return thing
-      }
+      },
+      freeResourceToChoose: context => context.freeResource === true
     }
   }
 );

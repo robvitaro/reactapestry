@@ -63,12 +63,12 @@ class Tapestry extends React.Component {
     return this.state.current.children.advanceTurn
   }
 
-  resourceChosen(resource) {
+  resourceChosen(resource, payOrFree) {
     switch (resource) {
-      case 'food': return this.gameStateService.send({type: 'payFood'})
-      case 'workers': return this.gameStateService.send({type: 'payWorker'})
-      case 'coin': return this.gameStateService.send({type: 'payCoin'})
-      case 'culture': return this.gameStateService.send({type: 'payCulture'})
+      case 'food': return this.gameStateService.send({type: payOrFree.concat('Food')})
+      case 'workers': return this.gameStateService.send({type: payOrFree.concat('Worker')})
+      case 'coin': return this.gameStateService.send({type: payOrFree.concat('Coin')})
+      case 'culture': return this.gameStateService.send({type: payOrFree.concat('Culture')})
       default: return null
     }
   }
@@ -104,8 +104,8 @@ class Tapestry extends React.Component {
     }
   }
 
-  buildingAdded() {
-    this.gameStateService.send({type: 'buildingPlaced'})
+  buildingAdded(freeResource) {
+    this.gameStateService.send({type: 'placedBuilding', freeResource: freeResource})
   }
 
   updateStateVar(field, value, callback) {

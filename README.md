@@ -77,7 +77,6 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/tr
 - City
   - choosing at start, affects start location
   - placing large buildings in city (rotating, off edge)
-  - choosing free resource at 3x3 completion
   - knowing when rows/columns are complete
 - Tapestry cards
   - data
@@ -89,7 +88,6 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/tr
   - conquering (pawns, toppling, rolling dice)
   - center tile conquer bonus
 - Tracks
-  - choosing resources for payment
   - optional bonus payment
   - missing effects
 - Civs
