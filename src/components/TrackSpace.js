@@ -3,7 +3,7 @@ import React from 'react';
 const TrackSpace = (props) => {
   const {space, occupied, className, advanceButton} = props
   const classOccupied = occupied ? 'occupied' : ''
-  const title = space.name ? space.name : <span>&nbsp;</span>;
+  const title = space.name ? space.name.toUpperCase() : <span>&nbsp;</span>;
 
   return (
     <td className={className}>

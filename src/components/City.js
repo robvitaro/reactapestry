@@ -97,7 +97,7 @@ class City extends React.Component {
           {rows}
           </tbody>
         </table>
-        <h4>{this.state.index}: {this.state.city.name}</h4>
+        <h4>{this.state.index}: {this.state.city.name.toUpperCase()}</h4>
       </div>
     )
   }
