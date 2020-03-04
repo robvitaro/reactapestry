@@ -239,6 +239,29 @@ table {
     background-image: none;
 }
 
+div.incomeTrack {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+div.incomeTrackHeader {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: stretch;
+    max-width: 20px;
+}
+
+div.incomeTrackSpaces {
+    float: left;
+}
+
+div.incomeTrackName {
+    transform: rotate(270deg);
+    font-size: 9pt;
+}
+
 text.hidden {
     fill: white;
 }
@@ -301,4 +324,8 @@ img.icon-in-text{
     margin-right: 2px;
     margin-left: 2px;
     vertical-align: text-bottom;
+}
+
+div.incomeTrackHeader img.icon-in-text{
+    margin-top: 19px;
 }

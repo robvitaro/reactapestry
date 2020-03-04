@@ -12,6 +12,10 @@ import points10 from '../img/points10.png'
 import pointsCity from '../img/pointsCity.png'
 import pointsConquered from '../img/pointsConquered.png'
 import pointsTech from '../img/pointsTech.png'
+import market from '../img/market.png'
+import house from '../img/house.png'
+import farm from '../img/farm.png'
+import armory from '../img/armory.png'
 
 const IncomeTrack = (props) => {
   const {incomeTrack, buildingsOnTrack, building} = props
@@ -27,33 +31,43 @@ const IncomeTrack = (props) => {
     'points10.png': points10,
     'pointsCity.png': pointsCity,
     'pointsConquered.png': pointsConquered,
-    'pointsTech.png': pointsTech
+    'pointsTech.png': pointsTech,
+    'Markets': market,
+    'Houses': house,
+    'Farms': farm,
+    'Armories': armory
   }
 
   return (
-    <div>
-      <table>
-        <tbody>
-          <tr>
-            {
-              incomeTrack.spaces.map((space, index) => {
-                const openSpace = index < 6 - buildingsOnTrack
-                const incomeImages = space.images.map(image => images[image])
+    <div className='incomeTrack'>
+      <div className='incomeTrackHeader'>
+        <div className='incomeTrackName'>{incomeTrack.name.toUpperCase()}</div>
+        <img className='icon-in-text' src={images[incomeTrack.name]}/>
+      </div>
+      <div className='incomeTrackSpaces'>
+        <table>
+          <tbody>
+            <tr>
+              {
+                incomeTrack.spaces.map((space, index) => {
+                  const openSpace = index < 6 - buildingsOnTrack
+                  const incomeImages = space.images.map(image => images[image])
 
-                return (
-                  <IncomeTrackSpace
-                    key={index}
-                    space={space}
-                    openSpace={openSpace}
-                    building={building}
-                    images={incomeImages}
-                  />
-                )
-              })
-            }
-          </tr>
-        </tbody>
-      </table>
+                  return (
+                    <IncomeTrackSpace
+                      key={index}
+                      space={space}
+                      openSpace={openSpace}
+                      building={building}
+                      images={incomeImages}
+                    />
+                  )
+                })
+              }
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   )
 }
