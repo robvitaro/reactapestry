@@ -186,7 +186,7 @@ table {
 
 .city p.smallMessage {
     margin-top: 0px;
-    font-size: 10pt;
+    font-size: 11pt;
 }
 
 .incomeMat {
@@ -293,4 +293,12 @@ svg g text {
 
 .resource.choosing {
     cursor: pointer;
+}
+
+img.icon-in-text{
+    max-width: 18px;
+    max-height: 18px;
+    margin-right: 2px;
+    margin-left: 2px;
+    vertical-align: text-bottom;
 }
