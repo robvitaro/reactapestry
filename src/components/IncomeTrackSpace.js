@@ -1,21 +1,19 @@
-import React from 'react';
+import React, {useState} from 'react';
 
 const IncomeTrackSpace = (props) => {
   const {space, openSpace, building, images} = props
   const title = space.name ? space.name : <span>&nbsp;</span>;
   const calculatedClass = openSpace ? 'space' : `space ${building.charAt(0)}`
   const incomeImages = images.map((image, index) => <img src={image} alt={space.images[index]} />)
-
-  const content = openSpace ? (
-    <div className={calculatedClass}>
-      <div className='incomeImage'>{incomeImages}</div>
-      <div className='label'>{title.toUpperCase()}</div>
-    </div>
-  ) : <div className={calculatedClass} />
+  const [isShown, setIsShown] = useState(false);
 
   return (
     <td>
-      {content}
+
+      <div className={calculatedClass} onMouseEnter={() => setIsShown(true)} onMouseLeave={() => setIsShown(false)}>
+        { (openSpace || isShown) && (<div className='incomeImage'>{incomeImages}</div>)}
+        { (openSpace || isShown) && (<div className='label'>{title.toUpperCase()}</div>)}
+      </div>
     </td>
   )
 }

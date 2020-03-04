@@ -216,6 +216,22 @@ table {
     max-height: 30px;
 }
 
+.incomeMat td div.m:hover {
+    background-image: none;
+ }
+
+.incomeMat td div.h:hover {
+    background-image: none;
+}
+
+.incomeMat td div.f:hover {
+    background-image: none;
+}
+
+.incomeMat td div.a:hover {
+    background-image: none;
+}
+
 text.hidden {
     fill: white;
 }
