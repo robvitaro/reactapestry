@@ -15,6 +15,18 @@ import marketImage from "../img/market.png";
 import houseImage from "../img/house.png";
 import farmImage from "../img/farm.png";
 import armoryImage from "../img/armory.png";
+import scoutingImage from "../img/Scouting.png";
+import raftsImage from "../img/Rafts.png";
+import wagonsImage from "../img/Wagons.png";
+import navigationImage from "../img/Navigation.png";
+import shipsImage from "../img/Ships.png";
+import tunnelsImage from "../img/Tunnels.png";
+import trainsImage from "../img/Trains.png";
+import carsImage from "../img/Cars.png";
+import airplanesImage from "../img/Airplanes.png";
+import spaceShuttleImage from "../img/SpaceShuttle.png";
+import interstellarTravelImage from "../img/InterstellarTravel.png";
+import warpGatesImage from "../img/WarpGates.png";
 
 export const IMAGES = {
   'coin': coinImage,
@@ -41,5 +53,17 @@ export const IMAGES = {
   'Farms': farmImage,
   'farm': farmImage,
   'Armories': armoryImage,
-  'armory': armoryImage
+  'armory': armoryImage,
+  'Scouting': scoutingImage,
+  'Rafts': raftsImage,
+  'Wagons': wagonsImage,
+  'Navigation': navigationImage,
+  'Ships': shipsImage,
+  'Tunnels': tunnelsImage,
+  'Trains': trainsImage,
+  'Cars': carsImage,
+  'Airplanes': airplanesImage,
+  'Space Shuttle': spaceShuttleImage,
+  'Interstellar Travel': interstellarTravelImage,
+  'Warpgates': warpGatesImage,
 }

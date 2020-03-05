@@ -1,5 +1,6 @@
 body {
     font-family: 'PT Sans Narrow', sans-serif;
+    background-color: #22aac0;
 }
 
 table {
@@ -11,6 +12,7 @@ table {
 }
 
 .track table {
+    background-color: #f6f0e6;
     border: 3px solid black;
 }
 
@@ -85,7 +87,6 @@ table {
 }
 .track .trackHeaderRow td.era-cell{
     position: relative;
-    background-color: #fff0d4;
 }
 
 .track .trackHeaderRow .era-back{
@@ -115,8 +116,10 @@ table {
 
 .city {
     float: left;
-    margin-left: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
     text-align: center;
+    background-color: #dfd5c1;
 }
 
 .city td {
@@ -149,7 +152,7 @@ table {
     height: 25px;
     max-width: 25px;
     max-height: 25px;
-    background-color: #fff0d4;
+    background-color: #f6f0e6;
 }
 
 .city td div{
@@ -221,8 +224,11 @@ table {
 
 .incomeMat {
     float: left;
-    margin-left: 10px;
-    margin-right: 10px;
+    padding-top: 10px;
+    padding-right: 10px;
+    padding-bottom: 9px;
+    padding-left: 10px;
+    background-color: #dfd5c1;
 }
 
 .incomeMat table {
@@ -233,7 +239,7 @@ table {
 .incomeMat td {
     text-align: center;
     border-left: 1px solid black;
-    background-color: #fff0d4;
+    background-color: #f6f0e6;
 }
 
 .incomeMat td div.space{
