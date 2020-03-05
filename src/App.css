@@ -81,6 +81,36 @@ table {
     max-height: 20px;
     margin-right: 2px;
     margin-left: 2px;
+    margin-top: 3px;
+}
+.track .trackHeaderRow td.era-cell{
+    position: relative;
+    background-color: #fff0d4;
+}
+
+.track .trackHeaderRow .era-back{
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 25%;
+    min-width: 50px;
+    position: absolute;
+    top: -9px;
+    left: 129px;
+    z-index: -1;
+}
+
+.track .trackHeaderRow .era{
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 50%;
+    font-size: 8pt;
+    font-weight: bold;
+    min-width: 18px;
+    margin: auto;
+    position: absolute;
+    top: -16px;
+    left: 145px;
+    z-index: -1;
 }
 
 .city {
