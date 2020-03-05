@@ -1,8 +1,5 @@
 import React from 'react';
-import market from '../img/market.png'
-import house from '../img/house.png'
-import farm from '../img/farm.png'
-import armory from '../img/armory.png'
+import {IMAGES} from "../data/images";
 
 class City extends React.Component {
   constructor(props) {
@@ -61,13 +58,8 @@ class City extends React.Component {
 
   message() {
     if (this.props.advanceTurnState && this.props.advanceTurnState.state.matches('PlacingBuilding')) {
-      switch (this.props.advanceTurnState.state.context.building) {
-        case 'market': return <span>Please add <img className='icon-in-text' src={market} /> to your city</span>
-        case 'farm': return <span>Please add <img className='icon-in-text' src={farm} /> to your city</span>
-        case 'house': return <span>Please add <img className='icon-in-text' src={house} /> to your city</span>
-        case 'armory': return <span>Please add <img className='icon-in-text' src={armory} /> to your city</span>
-        default: return <span>&nbsp;</span>
-      }
+      const building = this.props.advanceTurnState.state.context.building
+      return <span>Please add <img className='icon-in-text' src={IMAGES[building]} /> to your city</span>
     } else {
       return <span>&nbsp;</span>
     }
