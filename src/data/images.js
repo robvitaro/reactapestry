@@ -27,6 +27,42 @@ import airplanesImage from "../img/Airplanes.png";
 import spaceShuttleImage from "../img/SpaceShuttle.png";
 import interstellarTravelImage from "../img/InterstellarTravel.png";
 import warpGatesImage from "../img/WarpGates.png";
+import astronomyImage from "../img/Astronomy.png";
+import mathematicsImage from "../img/Mathematics.png";
+import herbalismImage from "../img/Herbalism.png";
+import medicineImage from "../img/Medicine.png";
+import chemistryImage from "../img/Chemistry.png";
+import biologyImage from "../img/Biology.png";
+import academicResearchImage from "../img/AcademicResearch.png";
+import nutritionImage from "../img/Nutrition.png";
+import physicsImage from "../img/Physics.png";
+import neuroscienceImage from "../img/Neuroscience.png";
+import quantumPhysicsImage from "../img/QuantumPhysics.png";
+import alienBiologyImage from "../img/AlienBiology.png";
+import potteryImage from "../img/Pottery.png";
+import carpentryImage from "../img/Carpentry.png";
+import stoneToolsImage from "../img/StoneTools.png";
+import metallurgyImage from "../img/Metallurgy.png";
+import glassImage from "../img/Glass.png";
+import steelImage from "../img/Steel.png";
+import rubberImage from "../img/Rubber.png";
+import plasticImage from "../img/Plastic.png";
+import electronicsImage from "../img/Electronics.png";
+import computersImage from "../img/Computers.png";
+import nanotechnologyImage from "../img/Nanotechnology.png";
+import aiSingularityImage from "../img/AISingularity.png";
+import archeryImage from "../img/Archery.png";
+import bladedWeaponsImage from "../img/BladedWeapons.png";
+import wallsImage from "../img/Walls.png";
+import standingArmyImage from "../img/StandingArmy.png";
+import cavalryImage from "../img/Cavalry.png";
+import gunpowderImage from "../img/Gunpowder.png";
+import tanksImage from "../img/Tanks.png";
+import warplanesImage from "../img/Warplanes.png";
+import anitAircraftDefenseImage from "../img/AntiAircraftDefense.png";
+import nuclearBombtechnologyImage from "../img/NuclearBomb.png";
+import droneAssassinsImage from "../img/DroneAssassins.png";
+import mechsImage from "../img/Mechs.png";
 
 export const IMAGES = {
   'coin': coinImage,
@@ -66,4 +102,40 @@ export const IMAGES = {
   'Space Shuttle': spaceShuttleImage,
   'Interstellar Travel': interstellarTravelImage,
   'Warpgates': warpGatesImage,
+  'Astronomy': astronomyImage,
+  'Mathematics': mathematicsImage,
+  'Herbalism': herbalismImage,
+  'Medicine': medicineImage,
+  'Chemistry': chemistryImage,
+  'Biology': biologyImage,
+  'Academic Research': academicResearchImage,
+  'Nutrition': nutritionImage,
+  'Physics': physicsImage,
+  'Neuroscience': neuroscienceImage,
+  'Quantum Physics': quantumPhysicsImage,
+  'Alien Biology': alienBiologyImage,
+  'Pottery': potteryImage,
+  'Carpentry': carpentryImage,
+  'Stone Tools': stoneToolsImage,
+  'Metallurgy': metallurgyImage,
+  'Glass': glassImage,
+  'Steel': steelImage,
+  'Rubber': rubberImage,
+  'Plastic': plasticImage,
+  'Electronics': electronicsImage,
+  'Computers': computersImage,
+  'Nanotechnology': nanotechnologyImage,
+  'AI Singularity': aiSingularityImage,
+  'Archery': archeryImage,
+  'Bladed Weapons': bladedWeaponsImage,
+  'Walls': wallsImage,
+  'Standing Army': standingArmyImage,
+  'Cavalry': cavalryImage,
+  'Gunpowder': gunpowderImage,
+  'Tanks': tanksImage,
+  'Warplanes': warplanesImage,
+  'Anti-Aircraft Defense': anitAircraftDefenseImage,
+  'Nuclear Bomb': nuclearBombtechnologyImage,
+  'Drone Assassins': droneAssassinsImage,
+  'Mechs': mechsImage,
 }
