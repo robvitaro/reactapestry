@@ -7,6 +7,7 @@ import SmallHexMap from "./components/SmallHexMap";
 import { tapestryGameStateMachine } from "./state_machines/TapestryGameStateMachine";
 import { CITIES } from './data/cities';
 import { TRACKS } from './data/tracks';
+import TrackStack from "./components/TrackStack";
 
 class Tapestry extends React.Component {
   constructor(props) {
@@ -21,10 +22,12 @@ class Tapestry extends React.Component {
     this.handleAdvanceTurn = this.handleAdvanceTurn.bind(this)
     this.updateStateVar = this.updateStateVar.bind(this)
     this.buildingAdded = this.buildingAdded.bind(this)
+    this.handleAdvanceTurn = this.handleAdvanceTurn.bind(this)
     this.handleIncomeTurn = this.handleIncomeTurn.bind(this)
     this.resourceChosen = this.resourceChosen.bind(this)
     this.checkForZeroResources = this.checkForZeroResources.bind(this)
     this.advanceTurnState = this.advanceTurnState.bind(this)
+    this.checkTrackAdvancePermitted = this.checkTrackAdvancePermitted.bind(this)
   }
 
   componentDidMount() {
@@ -199,20 +202,11 @@ class Tapestry extends React.Component {
     const {trackIndex, incomeIndex, food, workers, coin, culture, mode, canTakeIncomeTurn} = this.state.current.context
     return (
       <div>
-        <div>
-          {
-            TRACKS.map((track, index) => {
-              return <Track
-                key={track.name}
-                track={track}
-                index={index}
-                currentSpace={trackIndex[index]}
-                handleAdvance={this.handleAdvanceTurn}
-                advancePermitted={this.checkTrackAdvancePermitted(index, track.resource)}
-              />
-            })
-          }
-        </div>
+        <TrackStack
+          trackIndex={trackIndex}
+          handleAdvance={this.handleAdvanceTurn}
+          advancePermitted={this.checkTrackAdvancePermitted}
+        />
         <div>
           <button onClick={()=>this.handleIncomeTurn()} disabled={!canTakeIncomeTurn}>Take Income Turn</button>
         </div>
