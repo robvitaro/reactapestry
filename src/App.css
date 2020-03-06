@@ -4,12 +4,51 @@ body {
     color: #463b31;
 }
 
+.hidden {
+    display: none;
+}
+
+.clear {
+    clear: both;
+}
+
 table {
     border-collapse: collapse;
 }
 
+.trackStack {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: left;
+    align-items: flex-end;
+    align-content: flex-start;
+    margin-left: 20px;
+}
+
+.trackStack .switch {
+    float: left;
+    max-width: 23px;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    font-weight: bold;
+    font-size: 14pt;
+    border-right: 3px solid #696152;
+    border-top: 3px solid #696152;
+    border-bottom: 3px solid #696152;
+    margin-bottom: 20px;
+    min-height: 139px;
+    cursor: pointer;
+    padding-top: 10px;
+}
+
+.trackStack .tracks {
+    float: left;
+}
+
 .track {
-    margin: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-right: 20px;
 }
 
 .track table {
@@ -63,22 +102,22 @@ table {
     border-radius: 3px;
 }
 
-.track .exploration {
+.exploration {
     color: #202020;
     background-color: royalblue;
 }
 
-.track .science {
+.science {
     color: #202020;
     background-color: forestgreen;
 }
 
-.track .technology {
+.technology {
     color: #202020;
     background-color: goldenrod;
 }
 
-.track .military {
+.military {
     color: #202020;
     background-color: darkred;
 }
@@ -306,6 +345,10 @@ div.incomeTrackName {
 
 text.hidden {
     fill: white;
+}
+
+.map {
+    text-align: center;
 }
 
 svg {

@@ -202,6 +202,7 @@ class Tapestry extends React.Component {
     const {trackIndex, incomeIndex, food, workers, coin, culture, mode, canTakeIncomeTurn} = this.state.current.context
     return (
       <div>
+        <SmallHexMap />
         <TrackStack
           trackIndex={trackIndex}
           handleAdvance={this.handleAdvanceTurn}
@@ -228,7 +229,6 @@ class Tapestry extends React.Component {
             buildingAdded={this.buildingAdded}
           />
         </div>
-        <SmallHexMap />
       </div>
     )
   }

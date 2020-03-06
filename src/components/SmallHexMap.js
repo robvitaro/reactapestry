@@ -72,8 +72,8 @@ class SmallHexMap extends React.Component {
     const hexagonSize = { x: 8, y: 8 };
 
     return(
-      <div>
-        <HexGrid width={450} height={450} viewBox="-50 -50 100 100">
+      <div className='map'>
+        <HexGrid width={350} height={350} viewBox="-50 -50 100 100">
           <Layout size={hexagonSize} flat={true} spacing={1.0} origin={{ x: 0, y: 0 }}>
             {displayedTiles}
           </Layout>
