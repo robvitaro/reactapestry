@@ -1,6 +1,6 @@
 import React from 'react'
-import Hex from './Hex'
-import {HexGrid, Layout} from "react-hexgrid";
+// import Hex from './Hex'
+import {defineGrid, extendHex} from "honeycomb-grid";
 import {HEX_MAP_SMALL} from "../data/hex_map_small";
 
 class SmallHexMap extends React.Component {
@@ -15,48 +15,30 @@ class SmallHexMap extends React.Component {
     this.setState({show: value})
   }
 
-  checkUnwantedTiles(q,r,s) {
-    const unwantedTiles = [[-3,0,3],[3,-3,0],[0,3,-3]]
-    // check that EVERY unwanted tile's coords != q r s
-    return unwantedTiles.every((tile) => {
-      return !(tile[0] === q && tile[1] === r && tile[2] === s)
-    })
-  }
-
   render() {
-    const displayedTiles = []
+    const Hex = extendHex({
+      size: 24,
+      orientation: 'flat'
+    })
+    const Grid = defineGrid(Hex)
 
-    for (let q = -3; q <= 3; q++) {
-      let r1 = Math.max(-3, -q - 3);
-      let r2 = Math.min(3, -q + 3);
-      for (let r = r1; r <= r2; r++) {
-        let s = -q-r
-        if (this.checkUnwantedTiles(q,r,s)) {
-          let x = q + 3
-          let y = r + 3
-          let sides = [[],[],[],[],[],[]]
-          let start = null
+    const displayedTiles = Grid.hexagon({
+      radius: 3,
+      center: [3, 3]
+    })
+    let unwantedTiles = [[0,2],[3,6],[6,2]]
+    unwantedTiles.map(element => displayedTiles.splice(displayedTiles.indexOf(element), 1))
 
-          HEX_MAP_SMALL.visible.forEach((tile) => {
-            if(tile.x === x && tile.y === y) {
-              if (tile.start) { start = tile.start }
-              sides = []
-              tile.sides.forEach((side) => {
-                sides.push(side)
-              })
-            }
-          })
+    const hexes =  displayedTiles.map(hex => {
+      const position = hex.toPoint()
 
-          displayedTiles.push(
-            <Hex key={`${q}_${r}_${s}_${x}_${y}`}
-                 q={q} r={r} s={s} x={x} y={y}
-                 start={start}
-                 sides={sides}
-                 show={this.state.show} />
-          )
-        }
-      }
-    }
+      return (
+      <g >
+        <polygon points={hex.corners().map(({x, y}) => `${x},${y}`)} transform={`translate(${position.x} ${position.y})`} fill="#ffffff" stroke="darkgray" strokeWidth='1'/>
+        <text x={position.x} y={position.y} style={{fontSize: '8pt'}} transform={`translate(12 20)`} stroke="darkgray">{`${hex.x},${hex.y}`}</text>
+      </g>
+      )
+    })
 
     const debugMenu = (
       <div>
@@ -69,15 +51,18 @@ class SmallHexMap extends React.Component {
       </div>
     )
 
-    const hexagonSize = { x: 8, y: 8 };
-
     return(
-      <div className='map'>
-        <HexGrid width={350} height={350} viewBox="-50 -50 100 100">
-          <Layout size={hexagonSize} flat={true} spacing={1.0} origin={{ x: 0, y: 0 }}>
-            {displayedTiles}
-          </Layout>
-        </HexGrid>
+      <div id='map' className='map'>
+
+          <svg viewBox="0 0 300 300" width="300">
+            {hexes}
+          </svg>
+
+        {/*<HexGrid width={350} height={350} viewBox="-50 -50 100 100">*/}
+        {/*  <Layout size={hexagonSize} flat={true} spacing={1.0} origin={{ x: 0, y: 0 }}>*/}
+        {/*    {displayedTiles}*/}
+        {/*  </Layout>*/}
+        {/*</HexGrid>*/}
         {debugMenu}
       </div>
     )
