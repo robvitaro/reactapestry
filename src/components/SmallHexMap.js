@@ -1,5 +1,5 @@
 import React from 'react'
-// import Hex from './Hex'
+import Hex from './Hex'
 import {defineGrid, extendHex} from "honeycomb-grid";
 import {HEX_MAP_SMALL} from "../data/hex_map_small";
 
@@ -10,7 +10,15 @@ class SmallHexMap extends React.Component {
       size: 24,
       orientation: 'flat'
     })
-    this.state = {show: 'axial', current: [1,3], Grid: defineGrid(Hex)}
+    const Grid = defineGrid(Hex)
+    const displayedTiles = Grid.hexagon({
+      radius: 3,
+      center: [3, 3]
+    })
+    let unwantedTiles = [[0,2],[3,6],[6,2]]
+    unwantedTiles.map(element => displayedTiles.splice(displayedTiles.indexOf(element), 1))
+
+    this.state = {show: 'axial', current: [1,3], Grid: Grid, displayedTiles: displayedTiles}
     this.updateMap = this.updateMap.bind(this)
     this.setCurrentTile = this.setCurrentTile.bind(this)
   }
@@ -23,32 +31,48 @@ class SmallHexMap extends React.Component {
   setCurrentTile(event) {
     let x = event.nativeEvent.offsetX
     let y = event.nativeEvent.offsetY
+
     let hex = this.state.Grid.pointToHex([x, y])
     let coordinates = hex.coordinates()
-    this.setState({current: [coordinates.x, coordinates.y]})
+    if(this.state.displayedTiles.get(hex.coordinates()) !== undefined) {
+      this.setState({current: [coordinates.x, coordinates.y]})
+    }
   }
 
   render() {
-    const displayedTiles = this.state.Grid.hexagon({
-      radius: 3,
-      center: [3, 3]
-    })
-    let unwantedTiles = [[0,2],[3,6],[6,2]]
-    unwantedTiles.map(element => displayedTiles.splice(displayedTiles.indexOf(element), 1))
+    const {current, displayedTiles} = this.state
+    const currentNeighbors = !(current[0] === -1 && current[1] === -1) ? displayedTiles.neighborsOf(displayedTiles.get(current)) : []
 
-    const currentNeighbors = this.state.current !== [-1,-1] ? displayedTiles.neighborsOf(displayedTiles.get(this.state.current)) : []
-
-    const hexes =  displayedTiles.map(hex => {
+    const hexes =  this.state.displayedTiles.map(hex => {
       const position = hex.toPoint()
+      let start = null
+      let sides = [[],[],[],[],[],[]]
+
+      HEX_MAP_SMALL.visible.forEach((tile) => {
+        if(tile.x === hex.x && tile.y === hex.y) {
+          if (tile.start) { start = tile.start }
+          sides = []
+          tile.sides.forEach((side) => {
+            sides.push(side)
+          })
+        }
+      })
+
       return (
-      <g >
-        <polygon onMouseMove={this.setCurrentTile}
-                 points={hex.corners().map(({x, y}) => `${x},${y}`)}
-                 transform={`translate(${position.x} ${position.y})`}
-                 fill="#ffffff" stroke="darkgray" strokeWidth='1'
-                 className={currentNeighbors.some(neigh => neigh?.x === hex.coordinates().x && neigh?.y === hex.coordinates().y) ? 'highlight' : ''}/>
-        <text x={position.x} y={position.y} style={{fontSize: '8pt'}} transform={`translate(12 20)`} stroke="darkgray">{`${hex.x},${hex.y}`}</text>
-      </g>
+        <Hex handleMouseMove={this.setCurrentTile}
+             corners={hex.corners().map(({x, y}) => `${x},${y}`)}
+             positionX={position.x}
+             positionY={position.y}
+             className={currentNeighbors.some(neigh => neigh?.x === hex.x && neigh?.y === hex.y) ? 'highlight' : ''}
+             x={hex.x}
+             y={hex.y}
+             q={hex.q}
+             r={hex.r}
+             s={hex.s}
+             sides={sides}
+             start={start}
+             show={this.state.show}
+        />
       )
     })
 
@@ -65,16 +89,9 @@ class SmallHexMap extends React.Component {
 
     return(
       <div id='map' className='map'>
-
-          <svg viewBox="0 0 300 300" width="300">
-            {hexes}
-          </svg>
-
-        {/*<HexGrid width={350} height={350} viewBox="-50 -50 100 100">*/}
-        {/*  <Layout size={hexagonSize} flat={true} spacing={1.0} origin={{ x: 0, y: 0 }}>*/}
-        {/*    {displayedTiles}*/}
-        {/*  </Layout>*/}
-        {/*</HexGrid>*/}
+        <svg viewBox="0 0 300 300" width="300">
+          {hexes}
+        </svg>
         {debugMenu}
       </div>
     )
