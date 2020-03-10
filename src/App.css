@@ -356,11 +356,11 @@ svg {
 }
 
 svg g {
-    fill: #ffffff;
+    fill: #f6f0e6;
     /*fill-opacity: 0.6;*/
 }
 svg g:hover {
-    fill: #000000;
+    fill: #696152;
     /*fill-opacity: 0.7;*/
 }
 svg g:hover text {
@@ -374,9 +374,8 @@ svg g polygon {
 }
 
 svg g polygon.highlight {
-    stroke: red;
-    stroke-width: 0.8;
-    /*transition: fill-opacity .5s;*/
+    fill: #dad4c2;
+    /*fill-opacity: 0.7;*/
 }
 svg g text {
     font-size: 0.14em;
