@@ -63,7 +63,8 @@ import anitAircraftDefenseImage from "../img/AntiAircraftDefense.png";
 import nuclearBombtechnologyImage from "../img/NuclearBomb.png";
 import droneAssassinsImage from "../img/DroneAssassins.png";
 import mechsImage from "../img/Mechs.png";
-import sm_3_3 from "../img/sm_3_3.png"
+import sm_3_3  from "../img/sm_3_3.png"
+import sm_5_4  from "../img/sm_5_4.png"
 
 export const IMAGES = {
   'coin': coinImage,
@@ -139,5 +140,6 @@ export const IMAGES = {
   'Nuclear Bomb': nuclearBombtechnologyImage,
   'Drone Assassins': droneAssassinsImage,
   'Mechs': mechsImage,
-  'sm_3_3': sm_3_3
+  'sm_3_3': sm_3_3,
+  'sm_5_4': sm_5_4
 }
