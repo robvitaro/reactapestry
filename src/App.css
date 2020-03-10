@@ -356,7 +356,7 @@ svg {
 }
 
 svg g {
-    fill: #f6f0e6;
+    fill: none;
     /*fill-opacity: 0.6;*/
 }
 svg g:hover {
@@ -375,7 +375,7 @@ svg g polygon {
 
 svg g polygon.highlight {
     fill: #dad4c2;
-    /*fill-opacity: 0.7;*/
+    fill-opacity: 0.7;
 }
 svg g text {
     font-size: 0.14em;

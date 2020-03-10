@@ -18,7 +18,7 @@ class SmallHexMap extends React.Component {
     let unwantedTiles = [[0,2],[3,6],[6,2]]
     unwantedTiles.map(element => displayedTiles.splice(displayedTiles.indexOf(element), 1))
 
-    this.state = {show: 'axial', current: [1,3], Grid: Grid, displayedTiles: displayedTiles}
+    this.state = {show: 'main', current: [1,3], Grid: Grid, displayedTiles: displayedTiles}
     this.updateMap = this.updateMap.bind(this)
     this.setCurrentTile = this.setCurrentTile.bind(this)
   }
@@ -79,6 +79,7 @@ class SmallHexMap extends React.Component {
     const debugMenu = (
       <div>
         <select onChange={this.updateMap}>
+          <option value={'main'}>Main Map</option>
           <option value={'axial'}>Axial Coords</option>
           <option value={'cube'}>Cube Coords</option>
           <option value={'land'}>Land Values</option>

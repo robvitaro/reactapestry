@@ -1,4 +1,5 @@
 import React from 'react'
+import {IMAGES} from '../data/images'
 
 class Hex extends React.Component {
   constructor(props) {
@@ -14,7 +15,8 @@ class Hex extends React.Component {
       positionX: props.positionX,
       positionY: props.positionY,
       corners: props.corners,
-      handleMouseMove: props.handleMouseMove
+      handleMouseMove: props.handleMouseMove,
+      image: `sm_${props.x}_${props.y}`
     }
   }
 
@@ -48,12 +50,14 @@ class Hex extends React.Component {
   }
 
   render() {
-    const {positionX, positionY, corners, handleMouseMove} = this.state
+    const {positionX, positionY, corners, handleMouseMove, image} = this.state
     return (
       <g>
-      <polygon
+        <image href={IMAGES[image]} height='50' width='50' transform={`translate(${positionX} ${positionY-4})`}/>
+        <polygon
         onMouseMove={handleMouseMove}
         points={corners}
+        fill={IMAGES[image] ? 'none' : '#f6f0e6'}
         transform={`translate(${positionX} ${positionY})`}
         stroke="darkgray" strokeWidth='1'
         className={this.props.className}
