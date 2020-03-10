@@ -6,8 +6,13 @@ import {HEX_MAP_SMALL} from "../data/hex_map_small";
 class SmallHexMap extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {show: 'axial'}
+    const Hex = extendHex({
+      size: 24,
+      orientation: 'flat'
+    })
+    this.state = {show: 'axial', current: [1,3], Grid: defineGrid(Hex)}
     this.updateMap = this.updateMap.bind(this)
+    this.setCurrentTile = this.setCurrentTile.bind(this)
   }
 
   updateMap(event) {
@@ -15,26 +20,33 @@ class SmallHexMap extends React.Component {
     this.setState({show: value})
   }
 
-  render() {
-    const Hex = extendHex({
-      size: 24,
-      orientation: 'flat'
-    })
-    const Grid = defineGrid(Hex)
+  setCurrentTile(event) {
+    let x = event.nativeEvent.offsetX
+    let y = event.nativeEvent.offsetY
+    let hex = this.state.Grid.pointToHex([x, y])
+    let coordinates = hex.coordinates()
+    this.setState({current: [coordinates.x, coordinates.y]})
+  }
 
-    const displayedTiles = Grid.hexagon({
+  render() {
+    const displayedTiles = this.state.Grid.hexagon({
       radius: 3,
       center: [3, 3]
     })
     let unwantedTiles = [[0,2],[3,6],[6,2]]
     unwantedTiles.map(element => displayedTiles.splice(displayedTiles.indexOf(element), 1))
 
+    const currentNeighbors = this.state.current !== [-1,-1] ? displayedTiles.neighborsOf(displayedTiles.get(this.state.current)) : []
+
     const hexes =  displayedTiles.map(hex => {
       const position = hex.toPoint()
-
       return (
       <g >
-        <polygon points={hex.corners().map(({x, y}) => `${x},${y}`)} transform={`translate(${position.x} ${position.y})`} fill="#ffffff" stroke="darkgray" strokeWidth='1'/>
+        <polygon onMouseMove={this.setCurrentTile}
+                 points={hex.corners().map(({x, y}) => `${x},${y}`)}
+                 transform={`translate(${position.x} ${position.y})`}
+                 fill="#ffffff" stroke="darkgray" strokeWidth='1'
+                 className={currentNeighbors.some(neigh => neigh?.x === hex.coordinates().x && neigh?.y === hex.coordinates().y) ? 'highlight' : ''}/>
         <text x={position.x} y={position.y} style={{fontSize: '8pt'}} transform={`translate(12 20)`} stroke="darkgray">{`${hex.x},${hex.y}`}</text>
       </g>
       )

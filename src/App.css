@@ -372,6 +372,12 @@ svg g polygon {
     stroke-width: 0.2;
     /*transition: fill-opacity .5s;*/
 }
+
+svg g polygon.highlight {
+    stroke: red;
+    stroke-width: 0.8;
+    /*transition: fill-opacity .5s;*/
+}
 svg g text {
     font-size: 0.14em;
     fill: #696152;
