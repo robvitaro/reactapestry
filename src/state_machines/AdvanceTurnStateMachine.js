@@ -45,10 +45,12 @@ export const advanceTurnStateMachine = Machine({
     GainingBenefits: {
       entry: 'assignGains',
       on: {
-        '': {
-          actions: sendParent(context => ({ type: 'gainsFromAdvance', gains: context.gains})),
-          target: 'GainedBenefits'
-        },
+        '': [
+          { target: 'ChoosingBenefits', cond: 'gainLogicIsOR' },
+          {
+            actions: sendParent(context => ({ type: 'gainsFromAdvance', gains: context.gains})),
+            target: 'GainedBenefits'
+          }],
         ChooseBenefit: 'ChoosingBenefits',
         GainBenefit: 'GainedBenefits'
       }
@@ -167,7 +169,8 @@ export const advanceTurnStateMachine = Machine({
         })
         return thing
       },
-      freeResourceToChoose: context => context.freeResource === true
+      freeResourceToChoose: context => context.freeResource === true,
+      gainLogicIsOR: context => TRACKS[context.trackIndex].spaces[context.spaceIndex].gain_logic === 'OR'
     }
   }
 );

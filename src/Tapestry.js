@@ -1,19 +1,21 @@
 import React  from 'react';
 import { interpret } from 'xstate';
 import City from "./components/City";
-import Track from "./components/Track";
 import IncomeMat from "./components/IncomeMat";
+import Modal from "./components/Modal";
 import SmallHexMap from "./components/SmallHexMap";
 import { tapestryGameStateMachine } from "./state_machines/TapestryGameStateMachine";
 import { CITIES } from './data/cities';
-import { TRACKS } from './data/tracks';
 import TrackStack from "./components/TrackStack";
 
 class Tapestry extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { current: tapestryGameStateMachine.initialState };
+    this.state = {
+      current: tapestryGameStateMachine.initialState,
+      showModal: false
+    };
 
     this.gameStateService = interpret(tapestryGameStateMachine).onTransition(current =>
       this.setState({ current })
@@ -53,6 +55,10 @@ class Tapestry extends React.Component {
   offTrackAdvancement() { return 0 }
   tapestryAll() { return this.state.current.context.tapestryHand + this.state.current.context.tapestryMat }
   flat() { return 1 }
+
+  showModal = e => {
+    this.setState({showModal: !this.state.showModal}  )
+  }
 
   handleIncomeTurn() {
     this.gameStateService.send('IncomeTurn')
@@ -210,6 +216,7 @@ class Tapestry extends React.Component {
         />
         <div>
           <button onClick={()=>this.handleIncomeTurn()} disabled={!canTakeIncomeTurn}>Take Income Turn</button>
+          <button onClick={e => this.showModal(e)}>Show Modal</button>
         </div>
         <div>
           <IncomeMat
@@ -229,6 +236,14 @@ class Tapestry extends React.Component {
             buildingAdded={this.buildingAdded}
           />
         </div>
+        <Modal handleClose={this.showModal} show={this.state.showModal}>
+          <City
+            city={CITIES[1]}
+            index={1}
+            advanceTurnState={this.advanceTurnState()}
+            buildingAdded={this.buildingAdded}
+          />
+        </Modal>
       </div>
     )
   }
