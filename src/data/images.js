@@ -77,6 +77,7 @@ import sm_4_5  from "../img/sm_4_5.png"
 import sm_5_3  from "../img/sm_5_3.png"
 import sm_5_4  from "../img/sm_5_4.png"
 import sm_6_5  from "../img/sm_6_5.png"
+import tile_1  from "../img/tile_1.png"
 
 export const IMAGES = {
   'coin': coinImage,
@@ -166,4 +167,5 @@ export const IMAGES = {
   'sm_5_4': sm_5_4,
   'sm_5_3': sm_5_3,
   'sm_6_5': sm_6_5,
+  'tile_1': tile_1,
 }

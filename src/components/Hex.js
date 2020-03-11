@@ -16,7 +16,6 @@ class Hex extends React.Component {
       positionY: props.positionY,
       corners: props.corners,
       handleMouseMove: props.handleMouseMove,
-      image: `sm_${props.x}_${props.y}`
     }
   }
 
@@ -50,18 +49,20 @@ class Hex extends React.Component {
   }
 
   render() {
-    const {positionX, positionY, corners, handleMouseMove, image} = this.state
+    const {positionX, positionY, corners} = this.state
+    const {image, className} = this.props
+    const imageTag = image !== '' ? <image href={IMAGES[image]} height='50' width='50' transform={`translate(${positionX+20} ${positionY-10})`}/> : null
+
     return (
-      <g>
-        <image href={IMAGES[image]} height='50' width='50' transform={`translate(${positionX+20} ${positionY-10})`}/>
+      <g >
+        {imageTag}
         <polygon
-        onMouseMove={handleMouseMove}
-        points={corners}
-        transform={`translate(${positionX+20} ${positionY-6})`}
-        className={this.props.className}
-      />
-      {this.debugText(positionX,positionY)}
-    </g>
+          points={corners}
+          transform={`translate(${positionX+20} ${positionY-6})`}
+          className={className}
+        />
+        {this.debugText(positionX,positionY)}
+      </g>
     )
   }
 }

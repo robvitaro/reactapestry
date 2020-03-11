@@ -19,7 +19,15 @@ class SmallHexMap extends React.Component {
     let unwantedTiles = [[0,2],[3,6],[6,2]]
     unwantedTiles.map(element => displayedTiles.splice(displayedTiles.indexOf(element), 1))
 
-    this.state = {show: 'main', current: [-1,-1], Grid: Grid, displayedTiles: displayedTiles, size: 300}
+    this.state = {
+      show: 'main',
+      current: [-1,-1],
+      mouse: [0,0],
+      Grid: Grid,
+      displayedTiles: displayedTiles,
+      size: 300,
+      addingTile: 1
+    }
     this.updateMap = this.updateMap.bind(this)
     this.setCurrentTile = this.setCurrentTile.bind(this)
   }
@@ -30,8 +38,9 @@ class SmallHexMap extends React.Component {
   }
 
   setCurrentTile(event) {
-    let x = event.nativeEvent.offsetX
-    let y = event.nativeEvent.offsetY
+    let x = event.nativeEvent.offsetX -20
+    let y = event.nativeEvent.offsetY + 6
+    this.setState({mouse: [x,y]})
 
     let hex = this.state.Grid.pointToHex([x, y])
     let coordinates = hex.coordinates()
@@ -48,6 +57,7 @@ class SmallHexMap extends React.Component {
       const position = hex.toPoint()
       let start = null
       let sides = [[],[],[],[],[],[]]
+      let image = this.state.addingTile > 0 && this.state.current[0] === hex.x && this.state.current[1] === hex.y ? `tile_${this.state.addingTile}` : ''
 
       HEX_MAP_SMALL.visible.forEach((tile) => {
         if(tile.x === hex.x && tile.y === hex.y) {
@@ -56,23 +66,26 @@ class SmallHexMap extends React.Component {
           tile.sides.forEach((side) => {
             sides.push(side)
           })
+          image = `sm_${tile.x}_${tile.y}`
         }
       })
 
       return (
-        <Hex handleMouseMove={this.setCurrentTile}
-             corners={hex.corners().map(({x, y}) => `${x},${y}`)}
-             positionX={position.x}
-             positionY={position.y}
-             className={currentNeighbors.some(neigh => neigh?.x === hex.x && neigh?.y === hex.y) ? 'highlight' : ''}
-             x={hex.x}
-             y={hex.y}
-             q={hex.q}
-             r={hex.r}
-             s={hex.s}
-             sides={sides}
-             start={start}
-             show={this.state.show}
+        <Hex
+          corners={hex.corners().map(({x, y}) => `${x},${y}`)}
+          positionX={position.x}
+          positionY={position.y}
+          // className={currentNeighbors.some(neigh => neigh?.x === hex.x && neigh?.y === hex.y) ? 'highlight' : ''}
+          // className={this.state.current[0] === hex.x && this.state.current[1] === hex.y ? 'highlight' : ''}
+          x={hex.x}
+          y={hex.y}
+          q={hex.q}
+          r={hex.r}
+          s={hex.s}
+          sides={sides}
+          start={start}
+          show={this.state.show}
+          image={image}
         />
       )
     })
@@ -93,8 +106,10 @@ class SmallHexMap extends React.Component {
       <div className='map-wrapper'>
         <div id='map' className='map'>
           <img src={IMAGES['small_map_back']} width={this.state.size}/>
-          <svg viewBox="0 0 300 300" width={this.state.size}>
+          <svg onMouseMove={this.setCurrentTile} viewBox="0 0 300 300" width={this.state.size}>
             {hexes}
+            <text transform={'translate(0 290)'}>{`Mouse: ${this.state.mouse}`}</text>
+            <text transform={'translate(250 290)'}>{`Hex: ${this.state.current}`}</text>
           </svg>
           {debugMenu}
         </div>

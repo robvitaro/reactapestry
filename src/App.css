@@ -373,7 +373,7 @@ svg g {
     /*fill-opacity: 0.6;*/
 }
 svg g:hover {
-    fill: #696152;
+    /*fill: #696152;*/
     /*fill-opacity: 0.7;*/
 }
 svg g:hover text {
