@@ -347,12 +347,25 @@ text.hidden {
     fill: white;
 }
 
-.map {
+.map-wrapper {
     text-align: center;
 }
 
-svg {
+.map {
+    position: relative;
+    display: inline-block;
+}
 
+.map img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
+.map svg {
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 
 svg g {
@@ -368,8 +381,8 @@ svg g:hover text {
 }
 
 svg g polygon {
-    stroke: #000000;
-    stroke-width: 0.2;
+    /*stroke: #000000;*/
+    /*stroke-width: 0.5;*/
     /*transition: fill-opacity .5s;*/
 }
 
@@ -378,10 +391,10 @@ svg g polygon.highlight {
     fill-opacity: 0.7;
 }
 svg g text {
-    font-size: 0.14em;
+    font-size: 7pt;
     fill: #696152;
-    /*fill-opacity: 0.7;*/
-    /*transition: fill-opacity .5s;*/
+    stroke: #ffffff;
+    text-shadow: 1px 1px 5px;
 }
 
 .resourceTrack {

@@ -2,6 +2,7 @@ import React from 'react'
 import Hex from './Hex'
 import {defineGrid, extendHex} from "honeycomb-grid";
 import {HEX_MAP_SMALL} from "../data/hex_map_small";
+import {IMAGES} from "../data/images";
 
 class SmallHexMap extends React.Component {
   constructor(props) {
@@ -18,7 +19,7 @@ class SmallHexMap extends React.Component {
     let unwantedTiles = [[0,2],[3,6],[6,2]]
     unwantedTiles.map(element => displayedTiles.splice(displayedTiles.indexOf(element), 1))
 
-    this.state = {show: 'main', current: [1,3], Grid: Grid, displayedTiles: displayedTiles}
+    this.state = {show: 'main', current: [-1,-1], Grid: Grid, displayedTiles: displayedTiles, size: 300}
     this.updateMap = this.updateMap.bind(this)
     this.setCurrentTile = this.setCurrentTile.bind(this)
   }
@@ -89,11 +90,14 @@ class SmallHexMap extends React.Component {
     )
 
     return(
-      <div id='map' className='map'>
-        <svg viewBox="0 0 300 300" width="300">
-          {hexes}
-        </svg>
-        {debugMenu}
+      <div className='map-wrapper'>
+        <div id='map' className='map'>
+          <img src={IMAGES['small_map_back']} width={this.state.size}/>
+          <svg viewBox="0 0 300 300" width={this.state.size}>
+            {hexes}
+          </svg>
+          {debugMenu}
+        </div>
       </div>
     )
   }

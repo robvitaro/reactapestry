@@ -24,26 +24,26 @@ class Hex extends React.Component {
     const {x, y, q, r, s, start, sides} = this.state
     const {show} = this.props
     if(show === 'axial') {
-      return <text x={posX} y={posY} style={{fontSize: '7pt'}} transform={`translate(16 22)`} stroke="#333333">{`${x}, ${y}`}</text>
+      return <text x={posX} y={posY} transform={`translate(40 19)`}>{`${x}, ${y}`}</text>
     }else if(show === 'cube') {
-      return <text x={posX} y={posY} style={{fontSize: '7pt'}} transform={`translate(12 22)`} stroke="#333333">{`${q}, ${r}, ${s}`}</text>
+      return <text x={posX} y={posY} transform={`translate(34 19)`}>{`${q}, ${r}, ${s}`}</text>
     }else if(show === 'start') {
-      return <text x={posX} y={posY} style={{fontSize: '7pt'}} transform={`translate(8 22)`} stroke="#333333">{start ? `START: ${start}` : ''}</text>
+      return <text x={posX} y={posY} transform={`translate(30 19)`}>{start ? `START: ${start}` : ''}</text>
     }else if(show === 'land') {
       return (
         <g>
-          <text x={posX} y={posY} style={{fontSize: '7pt'}} transform={`translate(14 9)`} stroke="#333333">{sides[0][0]}</text>
-          <text x={posX} y={posY} style={{fontSize: '7pt'}} transform={`translate(25 9)`} stroke="#333333">{sides[0][1]}</text>
-          <text x={posX} y={posY} style={{fontSize: '7pt'}} transform={`translate(33 12)`} stroke="#333333">{sides[1][0]}</text>
-          <text x={posX} y={posY} style={{fontSize: '7pt'}} transform={`translate(37 20)`} stroke="#333333">{sides[1][1]}</text>
-          <text x={posX} y={posY} style={{fontSize: '7pt'}} transform={`translate(37 28)`} stroke="#333333">{sides[2][0]}</text>
-          <text x={posX} y={posY} style={{fontSize: '7pt'}} transform={`translate(33 36)`} stroke="#333333">{sides[2][1]}</text>
-          <text x={posX} y={posY} style={{fontSize: '7pt'}} transform={`translate(25 40)`} stroke="#333333">{sides[3][0]}</text>
-          <text x={posX} y={posY} style={{fontSize: '7pt'}} transform={`translate(14 40)`} stroke="#333333">{sides[3][1]}</text>
-          <text x={posX} y={posY} style={{fontSize: '7pt'}} transform={`translate(8 36)`} stroke="#333333">{sides[4][0]}</text>
-          <text x={posX} y={posY} style={{fontSize: '7pt'}} transform={`translate(4 28)`} stroke="#333333">{sides[4][1]}</text>
-          <text x={posX} y={posY} style={{fontSize: '7pt'}} transform={`translate(4 20)`} stroke="#333333">{sides[5][0]}</text>
-          <text x={posX} y={posY} style={{fontSize: '7pt'}} transform={`translate(8 12)`} stroke="#333333">{sides[5][1]}</text>
+          <text x={posX} y={posY} transform={`translate(36 2)`}>{sides[0][0]}</text>
+          <text x={posX} y={posY} transform={`translate(46 2)`}>{sides[0][1]}</text>
+          <text x={posX} y={posY} transform={`translate(54 5)`}>{sides[1][0]}</text>
+          <text x={posX} y={posY} transform={`translate(58 13)`}>{sides[1][1]}</text>
+          <text x={posX} y={posY} transform={`translate(58 21)`}>{sides[2][0]}</text>
+          <text x={posX} y={posY} transform={`translate(54 29)`}>{sides[2][1]}</text>
+          <text x={posX} y={posY} transform={`translate(46 34)`}>{sides[3][0]}</text>
+          <text x={posX} y={posY} transform={`translate(36 34)`}>{sides[3][1]}</text>
+          <text x={posX} y={posY} transform={`translate(28 29)`}>{sides[4][0]}</text>
+          <text x={posX} y={posY} transform={`translate(24 21)`}>{sides[4][1]}</text>
+          <text x={posX} y={posY} transform={`translate(24 13)`}>{sides[5][0]}</text>
+          <text x={posX} y={posY} transform={`translate(28 5)`}>{sides[5][1]}</text>
         </g>
       )
     }
@@ -53,13 +53,11 @@ class Hex extends React.Component {
     const {positionX, positionY, corners, handleMouseMove, image} = this.state
     return (
       <g>
-        <image href={IMAGES[image]} height='50' width='50' transform={`translate(${positionX} ${positionY-4})`}/>
+        <image href={IMAGES[image]} height='50' width='50' transform={`translate(${positionX+20} ${positionY-10})`}/>
         <polygon
         onMouseMove={handleMouseMove}
         points={corners}
-        fill={IMAGES[image] ? 'none' : '#f6f0e6'}
-        transform={`translate(${positionX} ${positionY})`}
-        stroke="darkgray" strokeWidth='1'
+        transform={`translate(${positionX+20} ${positionY-6})`}
         className={this.props.className}
       />
       {this.debugText(positionX,positionY)}
