@@ -22,6 +22,20 @@ class SmallHexMap extends React.Component {
     let unwantedTiles = [[0,2],[3,6],[6,2]]
     unwantedTiles.map(element => displayedTiles.splice(displayedTiles.indexOf(element), 1))
 
+    HEX_MAP_SMALL.visible.forEach((tile) => {
+      let hex = displayedTiles.get(tile)
+      if(tile.x === hex.x && tile.y === hex.y) {
+        let start = undefined
+        if (tile.start) { start = tile.start }
+        let sides = []
+        tile.sides.forEach((side) => {
+          sides.push(side)
+        })
+        let image = `sm_${tile.x}_${tile.y}`
+        hex.set({x: hex.x, y: hex.y, start: start, sides: sides, image: image})
+      }
+    })
+
     this.state = {
       show: 'main',
       current: [-1,-1],
@@ -59,20 +73,9 @@ class SmallHexMap extends React.Component {
 
     const hexes =  this.state.displayedTiles.map(hex => {
       const position = hex.toPoint()
-      let start = null
-      let sides = [[],[],[],[],[],[]]
-      let image = this.state.addingTile > 0 && this.state.current[0] === hex.x && this.state.current[1] === hex.y ? `tile_${this.state.addingTile}` : ''
-
-      HEX_MAP_SMALL.visible.forEach((tile) => {
-        if(tile.x === hex.x && tile.y === hex.y) {
-          if (tile.start) { start = tile.start }
-          sides = []
-          tile.sides.forEach((side) => {
-            sides.push(side)
-          })
-          image = `sm_${tile.x}_${tile.y}`
-        }
-      })
+      let start = hex.start ? hex.start : null
+      let sides = hex.sides ? hex.sides : [[],[],[],[],[],[]]
+      let image = hex.image ? hex.image : (this.state.addingTile > 0 && this.state.current[0] === hex.x && this.state.current[1] === hex.y ? `tile_${this.state.addingTile}` : '')
 
       return (
         <Hex
