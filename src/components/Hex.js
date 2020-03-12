@@ -1,5 +1,6 @@
 import React from 'react'
 import {IMAGES} from '../data/images'
+import {HEX_GLOBAL_OFFSET_X, HEX_GLOBAL_OFFSET_Y} from "./SmallHexMap";
 
 class Hex extends React.Component {
   constructor(props) {
@@ -51,14 +52,16 @@ class Hex extends React.Component {
   render() {
     const {positionX, positionY, corners} = this.state
     const {image, className} = this.props
-    const imageTag = image !== '' ? <image href={IMAGES[image]} height='50' width='50' transform={`translate(${positionX+20} ${positionY-10})`}/> : null
+    const imageTag = image !== ''
+      ? <image href={IMAGES[image]} height='50' width='50' transform={`translate(${positionX - HEX_GLOBAL_OFFSET_X} ${positionY- HEX_GLOBAL_OFFSET_Y - 5})`}/>
+      : null
 
     return (
       <g >
         {imageTag}
         <polygon
           points={corners}
-          transform={`translate(${positionX+20} ${positionY-6})`}
+          transform={`translate(${positionX - HEX_GLOBAL_OFFSET_X} ${positionY - HEX_GLOBAL_OFFSET_Y})`}
           className={className}
         />
         {this.debugText(positionX,positionY)}

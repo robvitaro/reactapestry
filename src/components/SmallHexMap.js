@@ -4,6 +4,9 @@ import {defineGrid, extendHex} from "honeycomb-grid";
 import {HEX_MAP_SMALL} from "../data/hex_map_small";
 import {IMAGES} from "../data/images";
 
+export const HEX_GLOBAL_OFFSET_X = -20
+export const HEX_GLOBAL_OFFSET_Y = 6
+
 class SmallHexMap extends React.Component {
   constructor(props) {
     super(props);
@@ -25,7 +28,8 @@ class SmallHexMap extends React.Component {
       mouse: [0,0],
       Grid: Grid,
       displayedTiles: displayedTiles,
-      size: 300,
+      size: 300,     // 500 for zoom
+      zoomOffset: 1, // .6 for size 500
       addingTile: 1
     }
     this.updateMap = this.updateMap.bind(this)
@@ -38,8 +42,8 @@ class SmallHexMap extends React.Component {
   }
 
   setCurrentTile(event) {
-    let x = event.nativeEvent.offsetX -20
-    let y = event.nativeEvent.offsetY + 6
+    let x = (event.nativeEvent.offsetX * this.state.zoomOffset) + HEX_GLOBAL_OFFSET_X
+    let y = (event.nativeEvent.offsetY * this.state.zoomOffset) + HEX_GLOBAL_OFFSET_Y
     this.setState({mouse: [x,y]})
 
     let hex = this.state.Grid.pointToHex([x, y])
