@@ -48,6 +48,7 @@ class SmallHexMap extends React.Component {
     }
     this.updateMap = this.updateMap.bind(this)
     this.setCurrentTile = this.setCurrentTile.bind(this)
+    this.placeTile = this.placeTile.bind(this)
   }
 
   updateMap(event) {
@@ -64,6 +65,16 @@ class SmallHexMap extends React.Component {
     let coordinates = hex.coordinates()
     if(this.state.displayedTiles.get(hex.coordinates()) !== undefined) {
       this.setState({current: [coordinates.x, coordinates.y]})
+    } else {
+      this.setState({current: [-1, -1]})
+    }
+  }
+
+  placeTile(event) {
+    if (this.state.current[0] !== -1 && this.state.current[1] !== -1) {
+      let hex = this.state.displayedTiles.get(this.state.current)
+      hex.set({x: hex.x, y: hex.y, start: hex.start, sides: hex.sides, image: `tile_${this.state.addingTile}`})
+      this.setState(prevState => { return { addingTile: prevState.addingTile + 1 }});
     }
   }
 
@@ -113,7 +124,7 @@ class SmallHexMap extends React.Component {
       <div className='map-wrapper'>
         <div id='map' className='map'>
           <img src={IMAGES['small_map_back']} width={this.state.size}/>
-          <svg onMouseMove={this.setCurrentTile} viewBox="0 0 300 300" width={this.state.size}>
+          <svg onClick={this.placeTile} onMouseMove={this.setCurrentTile} viewBox="0 0 300 300" width={this.state.size}>
             {hexes}
             <text transform={'translate(0 290)'}>{`Mouse: ${this.state.mouse}`}</text>
             <text transform={'translate(250 290)'}>{`Hex: ${this.state.current}`}</text>

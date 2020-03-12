@@ -63,21 +63,68 @@ import anitAircraftDefenseImage from "../img/AntiAircraftDefense.png";
 import nuclearBombtechnologyImage from "../img/NuclearBomb.png";
 import droneAssassinsImage from "../img/DroneAssassins.png";
 import mechsImage from "../img/Mechs.png";
-import small_map_back  from "../img/small_map_back.png"
-import sm_0_5  from "../img/sm_0_5.png"
-import sm_1_3  from "../img/sm_1_3.png"
-import sm_1_4  from "../img/sm_1_4.png"
-import sm_2_2  from "../img/sm_2_2.png"
-import sm_2_5  from "../img/sm_2_5.png"
-import sm_3_0  from "../img/sm_3_0.png"
-import sm_3_1  from "../img/sm_3_1.png"
-import sm_3_3  from "../img/sm_3_3.png"
-import sm_4_2  from "../img/sm_4_2.png"
-import sm_4_5  from "../img/sm_4_5.png"
-import sm_5_3  from "../img/sm_5_3.png"
-import sm_5_4  from "../img/sm_5_4.png"
-import sm_6_5  from "../img/sm_6_5.png"
-import tile_1  from "../img/tile_1.png"
+import small_map_back from "../img/small_map_back.png"
+import sm_0_5 from "../img/sm_0_5.png"
+import sm_1_3 from "../img/sm_1_3.png"
+import sm_1_4 from "../img/sm_1_4.png"
+import sm_2_2 from "../img/sm_2_2.png"
+import sm_2_5 from "../img/sm_2_5.png"
+import sm_3_0 from "../img/sm_3_0.png"
+import sm_3_1 from "../img/sm_3_1.png"
+import sm_3_3 from "../img/sm_3_3.png"
+import sm_4_2 from "../img/sm_4_2.png"
+import sm_4_5 from "../img/sm_4_5.png"
+import sm_5_3 from "../img/sm_5_3.png"
+import sm_5_4 from "../img/sm_5_4.png"
+import sm_6_5 from "../img/sm_6_5.png"
+import tile_1 from "../img/tile_1.png"
+import tile_2 from "../img/tile_2.png"
+import tile_3 from "../img/tile_3.png"
+import tile_4 from "../img/tile_4.png"
+import tile_5 from "../img/tile_5.png"
+import tile_6 from "../img/tile_6.png"
+import tile_7 from "../img/tile_7.png"
+import tile_8 from "../img/tile_8.png"
+import tile_9 from "../img/tile_9.png"
+import tile_10 from "../img/tile_10.png"
+import tile_11 from "../img/tile_11.png"
+import tile_12 from "../img/tile_12.png"
+import tile_13 from "../img/tile_13.png"
+import tile_14 from "../img/tile_14.png"
+import tile_15 from "../img/tile_15.png"
+import tile_16 from "../img/tile_16.png"
+import tile_17 from "../img/tile_17.png"
+import tile_18 from "../img/tile_18.png"
+import tile_19 from "../img/tile_19.png"
+import tile_20 from "../img/tile_20.png"
+import tile_21 from "../img/tile_21.png"
+import tile_22 from "../img/tile_22.png"
+import tile_23 from "../img/tile_23.png"
+import tile_24 from "../img/tile_24.png"
+import tile_25 from "../img/tile_25.png"
+import tile_26 from "../img/tile_26.png"
+import tile_27 from "../img/tile_27.png"
+import tile_28 from "../img/tile_28.png"
+import tile_29 from "../img/tile_29.png"
+import tile_30 from "../img/tile_30.png"
+import tile_31 from "../img/tile_31.png"
+import tile_32 from "../img/tile_32.png"
+import tile_33 from "../img/tile_33.png"
+import tile_34 from "../img/tile_34.png"
+import tile_35 from "../img/tile_35.png"
+import tile_36 from "../img/tile_36.png"
+import tile_37 from "../img/tile_37.png"
+import tile_38 from "../img/tile_38.png"
+import tile_39 from "../img/tile_39.png"
+import tile_40 from "../img/tile_40.png"
+import tile_41 from "../img/tile_41.png"
+import tile_42 from "../img/tile_42.png"
+import tile_43 from "../img/tile_43.png"
+import tile_44 from "../img/tile_44.png"
+import tile_45 from "../img/tile_45.png"
+import tile_46 from "../img/tile_46.png"
+import tile_47 from "../img/tile_47.png"
+import tile_48 from "../img/tile_48.png"
 
 export const IMAGES = {
   'coin': coinImage,
@@ -168,4 +215,51 @@ export const IMAGES = {
   'sm_5_3': sm_5_3,
   'sm_6_5': sm_6_5,
   'tile_1': tile_1,
+  'tile_2': tile_2,
+  'tile_3': tile_3,
+  'tile_4': tile_4,
+  'tile_5': tile_5,
+  'tile_6': tile_6,
+  'tile_7': tile_7,
+  'tile_8': tile_8,
+  'tile_9': tile_9,
+  'tile_10': tile_10,
+  'tile_11': tile_11,
+  'tile_12': tile_12,
+  'tile_13': tile_13,
+  'tile_14': tile_14,
+  'tile_15': tile_15,
+  'tile_16': tile_16,
+  'tile_17': tile_17,
+  'tile_18': tile_18,
+  'tile_19': tile_19,
+  'tile_20': tile_20,
+  'tile_21': tile_21,
+  'tile_22': tile_22,
+  'tile_23': tile_23,
+  'tile_24': tile_24,
+  'tile_25': tile_25,
+  'tile_26': tile_26,
+  'tile_27': tile_27,
+  'tile_28': tile_28,
+  'tile_29': tile_29,
+  'tile_30': tile_30,
+  'tile_31': tile_31,
+  'tile_32': tile_32,
+  'tile_33': tile_33,
+  'tile_34': tile_34,
+  'tile_35': tile_35,
+  'tile_36': tile_36,
+  'tile_37': tile_37,
+  'tile_38': tile_38,
+  'tile_39': tile_39,
+  'tile_40': tile_40,
+  'tile_41': tile_41,
+  'tile_42': tile_42,
+  'tile_43': tile_43,
+  'tile_44': tile_44,
+  'tile_45': tile_45,
+  'tile_46': tile_46,
+  'tile_47': tile_47,
+  'tile_48': tile_48,
 }
