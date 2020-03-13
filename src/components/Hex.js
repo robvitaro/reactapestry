@@ -51,9 +51,13 @@ class Hex extends React.Component {
 
   render() {
     const {positionX, positionY, corners} = this.state
-    const {image, className} = this.props
+    const {image, className, rotation} = this.props
     const imageTag = image !== ''
-      ? <image href={IMAGES[image]} height='50' width='50' transform={`translate(${positionX - HEX_GLOBAL_OFFSET_X} ${positionY- HEX_GLOBAL_OFFSET_Y - 5})`}/>
+      ? <image
+          href={IMAGES[image]}
+          height='50' width='50'
+          transform={`translate(${positionX - HEX_GLOBAL_OFFSET_X} ${positionY- HEX_GLOBAL_OFFSET_Y - 5}) rotate(${60 * rotation}, 25, 25)`}
+        />
       : null
 
     return (

@@ -12,7 +12,8 @@ class SmallHexMap extends React.Component {
     super(props);
     const Hex = extendHex({
       size: 24,
-      orientation: 'flat'
+      orientation: 'flat',
+      rotation: 0
     })
     const Grid = defineGrid(Hex)
     const displayedTiles = Grid.hexagon({
@@ -32,7 +33,7 @@ class SmallHexMap extends React.Component {
           sides.push(side)
         })
         let image = `sm_${tile.x}_${tile.y}`
-        hex.set({x: hex.x, y: hex.y, start: start, sides: sides, image: image})
+        hex.set({x: hex.x, y: hex.y, start: start, sides: sides, image: image, rotation: 0})
       }
     })
 
@@ -44,16 +45,25 @@ class SmallHexMap extends React.Component {
       displayedTiles: displayedTiles,
       size: 300,     // 500 for zoom
       zoomOffset: 1, // .6 for size 500
-      addingTile: 1
+      addingTile: 1,
+      addingTileRotation: 0
     }
     this.updateMap = this.updateMap.bind(this)
+    this.addingTile = this.addingTile.bind(this)
     this.setCurrentTile = this.setCurrentTile.bind(this)
     this.placeTile = this.placeTile.bind(this)
+    this.rotatePlaceTile = this.rotatePlaceTile.bind(this)
+    this.currentTileIsOnTheBoard = this.currentTileIsOnTheBoard.bind(this)
+    this.tileIsCurrentTile = this.tileIsCurrentTile.bind(this)
   }
 
   updateMap(event) {
     const {value} = event.target
     this.setState({show: value})
+  }
+
+  addingTile() {
+    return this.state.addingTile > 0
   }
 
   setCurrentTile(event) {
@@ -70,23 +80,42 @@ class SmallHexMap extends React.Component {
     }
   }
 
+  currentTileIsOnTheBoard() {
+    return this.state.current[0] !== -1 && this.state.current[1] !== -1
+  }
+
+  tileIsCurrentTile(hex) {
+    return this.state.current[0] === hex.x && this.state.current[1] === hex.y
+  }
+
   placeTile(event) {
-    if (this.state.current[0] !== -1 && this.state.current[1] !== -1) {
-      let hex = this.state.displayedTiles.get(this.state.current)
-      hex.set({x: hex.x, y: hex.y, start: hex.start, sides: hex.sides, image: `tile_${this.state.addingTile}`})
-      this.setState(prevState => { return { addingTile: prevState.addingTile + 1 }});
+    const {current, displayedTiles, addingTile, addingTileRotation} = this.state
+    let hex = displayedTiles.get(current)
+
+    if (!hex.image && this.currentTileIsOnTheBoard()) {
+      hex.set({x: hex.x, y: hex.y, start: hex.start, sides: hex.sides, image: `tile_${addingTile}`, rotation: addingTileRotation})
+      this.setState(prevState => { return { addingTile: prevState.addingTile + 1, addingTileRotation: 0 }});
+    }
+  }
+
+  rotatePlaceTile(event) {
+    event.preventDefault()
+    if (this.currentTileIsOnTheBoard()) {
+      const newRotation = this.state.addingTileRotation === 5 ? 0 : this.state.addingTileRotation + 1
+      this.setState({ addingTileRotation: newRotation });
     }
   }
 
   render() {
-    const {current, displayedTiles} = this.state
-    const currentNeighbors = !(current[0] === -1 && current[1] === -1) ? displayedTiles.neighborsOf(displayedTiles.get(current)) : []
+    const {current, displayedTiles, addingTile, addingTileRotation} = this.state
+    const currentNeighbors = this.currentTileIsOnTheBoard() ? displayedTiles.neighborsOf(displayedTiles.get(current)) : []
 
     const hexes =  this.state.displayedTiles.map(hex => {
       const position = hex.toPoint()
       let start = hex.start ? hex.start : null
       let sides = hex.sides ? hex.sides : [[],[],[],[],[],[]]
-      let image = hex.image ? hex.image : (this.state.addingTile > 0 && this.state.current[0] === hex.x && this.state.current[1] === hex.y ? `tile_${this.state.addingTile}` : '')
+      let rotation = (!hex.image && this.addingTile() && this.tileIsCurrentTile(hex)) ? addingTileRotation : hex.rotation
+      let image = hex.image ? hex.image : (this.addingTile() && this.tileIsCurrentTile(hex) ? `tile_${addingTile}` : '')
 
       return (
         <Hex
@@ -104,6 +133,7 @@ class SmallHexMap extends React.Component {
           start={start}
           show={this.state.show}
           image={image}
+          rotation={rotation}
         />
       )
     })
@@ -124,7 +154,7 @@ class SmallHexMap extends React.Component {
       <div className='map-wrapper'>
         <div id='map' className='map'>
           <img src={IMAGES['small_map_back']} width={this.state.size}/>
-          <svg onClick={this.placeTile} onMouseMove={this.setCurrentTile} viewBox="0 0 300 300" width={this.state.size}>
+          <svg onClick={this.placeTile} onContextMenu={this.rotatePlaceTile} onMouseMove={this.setCurrentTile} viewBox="0 0 300 300" width={this.state.size}>
             {hexes}
             <text transform={'translate(0 290)'}>{`Mouse: ${this.state.mouse}`}</text>
             <text transform={'translate(250 290)'}>{`Hex: ${this.state.current}`}</text>
