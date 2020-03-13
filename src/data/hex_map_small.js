@@ -49,7 +49,6 @@ export const HEX_MAP_SMALL = {
       y: 3,
       sides: [
         ['M','M'],['G','G'],['G','G'],['G','M'],['M','W'],['W','M']
-
       ]
     },
     {

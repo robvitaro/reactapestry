@@ -48,6 +48,7 @@ class SmallHexMap extends React.Component {
       addingTile: 1,
       addingTileRotation: 0
     }
+
     this.updateMap = this.updateMap.bind(this)
     this.addingTile = this.addingTile.bind(this)
     this.setCurrentTile = this.setCurrentTile.bind(this)
@@ -92,7 +93,7 @@ class SmallHexMap extends React.Component {
     const {current, displayedTiles, addingTile, addingTileRotation} = this.state
     let hex = displayedTiles.get(current)
 
-    if (!hex.image && this.currentTileIsOnTheBoard()) {
+    if (this.addingTile() && !hex.image && this.currentTileIsOnTheBoard()) {
       hex.set({x: hex.x, y: hex.y, start: hex.start, sides: hex.sides, image: `tile_${addingTile}`, rotation: addingTileRotation})
       this.setState(prevState => { return { addingTile: prevState.addingTile + 1, addingTileRotation: 0 }});
     }
@@ -100,7 +101,7 @@ class SmallHexMap extends React.Component {
 
   rotatePlaceTile(event) {
     event.preventDefault()
-    if (this.currentTileIsOnTheBoard()) {
+    if (this.addingTile() && this.currentTileIsOnTheBoard()) {
       const newRotation = this.state.addingTileRotation === 5 ? 0 : this.state.addingTileRotation + 1
       this.setState({ addingTileRotation: newRotation });
     }
