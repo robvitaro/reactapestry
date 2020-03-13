@@ -56,6 +56,7 @@ class SmallHexMap extends React.Component {
     this.rotatePlaceTile = this.rotatePlaceTile.bind(this)
     this.currentTileIsOnTheBoard = this.currentTileIsOnTheBoard.bind(this)
     this.tileIsCurrentTile = this.tileIsCurrentTile.bind(this)
+    this.handleZoom = this.handleZoom.bind(this)
   }
 
   updateMap(event) {
@@ -107,6 +108,14 @@ class SmallHexMap extends React.Component {
     }
   }
 
+  handleZoom() {
+    if (this.state.size === 300) {
+      this.setState({size: 500, zoomOffset: 0.6})
+    } else {
+      this.setState({size: 300, zoomOffset: 1})
+    }
+  }
+
   render() {
     const {current, displayedTiles, addingTile, addingTileRotation} = this.state
     const currentNeighbors = this.currentTileIsOnTheBoard() ? displayedTiles.neighborsOf(displayedTiles.get(current)) : []
@@ -151,6 +160,8 @@ class SmallHexMap extends React.Component {
       </div>
     )
 
+    const zoomButton = <button onClick={this.handleZoom}>{this.state.size === 300 ? 'Zoom in' : 'Zoom out'}</button>
+
     return(
       <div className='map-wrapper'>
         <div id='map' className='map'>
@@ -161,6 +172,7 @@ class SmallHexMap extends React.Component {
             <text transform={'translate(250 290)'}>{`Hex: ${this.state.current}`}</text>
           </svg>
           {debugMenu}
+          {zoomButton}
         </div>
       </div>
     )
