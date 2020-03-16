@@ -3,9 +3,18 @@ import Hex from './Hex'
 import {defineGrid, extendHex} from "honeycomb-grid";
 import {HEX_MAP_SMALL} from "../data/hex_map_small";
 import {IMAGES} from "../data/images";
+import {getSidesForTileID} from '../data/tiles'
 
 export const HEX_GLOBAL_OFFSET_X = -20
 export const HEX_GLOBAL_OFFSET_Y = 6
+
+export const rotateSides = (sides, rotateTimes) => {
+  for(let i = 0; i < rotateTimes; i++) {
+    let last = sides.pop()
+    sides.unshift(last)
+  }
+  return sides
+}
 
 class SmallHexMap extends React.Component {
   constructor(props) {
@@ -95,7 +104,8 @@ class SmallHexMap extends React.Component {
     let hex = displayedTiles.get(current)
 
     if (this.addingTile() && !hex.image && this.currentTileIsOnTheBoard()) {
-      hex.set({x: hex.x, y: hex.y, start: hex.start, sides: hex.sides, image: `tile_${addingTile}`, rotation: addingTileRotation})
+      const sides = rotateSides(getSidesForTileID(addingTile), addingTileRotation)
+      hex.set({x: hex.x, y: hex.y, start: hex.start, sides: sides, image: `tile_${addingTile}`, rotation: addingTileRotation})
       this.setState(prevState => { return { addingTile: prevState.addingTile + 1, addingTileRotation: 0 }});
     }
   }

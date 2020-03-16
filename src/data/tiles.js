@@ -240,3 +240,9 @@ export const TILES = [
     sides: [ ['W','G'],['G','G'],['G','F'],['F','F'],['F','W'],['W','W'] ]
   }
 ]
+
+export const getSidesForTileID = id => {
+  const found = TILES.find(el => el.id === id);
+  if (!found) return [[],[],[],[],[],[]]
+  return found.sides;
+}
