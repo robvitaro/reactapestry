@@ -205,7 +205,7 @@ class Tapestry extends React.Component {
   civ(gain) {}
 
   render() {
-    const {trackIndex, incomeIndex, food, workers, coin, culture, mode, canTakeIncomeTurn} = this.state.current.context
+    const {trackIndex, incomeIndex, food, workers, coin, culture, canTakeIncomeTurn} = this.state.current.context
     return (
       <div>
         <SmallHexMap />

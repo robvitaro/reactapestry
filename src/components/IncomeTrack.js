@@ -9,7 +9,7 @@ const IncomeTrack = (props) => {
     <div className='incomeTrack'>
       <div className='incomeTrackHeader'>
         <div className='incomeTrackName'>{incomeTrack.name.toUpperCase()}</div>
-        <img className='icon-in-text' src={IMAGES[incomeTrack.name]}/>
+        <img className='icon-in-text' src={IMAGES[incomeTrack.name]} alt={incomeTrack.name} />
       </div>
       <div className='incomeTrackSpaces'>
         <table>

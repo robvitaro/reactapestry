@@ -10,6 +10,7 @@ const TrackStack = (props) => {
     <div className='trackStack'>
       {TRACKS.map((track, index) => {
         return <div
+          key={`track_${track.name}`}
           className={`switch ${track.name.toLowerCase()} ${index === activeTrack ? 'hidden' : ''}`}
           onClick={() => setActiveTrack(index)}>
           {track.name}

@@ -117,8 +117,9 @@ class SmallHexMap extends React.Component {
   }
 
   render() {
-    const {current, displayedTiles, addingTile, addingTileRotation} = this.state
-    const currentNeighbors = this.currentTileIsOnTheBoard() ? displayedTiles.neighborsOf(displayedTiles.get(current)) : []
+    // const {current, displayedTiles} = this.state
+    const {addingTile, addingTileRotation} = this.state
+    // const currentNeighbors = this.currentTileIsOnTheBoard() ? displayedTiles.neighborsOf(displayedTiles.get(current)) : []
 
     const hexes =  this.state.displayedTiles.map(hex => {
       const position = hex.toPoint()
@@ -129,6 +130,7 @@ class SmallHexMap extends React.Component {
 
       return (
         <Hex
+          key={`hex_${hex.x}_${hex.y}`}
           corners={hex.corners().map(({x, y}) => `${x},${y}`)}
           positionX={position.x}
           positionY={position.y}
@@ -165,7 +167,7 @@ class SmallHexMap extends React.Component {
     return(
       <div className='map-wrapper'>
         <div id='map' className='map'>
-          <img src={IMAGES['small_map_back']} width={this.state.size}/>
+          <img src={IMAGES['small_map_back']} width={this.state.size} alt='Small Map' />
           <svg onClick={this.placeTile} onContextMenu={this.rotatePlaceTile} onMouseMove={this.setCurrentTile} viewBox="0 0 300 300" width={this.state.size}>
             {hexes}
             <text transform={'translate(0 290)'}>{`Mouse: ${this.state.mouse}`}</text>

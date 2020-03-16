@@ -11,7 +11,7 @@ const TrackSpace = (props) => {
     <td className={className}>
       <div className='space'>
         {title}
-        <img src={image} />
+        <img src={image} alt={space.name} />
         <div className={classOccupied}/>
         {advanceButton}
       </div>

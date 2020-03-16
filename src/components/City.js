@@ -59,7 +59,7 @@ class City extends React.Component {
   message() {
     if (this.props.advanceTurnState && this.props.advanceTurnState.state.matches('PlacingBuilding')) {
       const building = this.props.advanceTurnState.state.context.building
-      return <span>Please add <img className='icon-in-text' src={IMAGES[building]} /> to your city</span>
+      return <span>Please add <img className='icon-in-text' src={IMAGES[building]} alt={building}/> to your city</span>
     } else {
       return <span>&nbsp;</span>
     }
