@@ -13,7 +13,7 @@ export const costImageSources = (advanceTurnState) => {
 const ResourceTrackMessage = (props) => {
   const {advanceTurnState} = props
   const payingCost = advanceTurnState?.state.matches('PayingAdvancementCost')
-  const selectingFreeResource = advanceTurnState?.state.matches('SelectFreeResource')
+  const selectingFreeResource = advanceTurnState?.state?.children?.placeBuilding?.state?.matches('SelectFreeResource')
 
   const message = () => {
     if (payingCost) {

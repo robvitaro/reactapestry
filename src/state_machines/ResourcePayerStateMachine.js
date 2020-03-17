@@ -1,7 +1,7 @@
 import {Machine, assign, sendParent} from "xstate";
 
 export const resourcePayerStateMachine = Machine({
-  id: 'advanceTurnMachine',
+  id: 'resourcePayerMachine',
   context: {
     cost: []
   },

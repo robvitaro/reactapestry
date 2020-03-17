@@ -60,13 +60,13 @@ export const tapestryGameStateMachine = Machine(
           updateIncomeIndex: { actions: 'updateIncomeIndex'},
           placedBuilding: {actions: forwardTo('advanceTurn') },
           payFood: {actions: ['payFood', send({ type: 'PaidResource', payment: 'food'}, { to: 'advanceTurn' })]},
-          freeFood: {actions: ['gainFood', send({ type: 'SelectedFreeResource'}, { to: 'advanceTurn' })]},
+          freeFood: {actions: ['gainFood', send({ type: 'selectedFreeResource'}, { to: 'advanceTurn' })]},
           payCoin: {actions: ['payCoin', send({ type: 'PaidResource', payment: 'coin'}, { to: 'advanceTurn' })]},
-          freeCoin: {actions: ['gainCoin', send({ type: 'SelectedFreeResource'}, { to: 'advanceTurn' })]},
+          freeCoin: {actions: ['gainCoin', send({ type: 'selectedFreeResource'}, { to: 'advanceTurn' })]},
           payWorker: {actions: ['payWorker', send({ type: 'PaidResource', payment: 'workers'}, { to: 'advanceTurn' })]},
-          freeWorker: {actions: ['gainWorker', send({ type: 'SelectedFreeResource'}, { to: 'advanceTurn' })]},
+          freeWorker: {actions: ['gainWorker', send({ type: 'selectedFreeResource'}, { to: 'advanceTurn' })]},
           payCulture: {actions: ['payCulture', send({ type: 'PaidResource', payment: 'culture'}, { to: 'advanceTurn' })]},
-          freeCulture: {actions: ['gainCulture', send({ type: 'SelectedFreeResource'}, { to: 'advanceTurn' })]},
+          freeCulture: {actions: ['gainCulture', send({ type: 'selectedFreeResource'}, { to: 'advanceTurn' })]},
         }
       },
       TakingIncomeTurn: {
@@ -130,7 +130,6 @@ export const tapestryGameStateMachine = Machine(
         newIncomeIndex[index] = context.incomeIndex[index] - 1;
         return newIncomeIndex
       }}),
-      placedBuilding: send({ type: 'PlacedBuilding'}, { to: 'advanceTurn' }),
       endAdvance: send({ type: 'EndAdvance'}, { to: 'advanceTurn' })
     },
     guards: {

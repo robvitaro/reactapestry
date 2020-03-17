@@ -8,7 +8,7 @@ const ResourceTrack = (props) => {
   const maxValue = 8
 
   const payingCost = advanceTurnState?.state.matches('PayingAdvancementCost')
-  const selectingFreeResource = advanceTurnState?.state.matches('SelectFreeResource')
+  const selectingFreeResource = advanceTurnState?.state?.children?.placeBuilding?.state?.matches('SelectFreeResource')
 
   const chooseResource = (resource) => {
     if (payingCost || selectingFreeResource) {

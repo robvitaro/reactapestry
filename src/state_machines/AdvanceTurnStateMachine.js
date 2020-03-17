@@ -1,6 +1,7 @@
 import {Machine, assign, sendParent, forwardTo} from "xstate";
 import {TRACKS} from "../data/tracks";
 import {resourcePayerStateMachine} from "./ResourcePayerStateMachine";
+import {buildingPlacerStateMachine} from "./BuildingPlacerStateMachine";
 
 export const advanceTurnStateMachine = Machine({
   id: 'advanceTurnMachine',
@@ -24,7 +25,7 @@ export const advanceTurnStateMachine = Machine({
       },
       on: {
         'PaidResource': { actions: forwardTo('payAdvancementCost') },
-        'updateCost': {actions: assign({advancementCost: (context, event) => event.cost }) },
+        'updateCost': { actions: assign({advancementCost: (context, event) => event.cost }) },
       },
     },
     AdvanceToken: {
@@ -57,7 +58,6 @@ export const advanceTurnStateMachine = Machine({
       on: {
         '': [
           { target: 'PlacingBuilding', cond: 'buildingGainsExist' },
-          { target: 'SelectFreeResource', cond: 'freeResourceToChoose' },
           { target: 'AdvanceTurnOver' }
         ],
         PlaceBuilding: 'PlacingBuilding',
@@ -67,19 +67,15 @@ export const advanceTurnStateMachine = Machine({
     },
     PlacingBuilding: {
       entry: ['setBuilding', 'updateIncomeIndex'],
+      invoke: {
+        id: 'placeBuilding',
+        src: buildingPlacerStateMachine,
+        data: context => ({ building: context.building }),
+        onDone: 'GainedBenefits'
+      },
       on: {
-        placedBuilding: {
-          actions: 'placedBuilding',
-          target: 'GainedBenefits',
-        }
-      }
-    },
-    SelectFreeResource: {
-      on: {
-        SelectedFreeResource: {
-          actions: assign({ freeResource: false }),
-          target: 'GainedBenefits'
-        }
+        placedBuilding: { actions: ['placedBuilding', forwardTo('placeBuilding')] },
+        selectedFreeResource: { actions: forwardTo('placeBuilding') }
       }
     },
     AdvanceTurnOver: {type: 'final'}
@@ -134,15 +130,14 @@ export const advanceTurnStateMachine = Machine({
     },
     guards: {
       buildingGainsExist: context => {
-        let thing = false
+        let buildingGainsExist = false
         context.gains.forEach(gain => {
           if (buildingGains.includes(gain.type)) {
-            thing = true
+            buildingGainsExist = true
           }
         })
-        return thing
+        return buildingGainsExist
       },
-      freeResourceToChoose: context => context.freeResource === true,
       gainLogicIsOR: context => TRACKS[context.trackIndex].spaces[context.spaceIndex].gain_logic === 'OR'
     }
   }
