@@ -12,10 +12,10 @@ export const advanceTurnStateMachine = Machine({
     building: '',
     freeResource: false
   },
-  initial: 'PayingCost',
+  initial: 'PayingAdvancementCost',
   states: {
-    PayingCost: {
-      entry: 'determineCost',
+    PayingAdvancementCost: {
+      entry: 'determineAdvancementCost',
       invoke: {
         id: 'payAdvancementCost',
         src: resourcePayerStateMachine,
@@ -61,7 +61,7 @@ export const advanceTurnStateMachine = Machine({
           { target: 'AdvanceTurnOver' }
         ],
         PlaceBuilding: 'PlacingBuilding',
-        OptForBonus: 'PayingCost',
+        // OptForBonus: 'PayingCost',
         EndAdvance: 'AdvanceTurnOver'
       }
     },
@@ -88,7 +88,7 @@ export const advanceTurnStateMachine = Machine({
   {
     actions: {
       assignGains: assign({gains: context => TRACKS[context.trackIndex].spaces[context.spaceIndex].gain}),
-      determineCost: assign({advancementCost: (context, event) => {
+      determineAdvancementCost: assign({advancementCost: (context, event) => {
         const trackSpace = context.spaceIndex
         const trackResource = TRACKS[context.trackIndex].resource
         const advancementCost = []

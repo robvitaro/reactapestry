@@ -12,13 +12,15 @@ export const costImageSources = (advanceTurnState) => {
 
 const ResourceTrackMessage = (props) => {
   const {advanceTurnState} = props
+  const payingCost = advanceTurnState?.state.matches('PayingAdvancementCost')
+  const selectingFreeResource = advanceTurnState?.state.matches('SelectFreeResource')
 
   const message = () => {
-    if (advanceTurnState?.state?.matches('PayingCost')) {
+    if (payingCost) {
       const images = costImageSources(advanceTurnState).map(src => <img className="icon-in-text" src={src} alt='cost' />)
       return <span>To advance, pay: {images}</span>
     }
-    if (advanceTurnState?.state?.matches('SelectFreeResource')) {
+    if (selectingFreeResource) {
       return <span>You have completed a district! Select a free resource! </span>
     }
     return <span>&nbsp;</span>

@@ -7,9 +7,10 @@ const ResourceTrack = (props) => {
   const {advanceTurnState, resourceChosen} = props
   const maxValue = 8
 
+  const payingCost = advanceTurnState?.state.matches('PayingAdvancementCost')
+  const selectingFreeResource = advanceTurnState?.state.matches('SelectFreeResource')
+
   const chooseResource = (resource) => {
-    const payingCost = advanceTurnState && advanceTurnState.state.matches('PayingCost')
-    const selectingFreeResource = advanceTurnState && advanceTurnState.state.matches('SelectFreeResource')
     if (payingCost || selectingFreeResource) {
       if (payingCost) {
         resourceChosen(resource, 'pay')
@@ -20,11 +21,7 @@ const ResourceTrack = (props) => {
   }
 
   const choosingResourceClass = (atIcon) => {
-    if(atIcon && advanceTurnState &&
-      (advanceTurnState.state.matches('PayingCost') ||
-        advanceTurnState.state.matches('SelectFreeResource') )) {
-      return 'choosing'
-    }
+    if(atIcon && (payingCost || selectingFreeResource) ) return 'choosing'
     return ''
   }
 
