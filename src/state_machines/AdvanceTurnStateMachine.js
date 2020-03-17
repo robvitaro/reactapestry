@@ -1,5 +1,6 @@
-import {Machine, assign, sendParent} from "xstate";
+import {Machine, assign, sendParent, forwardTo} from "xstate";
 import {TRACKS} from "../data/tracks";
+import {resourcePayerStateMachine} from "./ResourcePayerStateMachine";
 
 export const advanceTurnStateMachine = Machine({
   id: 'advanceTurnMachine',
@@ -11,27 +12,19 @@ export const advanceTurnStateMachine = Machine({
     building: '',
     freeResource: false
   },
-  initial: 'DeterminingCost',
+  initial: 'PayingCost',
   states: {
-    DeterminingCost: {
-      entry: 'determineCost',
-      on: {
-        '': 'PayingCost'
-      }
-    },
     PayingCost: {
-      on: { PaidResource: 'ResourcePaid' },
-    },
-    ResourcePaid: {
-      entry: 'capturePayment',
+      entry: 'determineCost',
+      invoke: {
+        id: 'payAdvancementCost',
+        src: resourcePayerStateMachine,
+        data: context => ({ cost: context.advancementCost }),
+        onDone: 'AdvanceToken'
+      },
       on: {
-        '': [
-          // Transitions are tested one at a time.
-          // The first valid transition will be taken.
-          { target: 'PayingCost', cond: 'moreToPay' },
-          { target: 'AdvanceToken', cond: 'paidInFull' },
-        // CostPaidForBonus: 'GainingBenefits'
-        ]
+        'PaidResource': { actions: forwardTo('payAdvancementCost') },
+        'updateCost': {actions: assign({advancementCost: (context, event) => event.cost }) },
       },
     },
     AdvanceToken: {
@@ -46,7 +39,7 @@ export const advanceTurnStateMachine = Machine({
       entry: 'assignGains',
       on: {
         '': [
-          { target: 'ChoosingBenefits', cond: 'gainLogicIsOR' },
+          // { target: 'ChoosingBenefits', cond: 'gainLogicIsOR' },
           {
             actions: sendParent(context => ({ type: 'gainsFromAdvance', gains: context.gains})),
             target: 'GainedBenefits'
@@ -115,24 +108,6 @@ export const advanceTurnStateMachine = Machine({
 
         return advancementCost
       }}),
-      capturePayment: assign((context, event) => {
-        const newCost = context.advancementCost.map((x) => x)
-        const payment = event.payment
-        let paymentIndex = newCost.indexOf(payment)
-
-        if (paymentIndex >= 0) {
-          newCost.splice(paymentIndex, 1)
-        } else {
-          paymentIndex = newCost.indexOf('wild')
-          if (paymentIndex >= 0) {
-            newCost.splice(paymentIndex, 1)
-          } else {
-            // invalid choice ... what to do?
-          }
-
-        }
-        return {advancementCost: newCost}
-      }),
       setBuilding: assign({building: (context, event) => {
         let building = ''
         context.gains.forEach(gain => {
@@ -158,8 +133,6 @@ export const advanceTurnStateMachine = Machine({
       }),
     },
     guards: {
-      moreToPay: context => context.advancementCost.length > 0,
-      paidInFull: context => context.advancementCost.length === 0,
       buildingGainsExist: context => {
         let thing = false
         context.gains.forEach(gain => {
