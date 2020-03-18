@@ -1,5 +1,5 @@
-import React  from 'react';
-import { interpret } from 'xstate';
+import React, {useState}  from 'react';
+import { useMachine } from '@xstate/react';
 import City from "./components/City";
 import IncomeMat from "./components/IncomeMat";
 import Modal from "./components/Modal";
@@ -8,215 +8,183 @@ import { tapestryGameStateMachine } from "./state_machines/TapestryGameStateMach
 import { CITIES } from './data/cities';
 import TrackStack from "./components/TrackStack";
 
-class Tapestry extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      current: tapestryGameStateMachine.initialState,
-      showModal: false
-    };
-
-    this.gameStateService = interpret(tapestryGameStateMachine).onTransition(current =>
-      this.setState({ current })
-    );
-
-    this.handleAdvanceTurn = this.handleAdvanceTurn.bind(this)
-    this.updateStateVar = this.updateStateVar.bind(this)
-    this.buildingAdded = this.buildingAdded.bind(this)
-    this.handleAdvanceTurn = this.handleAdvanceTurn.bind(this)
-    this.handleIncomeTurn = this.handleIncomeTurn.bind(this)
-    this.resourceChosen = this.resourceChosen.bind(this)
-    this.checkForZeroResources = this.checkForZeroResources.bind(this)
-    this.advanceTurnState = this.advanceTurnState.bind(this)
-    this.checkTrackAdvancePermitted = this.checkTrackAdvancePermitted.bind(this)
-  }
-
-  componentDidMount() {
-    this.gameStateService.start();
-  }
-
-  componentWillUnmount() {
-    this.gameStateService.stop();
-  }
+const Tapestry = () => {
+  const [currentState, sendEvent, gameStateService] = useMachine(tapestryGameStateMachine);
+  const [showModal, setModal] = useState(false)
 
   // VP conditions
-  explorationTrackAdvances() { return this.state.current.context.trackIndex[0]}
-  scienceTrackAdvances() { return this.state.current.context.trackIndex[1]}
-  technologyTrackAdvances() { return this.state.current.context.trackIndex[2]}
-  militaryTrackAdvances() { return this.state.current.context.trackIndex[3]}
-  territoriesOwned() { return this.state.current.context.territoriesOwned}
-  territoriesControlled() { return this.state.current.context.territoriesControlled}
-  marketsInCity() { return 5 - this.state.current.context.incomeIndex[0]}
-  housesInCity() { return 5 - this.state.current.context.incomeIndex[1]}
-  farmsInCity() { return 5 - this.state.current.context.incomeIndex[2]}
-  armoriesInCity() { return 5 - this.state.current.context.incomeIndex[3]}
-  techCards() { return this.state.current.context.techCardBottom + this.state.current.context.techCardMiddle + this.state.current.context.techCardTop}
-  offTrackAdvancement() { return 0 }
-  tapestryAll() { return this.state.current.context.tapestryHand + this.state.current.context.tapestryMat }
-  flat() { return 1 }
+  function explorationTrackAdvances() { return currentState.context.trackIndex[0]}
+  function scienceTrackAdvances() { return currentState.context.trackIndex[1]}
+  function technologyTrackAdvances() { return currentState.context.trackIndex[2]}
+  function militaryTrackAdvances() { return currentState.context.trackIndex[3]}
+  function territoriesOwned() { return currentState.context.territoriesOwned}
+  function territoriesControlled() { return currentState.context.territoriesControlled}
+  function marketsInCity() { return 5 - currentState.context.incomeIndex[0]}
+  function housesInCity() { return 5 - currentState.context.incomeIndex[1]}
+  function farmsInCity() { return 5 - currentState.context.incomeIndex[2]}
+  function armoriesInCity() { return 5 - currentState.context.incomeIndex[3]}
+  function techCards() { return currentState.context.techCardBottom + currentState.context.techCardMiddle + currentState.context.techCardTop}
+  function offTrackAdvancement() { return 0 }
+  function tapestryAll() { return currentState.context.tapestryHand + currentState.context.tapestryMat }
+  function flat() { return 1 }
 
-  showModal = e => {
-    this.setState({showModal: !this.state.showModal}  )
+  function handleIncomeTurn() {
+    gameStateService.send('IncomeTurn')
   }
 
-  handleIncomeTurn() {
-    this.gameStateService.send('IncomeTurn')
+  function handleAdvanceTurn(index) {
+    gameStateService.send({type: 'AdvanceTurn', index: index})
   }
 
-  handleAdvanceTurn(index) {
-    this.gameStateService.send({type: 'AdvanceTurn', index: index})
+  function advanceTurnState() {
+    return currentState.children.advanceTurn
   }
 
-  advanceTurnState() {
-    return this.state.current.children.advanceTurn
-  }
-
-  resourceChosen(resource, payOrFree) {
+  function resourceChosen(resource, payOrFree) {
     switch (resource) {
-      case 'food': return this.gameStateService.send({type: payOrFree.concat('Food')})
-      case 'workers': return this.gameStateService.send({type: payOrFree.concat('Worker')})
-      case 'coin': return this.gameStateService.send({type: payOrFree.concat('Coin')})
-      case 'culture': return this.gameStateService.send({type: payOrFree.concat('Culture')})
+      case 'food': return gameStateService.send({type: payOrFree.concat('Food')})
+      case 'workers': return gameStateService.send({type: payOrFree.concat('Worker')})
+      case 'coin': return gameStateService.send({type: payOrFree.concat('Coin')})
+      case 'culture': return gameStateService.send({type: payOrFree.concat('Culture')})
       default: return null
     }
   }
 
-  checkForZeroResources() {
-    if (!this.checkAnyResource(1)) {this.setState({mode: 'zeroResources'})}
+  function checkForZeroResources() {
+    // if (!checkAnyResource(1)) {setState({mode: 'zeroResources'})}
   }
 
-  checkAnyResource(minimum, exclude) {
+  function checkAnyResource(minimum, exclude) {
     let totalResources = 0
-    if(exclude !== 'food') { totalResources += this.state.current.context.food }
-    if(exclude !== 'workers') { totalResources += this.state.current.context.workers }
-    if(exclude !== 'coin') { totalResources += this.state.current.context.coin }
-    if(exclude !== 'culture') { totalResources += this.state.current.context.culture }
+    if(exclude !== 'food') { totalResources += currentState.context.food }
+    if(exclude !== 'workers') { totalResources += currentState.context.workers }
+    if(exclude !== 'coin') { totalResources += currentState.context.coin }
+    if(exclude !== 'culture') { totalResources += currentState.context.culture }
     return totalResources >= minimum
   }
 
-  checkTrackAdvancePermitted(trackIndex, trackResource) {
-    if(this.state.current.context.trackIndex[trackIndex] < 3) {
+  function checkTrackAdvancePermitted(trackIndex, trackResource) {
+    if(currentState.context.trackIndex[trackIndex] < 3) {
       /* Age 1 requires 1 resource of any kind */
-      return this.checkAnyResource(1, '')
-    } else if(this.state.current.context.trackIndex[trackIndex] < 6) {
+      return checkAnyResource(1, '')
+    } else if(currentState.context.trackIndex[trackIndex] < 6) {
       /* Age 2 requires 1 track resource and 1 resource of any kind */
-      return this.state.current.context[trackResource] >= 2 || (this.state.current.context[trackResource] === 1 && this.checkAnyResource(1, trackResource))
-    } else if(this.state.current.context.trackIndex[trackIndex] < 9) {
+      return currentState.context[trackResource] >= 2 || (currentState.context[trackResource] === 1 && checkAnyResource(1, trackResource))
+    } else if(currentState.context.trackIndex[trackIndex] < 9) {
       /* Age 3 requires 1 track resource and 2 resources of any kind */
-      return this.state.current.context[trackResource] >= 3 ||
-            (this.state.current.context[trackResource] === 2 && this.checkAnyResource(1, trackResource)) ||
-            (this.state.current.context[trackResource] === 1 && this.checkAnyResource(2, trackResource))
-    } else if(this.state.current.context.trackIndex[trackIndex] < 12) {
+      return currentState.context[trackResource] >= 3 ||
+            (currentState.context[trackResource] === 2 && checkAnyResource(1, trackResource)) ||
+            (currentState.context[trackResource] === 1 && checkAnyResource(2, trackResource))
+    } else if(currentState.context.trackIndex[trackIndex] < 12) {
       /* Age 4 requires 2 track resources */
-      return this.state.current.context[trackResource] > 1
+      return currentState.context[trackResource] > 1
     }
   }
 
-  buildingAdded(freeResource) {
-    this.gameStateService.send({type: 'placedBuilding', freeResource: freeResource})
+  function buildingAdded(freeResource) {
+    gameStateService.send({type: 'placedBuilding', freeResource: freeResource})
   }
 
-  updateStateVar(field, value, callback) {
-    this.setState(prevState => { return { [field]: prevState[field] + value}}, callback)
+  function updateStateVar(field, value, callback) {
+    // setState(prevState => { return { [field]: prevState[field] + value}}, callback)
   }
 
-  explore(gain) {
-    this.updateStateVar('territoriesOwned', gain.qty * -1)
-    this.updateStateVar('territoriesExplored', gain.qty)
+  function explore(gain) {
+    updateStateVar('territoriesOwned', gain.qty * -1)
+    updateStateVar('territoriesExplored', gain.qty)
   }
 
-  exploreAnywhere(gain) {
-    this.updateStateVar('territoriesOwned', gain.qty * -1)
-    this.updateStateVar('territoriesExplored', gain.qty)
+  function exploreAnywhere(gain) {
+    updateStateVar('territoriesOwned', gain.qty * -1)
+    updateStateVar('territoriesExplored', gain.qty)
   }
 
-  vp(gain) {
-    this.updateStateVar('vp', gain.qty * this[gain.condition]())
+  function vp(gain) {
+    updateStateVar('vp', gain.qty * this[gain.condition]())
   }
 
-  spaceTile(gain) {
-    this.updateStateVar('spaceTilesOwned', gain.qty)
+  function spaceTile(gain) {
+    updateStateVar('spaceTilesOwned', gain.qty)
   }
 
-  exploreSpace(gain) {
-    this.updateStateVar('spaceTilesOwned', gain.qty * -1)
-    this.updateStateVar('spaceTilesExplored', gain.qty)
+  function exploreSpace(gain) {
+    updateStateVar('spaceTilesOwned', gain.qty * -1)
+    updateStateVar('spaceTilesExplored', gain.qty)
   }
 
-  techCard(gain) {
-    this.updateStateVar('techCardBottom', gain.qty)
+  function techCard(gain) {
+    updateStateVar('techCardBottom', gain.qty)
   }
 
-  updateIncomeIndex(index, qty) {
-    const newIncomeIndex = [...this.state.current.context.incomeIndex]; // copy so we don't mutate state directly
-    newIncomeIndex[index] = this.state.current.context.incomeIndex[index] - qty;
-    this.setState({ incomeIndex: newIncomeIndex });
+  function updateIncomeIndex(index, qty) {
+    const newIncomeIndex = [...currentState.context.incomeIndex]; // copy so we don't mutate state directly
+    newIncomeIndex[index] = currentState.context.incomeIndex[index] - qty;
+    // setState({ incomeIndex: newIncomeIndex });
   }
 
-  market(gain) {
-    this.updateIncomeIndex(0, gain.qty)
-    this.setState({mode: 'adding-m'})
+  function market(gain) {
+    updateIncomeIndex(0, gain.qty)
+    // setState({mode: 'adding-m'})
   }
 
-  house(gain) {
-    this.updateIncomeIndex(1, gain.qty)
-    this.setState({mode: 'adding-h'})
+  function house(gain) {
+    updateIncomeIndex(1, gain.qty)
+    // setState({mode: 'adding-h'})
   }
 
-  farm(gain) {
-    this.updateIncomeIndex(2, gain.qty)
-    this.setState({mode: 'adding-f'})
+  function farm(gain) {
+    updateIncomeIndex(2, gain.qty)
+    // setState({mode: 'adding-f'})
   }
 
-  armory(gain) {
-    this.updateIncomeIndex(3, gain.qty)
-    this.setState({mode: 'adding-a'})
+  function armory(gain) {
+    updateIncomeIndex(3, gain.qty)
+    // setState({mode: 'adding-a'})
   }
 
-  conquer(gain) {
-    this.updateStateVar('territoriesControlled', gain.qty)
+  function conquer(gain) {
+    updateStateVar('territoriesControlled', gain.qty)
   }
 
-  conquerIfOppBothDice(gain) {
-    this.updateStateVar('territoriesControlled', gain.qty)
+  function conquerIfOppBothDice(gain) {
+    updateStateVar('territoriesControlled', gain.qty)
   }
 
-  conquerAnywhere(gain) {
-    this.updateStateVar('territoriesControlled', gain.qty)
+  function conquerAnywhere(gain) {
+    updateStateVar('territoriesControlled', gain.qty)
   }
 
-  conquerBothDice(gain) {
-    this.updateStateVar('territoriesControlled', gain.qty)
+  function conquerBothDice(gain) {
+    updateStateVar('territoriesControlled', gain.qty)
   }
 
-  roll(gain) {}
-  rollNoBenefit(gain) {}
-  regainCurrentSpaceAnyTrack(gain) {}
-  advance(gain) {}
-  regress(gain) {}
-  discardFaceUpTechCards(gain) {}
-  upgradeTech(gain) {}
-  circleTechBenefit(gain) {}
-  squareTechBenefit(gain) {}
-  resetTechTrack(gain) {}
-  newTapestryOverLast(gain) {}
-  scoreCity(gain) {}
-  civ(gain) {}
+  function roll(gain) {}
+  function rollNoBenefit(gain) {}
+  function regainCurrentSpaceAnyTrack(gain) {}
+  function advance(gain) {}
+  function regress(gain) {}
+  function discardFaceUpTechCards(gain) {}
+  function upgradeTech(gain) {}
+  function circleTechBenefit(gain) {}
+  function squareTechBenefit(gain) {}
+  function resetTechTrack(gain) {}
+  function newTapestryOverLast(gain) {}
+  function scoreCity(gain) {}
+  function civ(gain) {}
 
-  render() {
-    const {trackIndex, incomeIndex, food, workers, coin, culture, canTakeIncomeTurn} = this.state.current.context
+  // render() {
+    const {trackIndex, incomeIndex, food, workers, coin, culture, canTakeIncomeTurn} = currentState.context
     return (
       <div>
         <SmallHexMap />
         <TrackStack
           trackIndex={trackIndex}
-          handleAdvance={this.handleAdvanceTurn}
-          advancePermitted={this.checkTrackAdvancePermitted}
+          handleAdvance={handleAdvanceTurn}
+          advancePermitted={checkTrackAdvancePermitted}
         />
         <div>
-          <button onClick={()=>this.handleIncomeTurn()} disabled={!canTakeIncomeTurn}>Take Income Turn</button>
-          <button onClick={e => this.showModal(e)}>Show Modal</button>
+          <button onClick={()=>handleIncomeTurn()} disabled={!canTakeIncomeTurn}>Take Income Turn</button>
+          <button onClick={()=>setModal(true)}>Show Modal</button>
         </div>
         <div>
           <IncomeMat
@@ -226,27 +194,27 @@ class Tapestry extends React.Component {
                         coin: coin,
                         culture: culture
                       }}
-            advanceTurnState={this.advanceTurnState()}
-            resourceChosen={this.resourceChosen}
+            advanceTurnState={advanceTurnState()}
+            resourceChosen={resourceChosen}
           />
           <City
             city={CITIES[1]}
             index={1}
-            advanceTurnState={this.advanceTurnState()}
-            buildingAdded={this.buildingAdded}
+            advanceTurnState={advanceTurnState()}
+            buildingAdded={buildingAdded}
           />
         </div>
-        <Modal handleClose={this.showModal} show={this.state.showModal}>
+        <Modal handleClose={()=>setModal(false)} show={showModal}>
           <City
             city={CITIES[1]}
             index={1}
-            advanceTurnState={this.advanceTurnState()}
-            buildingAdded={this.buildingAdded}
+            advanceTurnState={advanceTurnState()}
+            buildingAdded={buildingAdded}
           />
         </Modal>
       </div>
     )
-  }
+  // }
 }
 
 export default Tapestry
