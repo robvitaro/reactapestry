@@ -114,7 +114,6 @@ export const tapestryGameStateMachine = Machine(
         return newTrackIndex
       } }),
       statGainsFromAdvance: assign((context, event) => {
-        console.log('statGainsFromAdvance')
         const formattedGains = {}
         event.gains.forEach(gain => {
           if(statGains.includes(gain.type)) {

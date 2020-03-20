@@ -1,11 +1,11 @@
 import React from 'react';
 import {IMAGES} from "../data/images";
-import ResourceTrackMessage from "./ResourceTrackMessage";
+
+const MAX_RESOURCES = 8
 
 const ResourceTrack = (props) => {
   const {food, workers, coin, culture} = props.resources
-  const {advanceTurnState, resourceChosen} = props
-  const maxValue = 8
+  const {advanceTurnState, resourceChosen, message} = props
 
   const payingCost = advanceTurnState?.state.matches('PayingAdvancementCost')
   const selectingFreeResource = advanceTurnState?.state?.children?.placeBuilding?.state?.matches('SelectFreeResource')
@@ -27,7 +27,7 @@ const ResourceTrack = (props) => {
 
   const spaces = []
 
-  for(let i = 0; i <= maxValue; i++) {
+  for(let i = 0; i <= MAX_RESOURCES; i++) {
     spaces.push(
       <td key={i}>
         <div>
@@ -53,7 +53,7 @@ const ResourceTrack = (props) => {
 
   return (
     <div className={'resourceTrack'}>
-      <ResourceTrackMessage advanceTurnState={advanceTurnState} />
+      {message}
       <table>
         <tbody>
           <tr>

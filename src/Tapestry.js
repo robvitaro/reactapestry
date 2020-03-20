@@ -7,6 +7,8 @@ import SmallHexMap from "./components/SmallHexMap";
 import { tapestryGameStateMachine } from "./state_machines/TapestryGameStateMachine";
 import { CITIES } from './data/cities';
 import TrackStack from "./components/TrackStack";
+import ResourceTrack from "./components/ResourceTrack";
+import ResourceTrackMessage from "./components/ResourceTrackMessage";
 
 const Tapestry = () => {
   const [currentState, sendEvent, gameStateService] = useMachine(tapestryGameStateMachine);
@@ -21,7 +23,7 @@ const Tapestry = () => {
   }
 
   const advanceTurnState = () => {
-    return currentState.children.advanceTurn
+    return gameStateService.children.get('advanceTurn')
   }
 
   const resourceChosen = (resource, payOrFree) => {
@@ -82,13 +84,19 @@ const Tapestry = () => {
       <div>
         <IncomeMat
           incomeTracks={incomeIndex}
-          resources={{food: food,
-                      workers: workers,
-                      coin: coin,
-                      culture: culture
-                    }}
-          advanceTurnState={advanceTurnState()}
-          resourceChosen={resourceChosen}
+          resourceTrack={
+            <ResourceTrack
+              resources={{
+                food: food,
+                workers: workers,
+                coin: coin,
+                culture: culture
+              }}
+              advanceTurnState={advanceTurnState()}
+              resourceChosen={resourceChosen}
+              message={<ResourceTrackMessage advanceTurnState={advanceTurnState()}/>}
+            />
+          }
         />
         <City
           city={CITIES[1]}
