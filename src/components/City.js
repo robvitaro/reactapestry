@@ -1,27 +1,29 @@
 import React from 'react';
 import {IMAGES} from "../data/images";
 
+const CITY_WIDTH = 9
+const CITY_HEIGHT = 9
+
 class City extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       city: props.city,
       index: props.index,
-      cityWidth: 9,
-      cityHeight: 9,
       cityGrid: null,
       freeResourceGrid: [[0, 0, 0],[0, 0, 0],[0, 0, 0]],
       buildingAdded: props.buildingAdded
     }
     this.addBuilding = this.addBuilding.bind(this)
+    this.calculateCompletedLines = this.calculateCompletedLines.bind(this)
   }
 
   componentDidMount() {
     if (!this.state.cityGrid) {
-      const newCityGrid = new Array(this.state.cityWidth)
+      const newCityGrid = new Array(CITY_WIDTH)
 
-      for (let i = 0; i < this.state.cityWidth; i++) {
-        newCityGrid[i] = new Array(this.state.cityHeight);
+      for (let i = 0; i < CITY_WIDTH; i++) {
+        newCityGrid[i] = new Array(CITY_HEIGHT);
       }
 
       const newFreeResourceGrid = [...this.state.freeResourceGrid];
@@ -37,6 +39,23 @@ class City extends React.Component {
     }
   }
 
+  calculateCompletedLines() {
+    let completedLines = 0
+    this.state.cityGrid.forEach(column => {
+      const filteredColumn = column.filter(obj => obj) // removes undefined
+      if (filteredColumn.length === CITY_HEIGHT) completedLines += 1
+    })
+
+    const transposed = this.state.cityGrid[0].map((col,i) => this.state.cityGrid.map(row => row[i]))
+
+    transposed.forEach(column => {
+      const filteredColumn = column.filter(obj => obj) // removes undefined
+      if (filteredColumn.length === CITY_HEIGHT) completedLines += 1
+    })
+
+    return completedLines
+  }
+
   addBuilding(event) {
     if (this.props.advanceTurnState && this.props.advanceTurnState.state.matches('PlacingBuilding')) {
       const [x,y] = event.target.id.split('_')
@@ -45,14 +64,13 @@ class City extends React.Component {
       const newCityGrid = [...this.state.cityGrid];
       newCityGrid[x][y] = building
 
-
       const newFreeResourceGrid = [...this.state.freeResourceGrid];
       const rX = Math.floor(x/3)
       const rY = Math.floor(y/3)
       newFreeResourceGrid[rX][rY] = newFreeResourceGrid[rX][rY] + 1
 
       this.setState({cityGrid: newCityGrid, freeResourceGrid: newFreeResourceGrid})
-      this.state.buildingAdded(newFreeResourceGrid[rX][rY] === 9)
+      this.state.buildingAdded(newFreeResourceGrid[rX][rY] === 9, this.calculateCompletedLines())
     }
   }
 
@@ -78,7 +96,7 @@ class City extends React.Component {
     const rows = []
 
     if(this.state.cityGrid != null) {
-      for (let y = 0; y < this.state.cityHeight; y++) {
+      for (let y = 0; y < CITY_HEIGHT; y++) {
         rows.push(
           <tr key={`cityRow_${y}`}>
             {

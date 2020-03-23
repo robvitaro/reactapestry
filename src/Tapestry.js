@@ -11,7 +11,8 @@ import ResourceTrack from "./components/ResourceTrack";
 import ResourceTrackMessage from "./components/ResourceTrackMessage";
 
 const Tapestry = () => {
-  const [currentState, sendEvent, gameStateService] = useMachine(tapestryGameStateMachine);
+  const machine = useMachine(tapestryGameStateMachine)
+  const [currentState, sendEvent, gameStateService] = machine;
   const [showModal, setModal] = useState(false)
 
   const handleIncomeTurn = () => {
@@ -63,8 +64,8 @@ const Tapestry = () => {
     }
   }
 
-  const buildingAdded = freeResource => {
-    gameStateService.send({type: 'placedBuilding', freeResource: freeResource})
+  const buildingAdded = (freeResource, completedLines) => {
+    gameStateService.send({type: 'placedBuilding', freeResource: freeResource, completedLines: completedLines})
   }
 
   const {trackIndex, incomeIndex, food, workers, coin, culture, canTakeIncomeTurn} = currentState.context

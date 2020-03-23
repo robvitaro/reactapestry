@@ -25,6 +25,7 @@ export const tapestryGameStateMachine = Machine(
       spaceTilesExplored: 0,
       trackIndex: [0,0,0,0],  // expl, sci, tech, mil
       incomeIndex: [5,5,5,5], // markets, houses, farms, armories
+      completedLines: 0,
       mode: 'zeroResources',
       incomeTurns: 0,
       canTakeIncomeTurn: true,
@@ -58,7 +59,7 @@ export const tapestryGameStateMachine = Machine(
           advanceToken: { actions: 'advanceToken' },
           gainsFromAdvance: { actions: 'statGainsFromAdvance' },
           updateIncomeIndex: { actions: 'updateIncomeIndex'},
-          placedBuilding: {actions: forwardTo('advanceTurn') },
+          placedBuilding: {actions: ['updateCompletedLines', forwardTo('advanceTurn')] },
           payFood: {actions: ['payFood', send({ type: 'PaidResource', payment: 'food'}, { to: 'advanceTurn' })]},
           freeFood: {actions: ['gainFood', send({ type: 'selectedFreeResource'}, { to: 'advanceTurn' })]},
           payCoin: {actions: ['payCoin', send({ type: 'PaidResource', payment: 'coin'}, { to: 'advanceTurn' })]},
@@ -129,6 +130,7 @@ export const tapestryGameStateMachine = Machine(
         newIncomeIndex[index] = context.incomeIndex[index] - 1;
         return newIncomeIndex
       }}),
+      updateCompletedLines: assign({ completedLines: (context, event) => event.completedLines}),
       endAdvance: send({ type: 'EndAdvance'}, { to: 'advanceTurn' })
     },
     guards: {
