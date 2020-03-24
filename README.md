@@ -73,23 +73,39 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/tr
 
 
 - Income phase
-  - gaining points
+  - gaining VP
 - City
   - choosing at start, affects start location
   - placing large buildings in city (rotating, off edge)
-  - knowing when rows/columns are complete
 - Tapestry cards
   - data
   - obtaining
   - playing
   - effects
 - Map
-  - exploring (next to conquested tiles, rotating hex, getting bonus)
+  - exploring 
+    - only valid next to conquered tiles
+    - getting VPs based on sides
+    - getting bonus from tile
   - conquering (pawns, toppling, rolling dice)
+    - dice sides:
+      - Red: 4, 5, 6, 7, 1VP/controled, 1VP/controled
+      - Black: coin, worker, culture, food, tilebenefit, tilebenefit
   - center tile conquer bonus
 - Tracks
-  - optional bonus payment
-  - missing effects
+  - OR situation (pick ONE)
+  - optional bonus payment for another gain
+    - payments: wild, territory, tapestry, techCard
+  - Gains
+    - territory: pop from pre-shuffled "deck"
+    - tapestry: pop from pre-shuffled "deck"
+    - techCard: choose visible or pop from pre-shuffled "deck"
+  - Events
+    - explore/conquer (see above)
+    - roll science die (it's the 4 tracks x 3)
+    - upgradeTech
+    - clear face up tech cards and replace (optional)
+    - more to come...
 - Civs
   - data
   - choosing at start
