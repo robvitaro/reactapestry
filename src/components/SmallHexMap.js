@@ -8,12 +8,33 @@ import {getSidesForTileID} from '../data/tiles'
 export const HEX_GLOBAL_OFFSET_X = -20
 export const HEX_GLOBAL_OFFSET_Y = 6
 
+export const DIRS = ['N','NE','SE','S','SW','NW']
+export const OPPOSITE_DIRS = ['S','SW','NW','N','NE','SE']
+
 export const rotateSides = (sides, rotateTimes) => {
+  const newSides = [...sides]
   for(let i = 0; i < rotateTimes; i++) {
-    let last = sides.pop()
-    sides.unshift(last)
+    let last = newSides.pop()
+    newSides.unshift(last)
   }
-  return sides
+  return newSides
+}
+
+export const determineVPFromPlacement = (tiles, currentCoords, addingTile, addingTileRotation) => {
+  let vp = 0
+  const currentHex = tiles.get(currentCoords)
+  const addingSides = rotateSides(getSidesForTileID(addingTile), addingTileRotation)
+  DIRS.forEach((dir, index) => {
+    const hex = tiles.neighborsOf(currentHex, dir)[0]
+    if (hex === undefined || hex.sides === undefined) return
+    const oppositeDir = OPPOSITE_DIRS[index]
+    // console.log(oppositeDir)
+    const oppositeDirIndex = DIRS.indexOf(oppositeDir)
+    if(hex.sides[oppositeDirIndex][0] === addingSides[index][1] || hex.sides[oppositeDirIndex][1] === addingSides[index][0]) {
+      vp += 1
+    }
+  })
+  return vp
 }
 
 class SmallHexMap extends React.Component {
@@ -55,7 +76,8 @@ class SmallHexMap extends React.Component {
       size: 300,     // 500 for zoom
       zoomOffset: 1, // .6 for size 500
       addingTile: 1,
-      addingTileRotation: 0
+      addingTileRotation: 0,
+      gainVP: props.gainVP
     }
 
     this.updateMap = this.updateMap.bind(this)
@@ -107,6 +129,7 @@ class SmallHexMap extends React.Component {
       const sides = rotateSides(getSidesForTileID(addingTile), addingTileRotation)
       hex.set({x: hex.x, y: hex.y, start: hex.start, sides: sides, image: `tile_${addingTile}`, rotation: addingTileRotation})
       this.setState(prevState => { return { addingTile: prevState.addingTile + 1, addingTileRotation: 0 }});
+      this.state.gainVP(determineVPFromPlacement(displayedTiles, current, addingTile, addingTileRotation))
     }
   }
 
@@ -127,8 +150,7 @@ class SmallHexMap extends React.Component {
   }
 
   render() {
-    // const {current, displayedTiles} = this.state
-    const {addingTile, addingTileRotation} = this.state
+    const {addingTile, addingTileRotation, current, displayedTiles} = this.state
     // const currentNeighbors = this.currentTileIsOnTheBoard() ? displayedTiles.neighborsOf(displayedTiles.get(current)) : []
 
     const hexes =  this.state.displayedTiles.map(hex => {
@@ -137,7 +159,7 @@ class SmallHexMap extends React.Component {
       let sides = hex.sides ? hex.sides : [[],[],[],[],[],[]]
       let rotation = (!hex.image && this.addingTile() && this.tileIsCurrentTile(hex)) ? addingTileRotation : hex.rotation
       let image = hex.image ? hex.image : (this.addingTile() && this.tileIsCurrentTile(hex) ? `tile_${addingTile}` : '')
-
+      const vp = (!hex.image && this.addingTile() && this.tileIsCurrentTile(hex)) ? determineVPFromPlacement(displayedTiles, current, addingTile, addingTileRotation) : ''
       return (
         <Hex
           key={`hex_${hex.x}_${hex.y}`}
@@ -156,6 +178,7 @@ class SmallHexMap extends React.Component {
           show={this.state.show}
           image={image}
           rotation={rotation}
+          vp={vp}
         />
       )
     })

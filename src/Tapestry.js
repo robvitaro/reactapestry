@@ -68,11 +68,15 @@ const Tapestry = () => {
     gameStateService.send({type: 'placedBuilding', freeResource: freeResource, completedLines: completedLines})
   }
 
-  const {trackIndex, incomeIndex, food, workers, coin, culture, canTakeIncomeTurn} = currentState.context
+  const gainVP = (value) => {
+    gameStateService.send({type: 'gainVP', value: value})
+  }
+
+  const {trackIndex, incomeIndex, food, workers, coin, culture, canTakeIncomeTurn, vp} = currentState.context
 
   return (
     <div>
-      <SmallHexMap />
+      <SmallHexMap gainVP={gainVP}/>
       <TrackStack
         trackIndex={trackIndex}
         handleAdvance={handleAdvanceTurn}
@@ -105,6 +109,7 @@ const Tapestry = () => {
           advanceTurnState={advanceTurnState()}
           buildingAdded={buildingAdded}
         />
+        <div>VP: {vp}</div>
       </div>
       <Modal handleClose={()=>setModal(false)} show={showModal}>
         <City

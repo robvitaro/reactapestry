@@ -1,4 +1,4 @@
-import {rotateSides} from "./SmallHexMap";
+import {rotateSides, determineVPFromPlacement} from "./SmallHexMap";
 
 describe('rotateSides()', () => {
   it('returns array with identical sides if rotation is 0', () => {
@@ -37,3 +37,11 @@ describe('rotateSides()', () => {
     expect(result).toStrictEqual([['C','D'],['E','F'],['G','H'],['I','J'],['K','L'],['A','B']])
   })
 })
+
+// describe('determineVPFromPlacement()', () => {
+//   it('returns 0', () => {
+//     const testArray = [['A', 'B'], ['C', 'D'], ['E', 'F'], ['G', 'H'], ['I', 'J'], ['K', 'L']]
+//     const result = determineVPFromPlacement(testArray, [])
+//     expect(result).toStrictEqual(0)
+//   })
+// })

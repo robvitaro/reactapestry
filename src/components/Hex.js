@@ -21,7 +21,7 @@ class Hex extends React.Component {
 
   debugText(posX, posY) {
     const {x, y, q, r, s, start} = this.state
-    const {show, sides} = this.props
+    const {show, sides, vp} = this.props
     if(show === 'axial') {
       return <text x={posX} y={posY} transform={`translate(40 19)`}>{`${x}, ${y}`}</text>
     }else if(show === 'cube') {
@@ -45,6 +45,8 @@ class Hex extends React.Component {
           <text x={posX} y={posY} transform={`translate(28 5)`}>{sides[5][1]}</text>
         </g>
       )
+    }else {
+      return <text x={posX} y={posY} transform={`translate(40 19)`}>{vp}</text>
     }
   }
 

@@ -68,6 +68,7 @@ export const tapestryGameStateMachine = Machine(
           freeWorker: {actions: ['gainWorker', send({ type: 'selectedFreeResource'}, { to: 'advanceTurn' })]},
           payCulture: {actions: ['payCulture', send({ type: 'PaidResource', payment: 'culture'}, { to: 'advanceTurn' })]},
           freeCulture: {actions: ['gainCulture', send({ type: 'selectedFreeResource'}, { to: 'advanceTurn' })]},
+          gainVP: {actions: 'gainVP'}
         }
       },
       TakingIncomeTurn: {
@@ -109,6 +110,7 @@ export const tapestryGameStateMachine = Machine(
       gainWorker: assign({ workers: context => context.workers + 1 }),
       payCulture: assign({ culture: context => context.culture - 1 }),
       gainCulture: assign({ culture: context => context.culture + 1 }),
+      gainVP: assign({ vp: (context, event) => context.vp + event.value }),
       advanceToken: assign({ trackIndex: (context, event) => {
         const newTrackIndex = [...context.trackIndex]; // copy so we don't mutate state directly
         newTrackIndex[event.trackIndex] = context.trackIndex[event.trackIndex] + 1;
