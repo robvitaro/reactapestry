@@ -71,7 +71,9 @@ export const tapestryGameStateMachine = Machine(
           freeWorker: {actions: ['gainWorker', send({ type: 'selectedFreeResource'}, { to: 'advanceTurn' })]},
           payCulture: {actions: ['payCulture', send({ type: 'PaidResource', payment: 'culture'}, { to: 'advanceTurn' })]},
           freeCulture: {actions: ['gainCulture', send({ type: 'selectedFreeResource'}, { to: 'advanceTurn' })]},
-          gainVP: {actions: 'gainVP'}
+          gainVP: {actions: 'gainVP'},
+          exploringWithTile: {actions: ['updateTerritories', forwardTo('advanceTurn')]},
+          explored: {actions: [forwardTo('advanceTurn')]}
         }
       },
       TakingIncomeTurn: {
@@ -159,6 +161,15 @@ export const tapestryGameStateMachine = Machine(
         return newIncomeIndex
       }}),
       updateCompletedLines: assign({ completedLines: (context, event) => event.completedLines}),
+      updateTerritories: assign((context, event) => {
+        const newTerritory = [...context.territory]
+        const index = context.territory.indexOf(parseInt(event.tile))
+          console.log(index)
+        newTerritory.splice(index, 1)
+        return {
+          territory: newTerritory,
+        }
+      }),
       endAdvance: send({ type: 'EndAdvance'}, { to: 'advanceTurn' })
     },
     guards: {
@@ -184,9 +195,6 @@ const statGains = [
 vp
 scoreCity
 
-explore
-exploreAnywhere
-exploreSpace
 conquer
 conquerIfOppBothDice
 conquerAnywhere

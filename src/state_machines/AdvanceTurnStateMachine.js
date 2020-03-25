@@ -2,6 +2,7 @@ import {Machine, assign, sendParent, forwardTo} from "xstate";
 import {TRACKS} from "../data/tracks";
 import {resourcePayerStateMachine} from "./ResourcePayerStateMachine";
 import {buildingPlacerStateMachine} from "./BuildingPlacerStateMachine";
+import {exploreStateMachine} from "./ExploreStateMachine";
 
 export const advanceTurnStateMachine = Machine({
   id: 'advanceTurnMachine',
@@ -58,6 +59,7 @@ export const advanceTurnStateMachine = Machine({
       on: {
         '': [
           { target: 'PlacingBuilding', cond: 'buildingGainsExist' },
+          { target: 'Exploring', cond: 'exploreGainsExist' },
           { target: 'AdvanceTurnOver' }
         ],
         PlaceBuilding: 'PlacingBuilding',
@@ -76,6 +78,17 @@ export const advanceTurnStateMachine = Machine({
       on: {
         placedBuilding: { actions: ['placedBuilding', forwardTo('placeBuilding')] },
         selectedFreeResource: { actions: forwardTo('placeBuilding') }
+      }
+    },
+    Exploring: {
+      invoke: {
+        id: 'explore',
+        src: exploreStateMachine,
+        onDone: 'GainedBenefits'
+      },
+      on: {
+        exploringWithTile: { actions: forwardTo('explore') },
+        explored: { actions: ['explored', forwardTo('explore') ]}
       }
     },
     AdvanceTurnOver: {type: 'final'}
@@ -127,6 +140,17 @@ export const advanceTurnStateMachine = Machine({
           freeResource: event.freeResource
         }
       }),
+      explored: assign((context, event) => {
+        let newGains = []
+        context.gains.forEach(gain => {
+          if (!exploreGains.includes(gain.type)) {
+            newGains.push(gain)
+          }
+        })
+        return {
+          gains: newGains,
+        }
+      }),
     },
     guards: {
       buildingGainsExist: context => {
@@ -138,6 +162,15 @@ export const advanceTurnStateMachine = Machine({
         })
         return buildingGainsExist
       },
+      exploreGainsExist: context => {
+        let exploreGainsExist = false
+        context.gains.forEach(gain => {
+          if (exploreGains.includes(gain.type)) {
+            exploreGainsExist = true
+          }
+        })
+        return exploreGainsExist
+      },
       gainLogicIsOR: context => TRACKS[context.trackIndex].spaces[context.spaceIndex].gain_logic === 'OR'
     }
   }
@@ -148,4 +181,10 @@ const buildingGains = [
   'house',
   'market',
   'armory'
+]
+
+const exploreGains = [
+  'explore',
+  'exploreAnywhere',
+  'exploreSpace'
 ]

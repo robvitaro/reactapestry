@@ -74,9 +74,9 @@ class SmallHexMap extends React.Component {
       displayedTiles: displayedTiles,
       size: 300,     // 500 for zoom
       zoomOffset: 1, // .6 for size 500
-      addingTile: 1,
       addingTileRotation: 0,
-      gainVP: props.gainVP
+      gainVP: props.gainVP,
+      exploringWithTile: props.exploringWithTile
     }
 
     this.updateMap = this.updateMap.bind(this)
@@ -95,7 +95,7 @@ class SmallHexMap extends React.Component {
   }
 
   addingTile() {
-    return this.state.addingTile > 0
+    return this.props.addingTile > 0
   }
 
   setCurrentTile(event) {
@@ -121,14 +121,16 @@ class SmallHexMap extends React.Component {
   }
 
   placeTile(event) {
-    const {current, displayedTiles, addingTile, addingTileRotation} = this.state
+    const {current, displayedTiles, addingTileRotation} = this.state
+    const {addingTile} = this.props
     let hex = displayedTiles.get(current)
 
     if (this.addingTile() && !hex.image && this.currentTileIsOnTheBoard()) {
       const sides = rotateSides(getSidesForTileID(addingTile), addingTileRotation)
       hex.set({x: hex.x, y: hex.y, start: hex.start, sides: sides, image: `tile_${addingTile}`, rotation: addingTileRotation})
-      this.setState(prevState => { return { addingTile: prevState.addingTile + 1, addingTileRotation: 0 }});
+      this.setState(prevState => { return { addingTileRotation: 0 }});
       this.state.gainVP(determineVPFromPlacement(displayedTiles, current, addingTile, addingTileRotation))
+      this.props.explored()
     }
   }
 
@@ -149,7 +151,7 @@ class SmallHexMap extends React.Component {
   }
 
   render() {
-    const {addingTile, addingTileRotation, current, displayedTiles} = this.state
+    const {addingTileRotation, current, displayedTiles} = this.state
     // const currentNeighbors = this.currentTileIsOnTheBoard() ? displayedTiles.neighborsOf(displayedTiles.get(current)) : []
 
     const hexes =  this.state.displayedTiles.map(hex => {
@@ -157,8 +159,8 @@ class SmallHexMap extends React.Component {
       let start = hex.start ? hex.start : null
       let sides = hex.sides ? hex.sides : [[],[],[],[],[],[]]
       let rotation = (!hex.image && this.addingTile() && this.tileIsCurrentTile(hex)) ? addingTileRotation : hex.rotation
-      let image = hex.image ? hex.image : (this.addingTile() && this.tileIsCurrentTile(hex) ? `tile_${addingTile}` : '')
-      const vp = (!hex.image && this.addingTile() && this.tileIsCurrentTile(hex)) ? determineVPFromPlacement(displayedTiles, current, addingTile, addingTileRotation) : ''
+      let image = hex.image ? hex.image : (this.addingTile() && this.tileIsCurrentTile(hex) ? `tile_${this.props.addingTile}` : '')
+      const vp = (!hex.image && this.addingTile() && this.tileIsCurrentTile(hex)) ? determineVPFromPlacement(displayedTiles, current, this.props.addingTile, addingTileRotation) : ''
       return (
         <Hex
           key={`hex_${hex.x}_${hex.y}`}

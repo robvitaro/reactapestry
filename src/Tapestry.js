@@ -9,6 +9,7 @@ import { CITIES } from './data/cities';
 import TrackStack from "./components/TrackStack";
 import ResourceTrack from "./components/ResourceTrack";
 import ResourceTrackMessage from "./components/ResourceTrackMessage";
+import TerritoryTiles from "./components/TerritoryTiles";
 
 const Tapestry = () => {
   const machine = useMachine(tapestryGameStateMachine)
@@ -72,11 +73,24 @@ const Tapestry = () => {
     gameStateService.send({type: 'gainVP', value: value})
   }
 
-  const {trackIndex, incomeIndex, food, workers, coin, culture, canTakeIncomeTurn, vp} = currentState.context
+  const exploringWithTile = (tile) => {
+    gameStateService.send({type: 'exploringWithTile', tile: tile})
+  }
+
+  const explored = () => {
+    gameStateService.send({type: 'explored'})
+  }
+
+  const {trackIndex, incomeIndex, food, workers, coin, culture, territory, canTakeIncomeTurn, vp} = currentState.context
 
   return (
     <div>
-      <SmallHexMap gainVP={gainVP}/>
+      <SmallHexMap
+        gainVP={gainVP}
+        exploringWithTile={exploringWithTile}
+        addingTile={advanceTurnState()?.state?.children?.explore?.state?.matches('Exploring') ? advanceTurnState().state?.children?.explore?.state?.context.tile : 0}
+        explored={explored}
+      />
       <TrackStack
         trackIndex={trackIndex}
         handleAdvance={handleAdvanceTurn}
@@ -85,6 +99,7 @@ const Tapestry = () => {
       <div>
         <button onClick={()=>handleIncomeTurn()} disabled={!canTakeIncomeTurn}>Take Income Turn</button>
         <button onClick={()=>setModal(true)}>Show Modal</button>
+        <TerritoryTiles territories={territory} exploringWithTile={exploringWithTile} />
       </div>
       <div>
         <IncomeMat
