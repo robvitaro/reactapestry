@@ -28,7 +28,6 @@ export const determineVPFromPlacement = (tiles, currentCoords, addingTile, addin
     const hex = tiles.neighborsOf(currentHex, dir)[0]
     if (hex === undefined || hex.sides === undefined) return
     const oppositeDir = OPPOSITE_DIRS[index]
-    // console.log(oppositeDir)
     const oppositeDirIndex = DIRS.indexOf(oppositeDir)
     if(hex.sides[oppositeDirIndex][0] === addingSides[index][1] || hex.sides[oppositeDirIndex][1] === addingSides[index][0]) {
       vp += 1

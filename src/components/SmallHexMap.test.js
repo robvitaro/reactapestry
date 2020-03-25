@@ -1,4 +1,5 @@
 import {rotateSides, determineVPFromPlacement} from "./SmallHexMap";
+import {defineGrid, extendHex} from "honeycomb-grid";
 
 describe('rotateSides()', () => {
   it('returns array with identical sides if rotation is 0', () => {
@@ -38,10 +39,27 @@ describe('rotateSides()', () => {
   })
 })
 
-// describe('determineVPFromPlacement()', () => {
-//   it('returns 0', () => {
-//     const testArray = [['A', 'B'], ['C', 'D'], ['E', 'F'], ['G', 'H'], ['I', 'J'], ['K', 'L']]
-//     const result = determineVPFromPlacement(testArray, [])
-//     expect(result).toStrictEqual(0)
-//   })
-// })
+describe('determineVPFromPlacement()', () => {
+  it('returns 0', () => {
+    const Hex = extendHex({
+      size: 24,
+      orientation: 'flat',
+      rotation: 0
+    })
+    const Grid = defineGrid(Hex)
+    const displayedTiles = Grid.hexagon({
+      radius: 1,
+      center: [1, 1]
+    })
+    displayedTiles.splice(displayedTiles.indexOf([0,2]), 1) // no tile to SW
+    displayedTiles.get([0,1]).set({x: 0, y: 1, sides: [ ['W','W'],['W','W'],['F','W'],['W','W'],['W','W'],['W','W'] ], rotation: 0}) // no match NW
+    displayedTiles.get([1,0]).set({x: 1, y: 0, sides: [ ['W','W'],['W','W'],['D','W'],['W','W'],['W','W'],['W','W'] ], rotation: 0}) // match N
+    displayedTiles.get([1,2]).set({x: 1, y: 2, sides: [ ['W','W'],['W','W'],['W','W'],['W','W'],['W','W'],['W','W'] ], rotation: 0}) // no match S
+    displayedTiles.get([2,1]).set({x: 2, y: 1, sides: [ ['W','W'],['W','W'],['W','W'],['W','W'],['W','W'],['W','W'] ], rotation: 0}) // match NE
+    displayedTiles.get([2,2]).set({x: 2, y: 2, sides: [ ['W','W'],['W','W'],['W','W'],['W','W'],['W','W'],['D','D'] ], rotation: 0}) // no match SE
+
+    // tile 7 rotated 2 times, sides: [[W,W],[W,W],[W,G],[G,G],[G,F],[F,W]]
+    const result = determineVPFromPlacement(displayedTiles, [1,1], 7, 2)
+    expect(result).toStrictEqual(2)
+  })
+})
