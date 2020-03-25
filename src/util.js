@@ -16,3 +16,8 @@ export const shuffleArray = (array) => {
 
   return array;
 }
+
+export const newShuffledArrayInRange = (start, end) => {
+  let array = Array(end - start + 1).fill().map((item, index) => start + index);
+  return shuffleArray(array)
+}

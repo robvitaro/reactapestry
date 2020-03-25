@@ -1,6 +1,8 @@
 import { Machine, assign, send, forwardTo } from 'xstate';
 import { advanceTurnStateMachine } from './AdvanceTurnStateMachine';
 import { incomeTurnStateMachine } from './IncomeTurnStateMachine';
+import { TILES} from "../data/tiles";
+import { newShuffledArrayInRange} from "../util";
 
 const MAX_INCOME_TURNS = 5
 
@@ -18,7 +20,7 @@ export const tapestryGameStateMachine = Machine(
       techCard: 0,
       techCardMiddle: 0,
       techCardTop: 0,
-      territory: 0,
+      territory: [],
       territoriesExplored: 0,
       territoriesControlled: 0,
       spaceTile: 0,
@@ -30,6 +32,7 @@ export const tapestryGameStateMachine = Machine(
       incomeTurns: 0,
       canTakeIncomeTurn: true,
       canAdvance: true,
+      allExplorationTiles: newShuffledArrayInRange(1, TILES.length)
     },
     initial: 'Idle',
     states: {
@@ -57,7 +60,7 @@ export const tapestryGameStateMachine = Machine(
         },
         on: {
           advanceToken: { actions: 'advanceToken' },
-          gainsFromAdvance: { actions: 'statGainsFromAdvance' },
+          gainsFromAdvance: { actions: ['statGainsFromAdvance','territoryGainsFromAdvance'] },
           updateIncomeIndex: { actions: 'updateIncomeIndex'},
           placedBuilding: {actions: ['updateCompletedLines', forwardTo('advanceTurn')] },
           payFood: {actions: ['payFood', send({ type: 'PaidResource', payment: 'food'}, { to: 'advanceTurn' })]},
@@ -84,13 +87,20 @@ export const tapestryGameStateMachine = Machine(
         on: {
           gainIncome: {
             actions: assign((context, event) => {
+              const newAllTiles = [...context.allExplorationTiles]
+              const newTerritory = [...context.territory]
+              for(let i=0; i < event.tapestry; i++) {
+                const tile = newAllTiles.pop()
+                newTerritory.push(tile)
+              }
               return {
                 food: context.food + event.food,
                 workers: context.workers + event.workers,
                 coin: context.coin + event.coin,
                 culture: context.culture + event.culture,
                 tapestry: context.tapestry + event.tapestry,
-                territory: context.territory + event.territory,
+                allExplorationTiles: newAllTiles,
+                territory: newTerritory,
               }
             }),
           }
@@ -125,6 +135,22 @@ export const tapestryGameStateMachine = Machine(
         })
         return formattedGains
       }),
+      territoryGainsFromAdvance: assign((context, event) => {
+        const newAllTiles = [...context.allExplorationTiles]
+        const newTerritory = [...context.territory]
+        event.gains.forEach(gain => {
+          if (gain.type === 'territory' ) {
+            for(let i=0; i < gain.qty; i++) {
+              const tile = newAllTiles.pop()
+              newTerritory.push(tile)
+            }
+          }
+        })
+        return {
+          allExplorationTiles: newAllTiles,
+          territory: newTerritory,
+        }
+      }),
       updateIncomeIndex: assign({ incomeIndex: (context, event) => {
         const buildings = ['market', 'house', 'farm', 'armory']
         let index = buildings.indexOf(event.building)
@@ -147,7 +173,6 @@ const statGains = [
   'workers',
   'culture',
   'food',
-  'territory',
   'tapestry',
   'spaceTile',
   'techCard'
