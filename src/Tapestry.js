@@ -6,6 +6,7 @@ import Modal from "./components/Modal";
 import SmallHexMap from "./components/SmallHexMap";
 import { tapestryGameStateMachine } from "./state_machines/TapestryGameStateMachine";
 import { CITIES } from './data/cities';
+import { IMAGES } from './data/images';
 import TrackStack from "./components/TrackStack";
 import ResourceTrack from "./components/ResourceTrack";
 import ResourceTrackMessage from "./components/ResourceTrackMessage";
@@ -17,7 +18,7 @@ const Tapestry = () => {
   const [showModal, setModal] = useState(false)
 
   const handleIncomeTurn = () => {
-    gameStateService.send('IncomeTurn')
+    if(canTakeIncomeTurn) gameStateService.send('IncomeTurn')
   }
 
   const handleAdvanceTurn =(index) => {
@@ -96,12 +97,11 @@ const Tapestry = () => {
         handleAdvance={handleAdvanceTurn}
         advancePermitted={checkTrackAdvancePermitted}
       />
+      <TerritoryTiles territories={territory} exploringWithTile={exploringWithTile} advanceTurnState={advanceTurnState()}/>
       <div>
-        <button onClick={()=>handleIncomeTurn()} disabled={!canTakeIncomeTurn}>Take Income Turn</button>
-        <button onClick={()=>setModal(true)}>Show Modal</button>
-        <TerritoryTiles territories={territory} exploringWithTile={exploringWithTile} advanceTurnState={advanceTurnState()}/>
-      </div>
-      <div>
+        <div className='incomeMat income-turn'>
+          <img className={canTakeIncomeTurn ? 'income-turn' : 'income-turn-disabled'} src={IMAGES['income-turn']} onClick={()=>handleIncomeTurn()}/>
+        </div>
         <IncomeMat
           incomeTracks={incomeIndex}
           resourceTrack={
@@ -125,6 +125,7 @@ const Tapestry = () => {
           buildingAdded={buildingAdded}
         />
         <div>VP: {vp}</div>
+        <button onClick={()=>setModal(true)}>Show Modal</button>
       </div>
       <Modal handleClose={()=>setModal(false)} show={showModal}>
         <City

@@ -1,3 +1,4 @@
+import incomeTurnImage from "../img/income_turn.png";
 import coinImage from "../img/coin.png";
 import cultureImage from "../img/culture.png";
 import foodImage from "../img/food.png";
@@ -127,6 +128,7 @@ import tile_47 from "../img/tile_47.png"
 import tile_48 from "../img/tile_48.png"
 
 export const IMAGES = {
+  'income-turn': incomeTurnImage,
   'coin': coinImage,
   'coin.png': coinImage,
   'culture': cultureImage,

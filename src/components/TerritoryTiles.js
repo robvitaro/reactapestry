@@ -11,7 +11,7 @@ const TerritoryTiles = ({advanceTurnState, exploringWithTile, territories}) => {
   }
 
   return(
-    <span className='territory-tiles'>
+    <div className='territory-tiles'>
       {territories.map(territory =>
         <img className={choosing ? 'choosing' : ''} src={IMAGES[`tile_${territory}`]} onClick={()=>chooseTile(territory)}/>
       )}
@@ -20,7 +20,7 @@ const TerritoryTiles = ({advanceTurnState, exploringWithTile, territories}) => {
           &#8592; Choose a <img className={'icon-in-text'} src={IMAGES['territory.png']} /> to explore with
         </span>
       }
-    </span>
+    </div>
   )
 }
 

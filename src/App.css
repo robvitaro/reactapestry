@@ -276,6 +276,18 @@ table {
     background-color: #dad4c2;
 }
 
+img.income-turn {
+    cursor: pointer;
+}
+
+img.income-turn-disabled {
+    opacity: 0.25;
+}
+
+.incomeMat.income-turn {
+    min-height: 340px;
+}
+
 .incomeMat table {
     border: 3px solid #696152;
     margin-bottom: 10px;
