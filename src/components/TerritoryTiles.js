@@ -1,11 +1,26 @@
 import React from "react";
 import {IMAGES} from "../data/images";
 
-const TerritoryTiles = props => {
+const TerritoryTiles = ({advanceTurnState, exploringWithTile, territories}) => {
+  const choosing = advanceTurnState?.state?.children?.explore?.state?.matches('ChoosingTile')
+
+  const chooseTile = (tile) => {
+    if (choosing) {
+      exploringWithTile(tile)
+    }
+  }
+
   return(
-    props.territories.map(territory =>
-      <img id={`tile_${territory}`} src={IMAGES[`tile_${territory}`]} onClick={()=>props.exploringWithTile(territory)}/>
-    )
+    <span className='territory-tiles'>
+      {territories.map(territory =>
+        <img className={choosing ? 'choosing' : ''} src={IMAGES[`tile_${territory}`]} onClick={()=>chooseTile(territory)}/>
+      )}
+      {choosing &&
+        <span className={'smallMessage animated pulse'}>
+          &#8592; Choose a <img className={'icon-in-text'} src={IMAGES['territory.png']} /> to explore with
+        </span>
+      }
+    </span>
   )
 }
 

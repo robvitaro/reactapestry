@@ -99,7 +99,7 @@ const Tapestry = () => {
       <div>
         <button onClick={()=>handleIncomeTurn()} disabled={!canTakeIncomeTurn}>Take Income Turn</button>
         <button onClick={()=>setModal(true)}>Show Modal</button>
-        <TerritoryTiles territories={territory} exploringWithTile={exploringWithTile} />
+        <TerritoryTiles territories={territory} exploringWithTile={exploringWithTile} advanceTurnState={advanceTurnState()}/>
       </div>
       <div>
         <IncomeMat
