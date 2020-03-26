@@ -41,18 +41,19 @@ export const advanceTurnStateMachine = Machine({
       entry: 'assignGains',
       on: {
         '': [
-          // { target: 'ChoosingBenefits', cond: 'gainLogicIsOR' },
+          { target: 'ChoosingGain', cond: 'gainLogicIsOR' },
           {
             actions: sendParent(context => ({ type: 'gainsFromAdvance', gains: context.gains})),
             target: 'GainedBenefits'
           }],
-        ChooseBenefit: 'ChoosingBenefits',
-        GainBenefit: 'GainedBenefits'
       }
     },
-    ChoosingBenefits: {
+    ChoosingGain: {
       on: {
-        GainBenefit: 'GainedBenefits'
+        chooseOneGainFromAdvance: {
+         actions: assign({gains: (context, event) => event.gains }),
+         target: 'GainedBenefits'
+        }
       }
     },
     GainedBenefits: {

@@ -456,12 +456,21 @@ div.incomeTrackHeader img.icon-in-text{
 
 .modal-main {
     position:fixed;
-    background: white;
-    width: 80%;
+    text-align: center;
+    border: 5px solid #696152;
+    outline: 2px solid #f6f0e6;
+    background-color: #f6f0e6;
     height: auto;
     top:50%;
     left:50%;
     transform: translate(-50%,-50%);
+    padding-bottom: 20px;
+}
+
+.modal-main img{
+    cursor: pointer;
+    padding-left: 40px;
+    padding-right: 40px;
 }
 
 .display-block {

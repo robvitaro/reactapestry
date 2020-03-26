@@ -61,6 +61,7 @@ export const tapestryGameStateMachine = Machine(
         on: {
           advanceToken: { actions: 'advanceToken' },
           gainsFromAdvance: { actions: ['statGainsFromAdvance','territoryGainsFromAdvance'] },
+          chooseOneGainFromAdvance: { actions: ['statGainsFromAdvance','territoryGainsFromAdvance', forwardTo('advanceTurn')] },
           updateIncomeIndex: { actions: 'updateIncomeIndex'},
           placedBuilding: {actions: ['updateCompletedLines', forwardTo('advanceTurn')] },
           payFood: {actions: ['payFood', send({ type: 'PaidResource', payment: 'food'}, { to: 'advanceTurn' })]},

@@ -1,4 +1,4 @@
-import React, {useState}  from 'react';
+import React from 'react';
 import { useMachine } from '@xstate/react';
 import City from "./components/City";
 import IncomeMat from "./components/IncomeMat";
@@ -15,7 +15,6 @@ import TerritoryTiles from "./components/TerritoryTiles";
 const Tapestry = () => {
   const machine = useMachine(tapestryGameStateMachine)
   const [currentState, sendEvent, gameStateService] = machine;
-  const [showModal, setModal] = useState(false)
 
   const handleIncomeTurn = () => {
     if(canTakeIncomeTurn) gameStateService.send('IncomeTurn')
@@ -27,6 +26,10 @@ const Tapestry = () => {
 
   const advanceTurnState = () => {
     return gameStateService.children.get('advanceTurn')
+  }
+
+  const showModal = () => {
+    return advanceTurnState()?.state?.matches('ChoosingGain') // or other things..
   }
 
   const resourceChosen = (resource, payOrFree) => {
@@ -82,6 +85,10 @@ const Tapestry = () => {
     gameStateService.send({type: 'explored'})
   }
 
+  const chooseGain = (gain) => {
+    gameStateService.send({type: 'chooseOneGainFromAdvance', gains: [gain]})
+  }
+
   const {trackIndex, incomeIndex, food, workers, coin, culture, territory, canTakeIncomeTurn, vp} = currentState.context
 
   return (
@@ -125,15 +132,17 @@ const Tapestry = () => {
           buildingAdded={buildingAdded}
         />
         <div>VP: {vp}</div>
-        <button onClick={()=>setModal(true)}>Show Modal</button>
       </div>
-      <Modal handleClose={()=>setModal(false)} show={showModal}>
-        <City
-          city={CITIES[1]}
-          index={1}
-          advanceTurnState={advanceTurnState()}
-          buildingAdded={buildingAdded}
-        />
+      <Modal show={showModal()}>
+        {advanceTurnState()?.state?.matches('ChoosingGain') &&
+          <div>
+            <h2>Choose:</h2>
+            {advanceTurnState().state.context.gains.map(gain => {
+                return <img src={IMAGES[gain['type']]} onClick={()=> chooseGain(gain)}/>
+              })
+            }
+          </div>
+        }
       </Modal>
     </div>
   )

@@ -6,6 +6,7 @@ import workerImage from "../img/worker.png";
 import wildImage from "../img/wild.png";
 import tapestryImage from "../img/tapestry.png";
 import territoryImage from "../img/territory.png";
+import exploreImage from "../img/explore.png";
 import points4Image from "../img/points4.png";
 import points7Image from "../img/points7.png";
 import points10Image from "../img/points10.png";
@@ -140,6 +141,7 @@ export const IMAGES = {
   'wild': wildImage,
   'tapestry.png': tapestryImage,
   'territory.png': territoryImage,
+  'explore': exploreImage,
   'points4.png': points4Image,
   'points7.png': points7Image,
   'points10.png': points10Image,
