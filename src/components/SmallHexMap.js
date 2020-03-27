@@ -1,9 +1,10 @@
-import React from 'react'
+import React, {useContext, useState} from 'react'
 import Hex from './Hex'
 import {defineGrid, extendHex} from "honeycomb-grid";
 import {HEX_MAP_SMALL} from "../data/hex_map_small";
 import {IMAGES} from "../data/images";
 import {getSidesForTileID} from '../data/tiles'
+import TapestryContext from "./TapestryContext";
 
 export const HEX_GLOBAL_OFFSET_X = -20
 export const HEX_GLOBAL_OFFSET_Y = 6
@@ -36,182 +37,172 @@ export const determineVPFromPlacement = (tiles, currentCoords, addingTile, addin
   return vp
 }
 
-class SmallHexMap extends React.Component {
-  constructor(props) {
-    super(props);
-    const Hex = extendHex({
-      size: 24,
-      orientation: 'flat',
-      rotation: 0
-    })
-    const Grid = defineGrid(Hex)
-    const displayedTiles = Grid.hexagon({
-      radius: 3,
-      center: [3, 3]
-    })
-    let unwantedTiles = [[0,2],[3,6],[6,2]]
-    unwantedTiles.map(element => displayedTiles.splice(displayedTiles.indexOf(element), 1))
+const SmallHexMap = () => {
+  const {gameStateService} = useContext(TapestryContext);
+  const advanceTurnState = gameStateService.children.get('advanceTurn')
 
-    HEX_MAP_SMALL.visible.forEach((tile) => {
-      let hex = displayedTiles.get(tile)
-      if(tile.x === hex.x && tile.y === hex.y) {
-        let start = undefined
-        if (tile.start) { start = tile.start }
-        let sides = []
-        tile.sides.forEach((side) => {
-          sides.push(side)
-        })
-        let image = `sm_${tile.x}_${tile.y}`
-        hex.set({x: hex.x, y: hex.y, start: start, sides: sides, image: image, rotation: 0})
-      }
-    })
+  const hexFactory = extendHex({
+    size: 24,
+    orientation: 'flat',
+    rotation: 0
+  })
+  const hexGrid = defineGrid(hexFactory)
+  const startingTiles = hexGrid.hexagon({
+    radius: 3,
+    center: [3, 3]
+  })
+  let unwantedTiles = [[0,2],[3,6],[6,2]]
+  unwantedTiles.map(element => startingTiles.splice(startingTiles.indexOf(element), 1))
 
-    this.state = {
-      show: 'main',
-      current: [-1,-1],
-      mouse: [0,0],
-      Grid: Grid,
-      displayedTiles: displayedTiles,
-      size: 300,     // 500 for zoom
-      zoomOffset: 1, // .6 for size 500
-      addingTileRotation: 0,
-      gainVP: props.gainVP,
+  HEX_MAP_SMALL.visible.forEach((tile) => {
+    let hex = startingTiles.get(tile)
+    if(tile.x === hex.x && tile.y === hex.y) {
+      let start = undefined
+      if (tile.start) { start = tile.start }
+      let sides = []
+      tile.sides.forEach((side) => {
+        sides.push(side)
+      })
+      let image = `sm_${tile.x}_${tile.y}`
+      hex.set({x: hex.x, y: hex.y, start: start, sides: sides, image: image, rotation: 0})
     }
+  })
 
-    this.updateMap = this.updateMap.bind(this)
-    this.addingTile = this.addingTile.bind(this)
-    this.setCurrentTile = this.setCurrentTile.bind(this)
-    this.placeTile = this.placeTile.bind(this)
-    this.rotatePlaceTile = this.rotatePlaceTile.bind(this)
-    this.currentTileIsOnTheBoard = this.currentTileIsOnTheBoard.bind(this)
-    this.tileIsCurrentTile = this.tileIsCurrentTile.bind(this)
-    this.handleZoom = this.handleZoom.bind(this)
+  const [mapInfo, showMapInfo] = useState('main')
+  const [currentTile, setCurrentTile] = useState([-1,-1])
+  const [mouse, setMouse] = useState([0,0])
+  const [displayedTiles, setDisplayedTiles] = useState(startingTiles)
+  const [mapSize, setMapSize] = useState(300)  // 500 for zoom
+  const [mapZoomOffset, setMapZoomOffset] = useState(1) // .6 for size 500
+  const [addingTileRotation, setAddingTileRotation] = useState(0)
+
+  const exploring = advanceTurnState?.state?.children?.explore?.state?.matches('Exploring')
+  const addingTile = exploring ? advanceTurnState.state?.children?.explore?.state?.context.tile : 0
+
+  const currentlyAddingTile = () => {
+    return addingTile > 0
   }
 
-  updateMap(event) {
-    const {value} = event.target
-    this.setState({show: value})
+  const gainVP = (value) => {
+    gameStateService.send({type: 'gainVP', value: value})
   }
 
-  addingTile() {
-    return this.props.addingTile > 0
+  const explored = () => {
+    gameStateService.send({type: 'explored'})
   }
 
-  setCurrentTile(event) {
-    let x = (event.nativeEvent.offsetX * this.state.zoomOffset) + HEX_GLOBAL_OFFSET_X
-    let y = (event.nativeEvent.offsetY * this.state.zoomOffset) + HEX_GLOBAL_OFFSET_Y
-    this.setState({mouse: [x,y]})
+  const calculateCurrentTile = (event) => {
+    let x = (event.nativeEvent.offsetX * mapZoomOffset) + HEX_GLOBAL_OFFSET_X
+    let y = (event.nativeEvent.offsetY * mapZoomOffset) + HEX_GLOBAL_OFFSET_Y
+    setMouse([x,y])
 
-    let hex = this.state.Grid.pointToHex([x, y])
+    let hex = hexGrid.pointToHex([x, y])
     let coordinates = hex.coordinates()
-    if(this.state.displayedTiles.get(hex.coordinates()) !== undefined) {
-      this.setState({current: [coordinates.x, coordinates.y]})
+    if(displayedTiles.get(hex.coordinates()) !== undefined) {
+      setCurrentTile([coordinates.x, coordinates.y])
     } else {
-      this.setState({current: [-1, -1]})
+      setCurrentTile([-1, -1])
     }
   }
 
-  currentTileIsOnTheBoard() {
-    return this.state.current[0] !== -1 && this.state.current[1] !== -1
+  const currentTileIsOnTheBoard = () => {
+    return currentTile[0] !== -1 && currentTile[1] !== -1
   }
 
-  tileIsCurrentTile(hex) {
-    return this.state.current[0] === hex.x && this.state.current[1] === hex.y
+  const tileIsCurrentTile = (hex) => {
+    return currentTile[0] === hex.x && currentTile[1] === hex.y
   }
 
-  placeTile(event) {
-    const {current, displayedTiles, addingTileRotation} = this.state
-    const {addingTile} = this.props
-    let hex = displayedTiles.get(current)
+  const placeTile = (event) => {
+    let hex = displayedTiles.get(currentTile)
 
-    if (this.addingTile() && !hex.image && this.currentTileIsOnTheBoard()) {
+    if (currentlyAddingTile() && !hex.image && currentTileIsOnTheBoard()) {
       const sides = rotateSides(getSidesForTileID(addingTile), addingTileRotation)
       hex.set({x: hex.x, y: hex.y, start: hex.start, sides: sides, image: `tile_${addingTile}`, rotation: addingTileRotation})
-      this.setState(prevState => { return { addingTileRotation: 0 }});
-      this.state.gainVP(determineVPFromPlacement(displayedTiles, current, addingTile, addingTileRotation))
-      this.props.explored()
+      setAddingTileRotation(0)
+      gainVP(determineVPFromPlacement(displayedTiles, currentTile, addingTile, addingTileRotation))
+      explored()
     }
   }
 
-  rotatePlaceTile(event) {
+  const rotatePlaceTile = (event) => {
     event.preventDefault()
-    if (this.addingTile() && this.currentTileIsOnTheBoard()) {
-      const newRotation = this.state.addingTileRotation === 5 ? 0 : this.state.addingTileRotation + 1
-      this.setState({ addingTileRotation: newRotation });
+    if (currentlyAddingTile() && currentTileIsOnTheBoard()) {
+      const newRotation = addingTileRotation === 5 ? 0 : addingTileRotation + 1
+      setAddingTileRotation(newRotation)
     }
   }
 
-  handleZoom() {
-    if (this.state.size === 300) {
-      this.setState({size: 500, zoomOffset: 0.6})
+  const handleZoom = () => {
+    if (mapSize === 300) {
+     setMapSize(500)
+     setMapZoomOffset(0.6)
     } else {
-      this.setState({size: 300, zoomOffset: 1})
+      setMapSize(300)
+      setMapZoomOffset(1)
     }
   }
 
-  render() {
-    const {addingTileRotation, current, displayedTiles} = this.state
     // const currentNeighbors = this.currentTileIsOnTheBoard() ? displayedTiles.neighborsOf(displayedTiles.get(current)) : []
 
-    const hexes =  this.state.displayedTiles.map(hex => {
-      const position = hex.toPoint()
-      let start = hex.start ? hex.start : null
-      let sides = hex.sides ? hex.sides : [[],[],[],[],[],[]]
-      let rotation = (!hex.image && this.addingTile() && this.tileIsCurrentTile(hex)) ? addingTileRotation : hex.rotation
-      let image = hex.image ? hex.image : (this.addingTile() && this.tileIsCurrentTile(hex) ? `tile_${this.props.addingTile}` : '')
-      const vp = (!hex.image && this.addingTile() && this.tileIsCurrentTile(hex)) ? determineVPFromPlacement(displayedTiles, current, this.props.addingTile, addingTileRotation) : ''
-      return (
-        <Hex
-          key={`hex_${hex.x}_${hex.y}`}
-          corners={hex.corners().map(({x, y}) => `${x},${y}`)}
-          positionX={position.x}
-          positionY={position.y}
-          // className={currentNeighbors.some(neigh => neigh?.x === hex.x && neigh?.y === hex.y) ? 'highlight' : ''}
-          // className={this.state.current[0] === hex.x && this.state.current[1] === hex.y ? 'highlight' : ''}
-          x={hex.x}
-          y={hex.y}
-          q={hex.q}
-          r={hex.r}
-          s={hex.s}
-          sides={sides}
-          start={start}
-          show={this.state.show}
-          image={image}
-          rotation={rotation}
-          vp={vp}
-        />
-      )
-    })
-
-    const debugMenu = (
-      <div>
-        <select onChange={this.updateMap}>
-          <option value={'main'}>Main Map</option>
-          <option value={'axial'}>Axial Coords</option>
-          <option value={'cube'}>Cube Coords</option>
-          <option value={'land'}>Land Values</option>
-          <option value={'start'}>Start Tiles</option>
-        </select>
-      </div>
+  const hexes = displayedTiles.map(hex => {
+    const position = hex.toPoint()
+    let start = hex.start ? hex.start : null
+    let sides = hex.sides ? hex.sides : [[],[],[],[],[],[]]
+    let rotation = (!hex.image && currentlyAddingTile() && tileIsCurrentTile(hex)) ? addingTileRotation : hex.rotation
+    let image = hex.image ? hex.image : (currentlyAddingTile() && tileIsCurrentTile(hex) ? `tile_${addingTile}` : '')
+    const vp = (!hex.image && currentlyAddingTile() && tileIsCurrentTile(hex)) ? determineVPFromPlacement(displayedTiles, currentTile, addingTile, addingTileRotation) : ''
+    return (
+      <Hex
+        key={`hex_${hex.x}_${hex.y}`}
+        corners={hex.corners().map(({x, y}) => `${x},${y}`)}
+        positionX={position.x}
+        positionY={position.y}
+        // className={currentNeighbors.some(neigh => neigh?.x === hex.x && neigh?.y === hex.y) ? 'highlight' : ''}
+        // className={this.state.current[0] === hex.x && this.state.current[1] === hex.y ? 'highlight' : ''}
+        x={hex.x}
+        y={hex.y}
+        q={hex.q}
+        r={hex.r}
+        s={hex.s}
+        sides={sides}
+        start={start}
+        show={mapInfo}
+        image={image}
+        rotation={rotation}
+        vp={vp}
+      />
     )
+  })
 
-    const zoomButton = <button onClick={this.handleZoom}>{this.state.size === 300 ? 'Zoom in' : 'Zoom out'}</button>
+  const debugMenu = (
+    <div>
+      <select onChange={(e) => showMapInfo(e.target.value)}>
+        <option value={'main'}>Main Map</option>
+        <option value={'axial'}>Axial Coords</option>
+        <option value={'cube'}>Cube Coords</option>
+        <option value={'land'}>Land Values</option>
+        <option value={'start'}>Start Tiles</option>
+      </select>
+    </div>
+  )
 
-    return(
-      <div className='map-wrapper'>
-        <div id='map' className='map'>
-          <img src={IMAGES['small_map_back']} width={this.state.size} alt='Small Map' />
-          <svg onClick={this.placeTile} onContextMenu={this.rotatePlaceTile} onMouseMove={this.setCurrentTile} viewBox="0 0 300 300" width={this.state.size}>
-            {hexes}
-            <text transform={'translate(0 290)'}>{`Mouse: ${this.state.mouse}`}</text>
-            <text transform={'translate(250 290)'}>{`Hex: ${this.state.current}`}</text>
-          </svg>
-          {debugMenu}
-          {zoomButton}
-        </div>
+  const zoomButton = <button onClick={handleZoom}>{mapSize === 300 ? 'Zoom in' : 'Zoom out'}</button>
+
+  return(
+    <div className='map-wrapper'>
+      <div id='map' className='map'>
+        <img src={IMAGES['small_map_back']} width={mapSize} alt='Small Map' />
+        <svg onClick={placeTile} onContextMenu={rotatePlaceTile} onMouseMove={calculateCurrentTile} viewBox="0 0 300 300" width={mapSize}>
+          {hexes}
+          <text transform={'translate(0 290)'}>{`Mouse: ${mouse}`}</text>
+          <text transform={'translate(250 290)'}>{`Hex: ${currentTile}`}</text>
+        </svg>
+        {debugMenu}
+        {zoomButton}
       </div>
-    )
-  }
+    </div>
+  )
 }
 
 export default SmallHexMap

@@ -9,29 +9,13 @@ import TerritoryTiles from "./components/TerritoryTiles";
 import TapestryContext from "./components/TapestryContext";
 
 const Tapestry = () => {
-  const {currentState, gameStateService} = useContext(TapestryContext);
-
-  const advanceTurnState = () => {
-    return gameStateService.children.get('advanceTurn')
-  }
-
-  const gainVP = (value) => {
-    gameStateService.send({type: 'gainVP', value: value})
-  }
-
-  const explored = () => {
-    gameStateService.send({type: 'explored'})
-  }
+  const {currentState} = useContext(TapestryContext);
 
   const {vp} = currentState.context
 
   return (
     <div>
-      <SmallHexMap
-        gainVP={gainVP}
-        addingTile={advanceTurnState()?.state?.children?.explore?.state?.matches('Exploring') ? advanceTurnState().state?.children?.explore?.state?.context.tile : 0}
-        explored={explored}
-      />
+      <SmallHexMap />
       <TrackStack />
       <TerritoryTiles />
       <div>

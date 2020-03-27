@@ -165,7 +165,6 @@ export const tapestryGameStateMachine = Machine(
       updateTerritories: assign((context, event) => {
         const newTerritory = [...context.territory]
         const index = context.territory.indexOf(parseInt(event.tile))
-          console.log(index)
         newTerritory.splice(index, 1)
         return {
           territory: newTerritory,
