@@ -20,10 +20,6 @@ const Tapestry = () => {
     return advanceTurnState()?.state?.matches('ChoosingGain') // or other things..
   }
 
-  const buildingAdded = (freeResource, completedLines) => {
-    gameStateService.send({type: 'placedBuilding', freeResource: freeResource, completedLines: completedLines})
-  }
-
   const gainVP = (value) => {
     gameStateService.send({type: 'gainVP', value: value})
   }
@@ -52,8 +48,6 @@ const Tapestry = () => {
         <City
           city={CITIES[1]}
           index={1}
-          advanceTurnState={advanceTurnState()}
-          buildingAdded={buildingAdded}
         />
         <div>VP: {vp}</div>
       </div>
