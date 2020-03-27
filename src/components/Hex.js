@@ -2,26 +2,10 @@ import React from 'react'
 import {IMAGES} from '../data/images'
 import {HEX_GLOBAL_OFFSET_X, HEX_GLOBAL_OFFSET_Y} from "./SmallHexMap";
 
-class Hex extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      q: props.q,
-      r: props.r,
-      s: props.s,
-      x: props.x,
-      y: props.y,
-      start: props.start,
-      positionX: props.positionX,
-      positionY: props.positionY,
-      corners: props.corners,
-      handleMouseMove: props.handleMouseMove,
-    }
-  }
+const Hex = (props) => {
+  const {x, y, q, r, s, start, show, sides, vp, positionX, positionY, corners, image, className, rotation} = props
 
-  debugText(posX, posY) {
-    const {x, y, q, r, s, start} = this.state
-    const {show, sides, vp} = this.props
+  const debugText = (posX, posY) => {
     if(show === 'axial') {
       return <text x={posX} y={posY} transform={`translate(40 19)`}>{`${x}, ${y}`}</text>
     }else if(show === 'cube') {
@@ -45,34 +29,30 @@ class Hex extends React.Component {
           <text x={posX} y={posY} transform={`translate(28 5)`}>{sides[5][1]}</text>
         </g>
       )
-    }else {
+    } else {
       return <text x={posX} y={posY} transform={`translate(40 19)`}>{vp}</text>
     }
   }
 
-  render() {
-    const {positionX, positionY, corners} = this.state
-    const {image, className, rotation} = this.props
-    const imageTag = image !== ''
-      ? <image
-          href={IMAGES[image]}
-          height='50' width='50'
-          transform={`translate(${positionX - HEX_GLOBAL_OFFSET_X} ${positionY- HEX_GLOBAL_OFFSET_Y - 5}) rotate(${60 * rotation}, 25, 25)`}
-        />
-      : null
+  const imageTag = image !== ''
+    ? <image
+        href={IMAGES[image]}
+        height='50' width='50'
+        transform={`translate(${positionX - HEX_GLOBAL_OFFSET_X} ${positionY- HEX_GLOBAL_OFFSET_Y - 5}) rotate(${60 * rotation}, 25, 25)`}
+      />
+    : null
 
-    return (
-      <g >
-        {imageTag}
-        <polygon
-          points={corners}
-          transform={`translate(${positionX - HEX_GLOBAL_OFFSET_X} ${positionY - HEX_GLOBAL_OFFSET_Y})`}
-          className={className}
-        />
-        {this.debugText(positionX,positionY)}
-      </g>
-    )
-  }
+  return (
+    <g >
+      {imageTag}
+      <polygon
+        points={corners}
+        transform={`translate(${positionX - HEX_GLOBAL_OFFSET_X} ${positionY - HEX_GLOBAL_OFFSET_Y})`}
+        className={className}
+      />
+      {debugText(positionX,positionY)}
+    </g>
+  )
 }
 
 export default Hex
