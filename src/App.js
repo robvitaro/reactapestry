@@ -1,10 +1,13 @@
 import React  from 'react';
 import './App.css';
+import TapestryContextProvider from "./components/TapestryContextProvider";
 import Tapestry from "./Tapestry";
 
 function App() {
   return (
-    <Tapestry />
+    <TapestryContextProvider>
+      <Tapestry />
+    </TapestryContextProvider>
   );
 }
 

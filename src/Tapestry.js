@@ -1,20 +1,18 @@
-import React from 'react';
-import { useMachine } from '@xstate/react';
+import React, {useContext} from 'react';
 import City from "./components/City";
 import IncomeMat from "./components/IncomeMat";
 import Modal from "./components/Modal";
 import SmallHexMap from "./components/SmallHexMap";
-import { tapestryGameStateMachine } from "./state_machines/TapestryGameStateMachine";
 import { CITIES } from './data/cities';
 import { IMAGES } from './data/images';
 import TrackStack from "./components/TrackStack";
 import ResourceTrack from "./components/ResourceTrack";
 import ResourceTrackMessage from "./components/ResourceTrackMessage";
 import TerritoryTiles from "./components/TerritoryTiles";
+import TapestryContext from "./components/TapestryContext";
 
 const Tapestry = () => {
-  const machine = useMachine(tapestryGameStateMachine)
-  const [currentState, sendEvent, gameStateService] = machine;
+  const {currentState, gameStateService} = useContext(TapestryContext);
 
   const handleIncomeTurn = () => {
     if(canTakeIncomeTurn) gameStateService.send('IncomeTurn')
@@ -121,7 +119,7 @@ const Tapestry = () => {
               }}
               advanceTurnState={advanceTurnState()}
               resourceChosen={resourceChosen}
-              message={<ResourceTrackMessage advanceTurnState={advanceTurnState()}/>}
+              message={<ResourceTrackMessage />}
             />
           }
         />

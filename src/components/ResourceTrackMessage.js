@@ -1,5 +1,6 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {IMAGES} from "../data/images";
+import TapestryContext from "./TapestryContext";
 
 export const costImageSources = (advanceTurnState) => {
   const cost = advanceTurnState.state.context.advancementCost
@@ -11,7 +12,8 @@ export const costImageSources = (advanceTurnState) => {
 }
 
 const ResourceTrackMessage = (props) => {
-  const {advanceTurnState} = props
+  const {gameStateService} = useContext(TapestryContext);
+  const advanceTurnState = gameStateService.children.get('advanceTurn')
   const payingCost = advanceTurnState?.state.matches('PayingAdvancementCost')
   const selectingFreeResource = advanceTurnState?.state?.children?.placeBuilding?.state?.matches('SelectFreeResource')
 
