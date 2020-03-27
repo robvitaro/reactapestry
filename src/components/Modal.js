@@ -21,7 +21,7 @@ const Modal = props => {
         <div>
           <h2>Choose:</h2>
           {advanceTurnState.state.context.gains.map(gain => {
-            return <img src={IMAGES[gain['type']]} onClick={()=> chooseGain(gain)}/>
+            return <img key={gain.type} src={IMAGES[gain['type']]} onClick={()=> chooseGain(gain)} alt={gain['type']}/>
           })
           }
         </div>

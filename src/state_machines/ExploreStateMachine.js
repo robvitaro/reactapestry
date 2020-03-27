@@ -1,4 +1,4 @@
-import {Machine, assign, sendParent} from "xstate";
+import {Machine, assign} from "xstate";
 
 export const exploreStateMachine = Machine({
     id: 'exploreMachine',

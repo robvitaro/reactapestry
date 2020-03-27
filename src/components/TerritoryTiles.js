@@ -17,11 +17,16 @@ const TerritoryTiles = () => {
   return(
     <div className='territory-tiles'>
       {territories.map(territory =>
-        <img className={choosing ? 'choosing' : ''} src={IMAGES[`tile_${territory}`]} onClick={()=>chooseTile(territory)}/>
+        <img key={`tile_${territory}`}
+             className={choosing ? 'choosing' : ''}
+             src={IMAGES[`tile_${territory}`]}
+             alt={`tile_${territory}`}
+             onClick={()=>chooseTile(territory)}
+        />
       )}
       {choosing &&
         <span className={'smallMessage animated pulse'}>
-          &#8592; Choose a <img className={'icon-in-text'} src={IMAGES['territory.png']} /> to explore with
+          &#8592; Choose a <img className={'icon-in-text'} src={IMAGES['territory.png']} alt='territory' /> to explore with
         </span>
       }
     </div>

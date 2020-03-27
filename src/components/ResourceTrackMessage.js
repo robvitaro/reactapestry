@@ -19,7 +19,7 @@ const ResourceTrackMessage = (props) => {
 
   const message = () => {
     if (payingCost) {
-      const images = costImageSources(advanceTurnState).map(src => <img className="icon-in-text" src={src} alt='cost' />)
+      const images = costImageSources(advanceTurnState).map(src => <img key={src.toString()} className="icon-in-text" src={src} alt='cost' />)
       return <span>To advance, pay: {images}</span>
     }
     if (selectingFreeResource) {

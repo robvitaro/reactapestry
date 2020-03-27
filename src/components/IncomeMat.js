@@ -17,7 +17,10 @@ const IncomeMat = (props) => {
   return (
     <div>
       <div className='incomeMat income-turn'>
-        <img className={canTakeIncomeTurn ? 'income-turn' : 'income-turn-disabled'} src={IMAGES['income-turn']} onClick={()=>handleIncomeTurn()}/>
+        <img className={canTakeIncomeTurn ? 'income-turn' : 'income-turn-disabled'}
+             src={IMAGES['income-turn']}
+             alt='Take Income Turn'
+             onClick={()=>handleIncomeTurn()}/>
       </div>
       <div className='incomeMat'>
         <div className='incomeMat'>

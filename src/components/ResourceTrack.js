@@ -9,7 +9,6 @@ const ResourceTrack = (props) => {
   const {currentState, gameStateService} = useContext(TapestryContext);
   const advanceTurnState = gameStateService.children.get('advanceTurn')
   const {food, workers, coin, culture} = currentState.context
-  const {message} = props
 
   const payingCost = advanceTurnState?.state.matches('PayingAdvancementCost')
   const selectingFreeResource = advanceTurnState?.state?.children?.placeBuilding?.state?.matches('SelectFreeResource')
