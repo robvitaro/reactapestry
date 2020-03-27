@@ -76,7 +76,6 @@ class SmallHexMap extends React.Component {
       zoomOffset: 1, // .6 for size 500
       addingTileRotation: 0,
       gainVP: props.gainVP,
-      exploringWithTile: props.exploringWithTile
     }
 
     this.updateMap = this.updateMap.bind(this)

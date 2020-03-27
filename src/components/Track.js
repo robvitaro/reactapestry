@@ -1,13 +1,20 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import TrackHeaderRow from "./TrackHeaderRow";
 import TrackSpace from "./TrackSpace";
+import TapestryContext from "./TapestryContext";
 
 const Track = (props) => {
-  const {track, index, visible, currentSpace, handleAdvance, advancePermitted} = props
+  const {gameStateService} = useContext(TapestryContext);
+  const {track, index, visible, currentSpace, advancePermitted} = props
   const disabled = !advancePermitted || currentSpace > 11
   const className = visible ? 'track' : 'track hidden'
 
-  const advanceButton =  <button onClick={()=>handleAdvance(index)} disabled={disabled}>ADVANCE</button>
+
+  const handleAdvanceTurn =(index) => {
+    gameStateService.send({type: 'AdvanceTurn', index: index})
+  }
+
+  const advanceButton =  <button onClick={()=>handleAdvanceTurn(index)} disabled={disabled}>ADVANCE</button>
 
   return (
     <div className={className}>

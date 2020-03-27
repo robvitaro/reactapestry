@@ -1,12 +1,16 @@
-import React from "react";
+import React, {useContext} from "react";
 import {IMAGES} from "../data/images";
+import TapestryContext from "./TapestryContext";
 
-const TerritoryTiles = ({advanceTurnState, exploringWithTile, territories}) => {
+const TerritoryTiles = () => {
+  const {currentState, gameStateService} = useContext(TapestryContext);
+  const territories = currentState.context.territory
+  const advanceTurnState = gameStateService.children.get('advanceTurn')
   const choosing = advanceTurnState?.state?.children?.explore?.state?.matches('ChoosingTile')
 
   const chooseTile = (tile) => {
     if (choosing) {
-      exploringWithTile(tile)
+      gameStateService.send({type: 'exploringWithTile', tile: tile})
     }
   }
 

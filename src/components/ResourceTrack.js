@@ -1,14 +1,28 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {IMAGES} from "../data/images";
+import TapestryContext from "./TapestryContext";
+import ResourceTrackMessage from "./ResourceTrackMessage";
 
 const MAX_RESOURCES = 8
 
 const ResourceTrack = (props) => {
-  const {food, workers, coin, culture} = props.resources
-  const {advanceTurnState, resourceChosen, message} = props
+  const {currentState, gameStateService} = useContext(TapestryContext);
+  const advanceTurnState = gameStateService.children.get('advanceTurn')
+  const {food, workers, coin, culture} = currentState.context
+  const {message} = props
 
   const payingCost = advanceTurnState?.state.matches('PayingAdvancementCost')
   const selectingFreeResource = advanceTurnState?.state?.children?.placeBuilding?.state?.matches('SelectFreeResource')
+
+  const resourceChosen = (resource, payOrFree) => {
+    switch (resource) {
+      case 'food': return gameStateService.send({type: payOrFree.concat('Food')})
+      case 'workers': return gameStateService.send({type: payOrFree.concat('Worker')})
+      case 'coin': return gameStateService.send({type: payOrFree.concat('Coin')})
+      case 'culture': return gameStateService.send({type: payOrFree.concat('Culture')})
+      default: return null
+    }
+  }
 
   const chooseResource = (resource) => {
     if (payingCost || selectingFreeResource) {
@@ -53,7 +67,7 @@ const ResourceTrack = (props) => {
 
   return (
     <div className={'resourceTrack'}>
-      {message}
+      <ResourceTrackMessage />
       <table>
         <tbody>
           <tr>
