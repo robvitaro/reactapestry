@@ -4,7 +4,6 @@ import IncomeMat from "./components/IncomeMat";
 import Modal from "./components/Modal";
 import SmallHexMap from "./components/SmallHexMap";
 import { CITIES } from './data/cities';
-import { IMAGES } from './data/images';
 import TrackStack from "./components/TrackStack";
 import TerritoryTiles from "./components/TerritoryTiles";
 import TapestryContext from "./components/TapestryContext";
@@ -16,20 +15,12 @@ const Tapestry = () => {
     return gameStateService.children.get('advanceTurn')
   }
 
-  const showModal = () => {
-    return advanceTurnState()?.state?.matches('ChoosingGain') // or other things..
-  }
-
   const gainVP = (value) => {
     gameStateService.send({type: 'gainVP', value: value})
   }
 
   const explored = () => {
     gameStateService.send({type: 'explored'})
-  }
-
-  const chooseGain = (gain) => {
-    gameStateService.send({type: 'chooseOneGainFromAdvance', gains: [gain]})
   }
 
   const {vp} = currentState.context
@@ -51,17 +42,7 @@ const Tapestry = () => {
         />
         <div>VP: {vp}</div>
       </div>
-      <Modal show={showModal()}>
-        {advanceTurnState()?.state?.matches('ChoosingGain') &&
-          <div>
-            <h2>Choose:</h2>
-            {advanceTurnState().state.context.gains.map(gain => {
-                return <img src={IMAGES[gain['type']]} onClick={()=> chooseGain(gain)}/>
-              })
-            }
-          </div>
-        }
-      </Modal>
+      <Modal />
     </div>
   )
 }
