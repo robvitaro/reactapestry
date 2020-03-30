@@ -42,7 +42,7 @@ const ResourceTrack = (props) => {
 
   for(let i = 0; i <= MAX_RESOURCES; i++) {
     spaces.push(
-      <td key={i}>
+      <td key={i} className={i === 0 ? 'zero' : ''}>
         <div>
           <div className={`resource coin ${choosingResourceClass(coin === i)}`}>
             {coin === i ? <img alt="coin" src={IMAGES['coin']} onClick={()=> chooseResource('coin')}/> : ''}

@@ -415,6 +415,10 @@ svg g text {
     margin-left: 50px;
 }
 
+.resourceTrack .zero {
+    background-color: #ab9b8a;
+}
+
 .resource{
     float: left;
     min-width: 40px;
