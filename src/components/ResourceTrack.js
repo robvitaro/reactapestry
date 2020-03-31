@@ -10,7 +10,7 @@ const ResourceTrack = (props) => {
   const advanceTurnState = gameStateService.children.get('advanceTurn')
   const {food, workers, coin, culture} = currentState.context
 
-  const payingCost = advanceTurnState?.state.matches('PayingAdvancementCost')
+  const payingCost = advanceTurnState?.state.matches('PayingAdvancementCost') || advanceTurnState?.state.matches('PayingBonusCost')
   const selectingFreeResource = advanceTurnState?.state?.children?.placeBuilding?.state?.matches('SelectFreeResource')
 
   const resourceChosen = (resource, payOrFree) => {

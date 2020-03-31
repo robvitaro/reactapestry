@@ -7,10 +7,16 @@ const Modal = props => {
   const advanceTurnState = gameStateService.children.get('advanceTurn')
 
   const chooseGain = (gain) => {
-    gameStateService.send({type: 'chooseOneGainFromAdvance', gains: [gain]})
+    gameStateService.send({type: 'chooseOneGain', gains: [gain]})
   }
 
-  const show = advanceTurnState?.state?.matches('ChoosingGain') // or other things..
+  const bonusAnswer = (answer) => {
+    const type = answer === 'yes' ? 'yesBonus' : 'noBonus'
+    gameStateService.send({type: type})
+  }
+
+  const show = advanceTurnState?.state?.matches('ChoosingGain') ||
+               advanceTurnState?.state?.matches('DecidingBonus') // or other things..
 
   const showHideClassName = show ? "modal display-block" : "modal display-none";
 
@@ -24,6 +30,17 @@ const Modal = props => {
             return <img key={gain.type} src={IMAGES[gain['type']]} onClick={()=> chooseGain(gain)} alt={gain['type']}/>
           })
           }
+        </div>
+        }
+        {advanceTurnState?.state?.matches('DecidingBonus') &&
+        <div>
+          <h2>Would you like to pay for the bonus?</h2>
+          <div>
+            {`${advanceTurnState.state.context.bonus['cost_qty']} x `}<img key={advanceTurnState.state.context.bonus['cost']} src={IMAGES[advanceTurnState.state.context.bonus['cost']]} alt={advanceTurnState.state.context.bonus['cost']}/> for
+            {`${advanceTurnState.state.context.bonus['gain_qty']} x `}<img key={advanceTurnState.state.context.bonus['gain']} src={IMAGES[advanceTurnState.state.context.bonus['gain']]} alt={advanceTurnState.state.context.bonus['gain']}/>
+            <button onClick={()=> bonusAnswer('yes')}>Yes</button>
+            <button onClick={()=> bonusAnswer('no')}>No</button>
+          </div>
         </div>
         }
       </section>

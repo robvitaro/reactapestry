@@ -60,8 +60,8 @@ export const tapestryGameStateMachine = Machine(
         },
         on: {
           advanceToken: { actions: 'advanceToken' },
-          gainsFromAdvance: { actions: ['statGainsFromAdvance','territoryGainsFromAdvance'] },
-          chooseOneGainFromAdvance: { actions: ['statGainsFromAdvance','territoryGainsFromAdvance', forwardTo('advanceTurn')] },
+          gains: { actions: ['statGains','territoryGains'] },
+          chooseOneGain: { actions: ['statGains','territoryGains', forwardTo('advanceTurn')] },
           updateIncomeIndex: { actions: 'updateIncomeIndex'},
           placedBuilding: {actions: ['updateCompletedLines', forwardTo('advanceTurn')] },
           payFood: {actions: ['payFood', send({ type: 'PaidResource', payment: 'food'}, { to: 'advanceTurn' })]},
@@ -74,7 +74,9 @@ export const tapestryGameStateMachine = Machine(
           freeCulture: {actions: ['gainCulture', send({ type: 'selectedFreeResource'}, { to: 'advanceTurn' })]},
           gainVP: {actions: 'gainVP'},
           exploringWithTile: {actions: ['updateTerritories', forwardTo('advanceTurn')]},
-          explored: {actions: [forwardTo('advanceTurn')]}
+          explored: {actions: [forwardTo('advanceTurn')]},
+          yesBonus: {actions: [forwardTo('advanceTurn')]},
+          noBonus: {actions: [forwardTo('advanceTurn')]},
         }
       },
       TakingIncomeTurn: {
@@ -129,7 +131,7 @@ export const tapestryGameStateMachine = Machine(
         newTrackIndex[event.trackIndex] = context.trackIndex[event.trackIndex] + 1;
         return newTrackIndex
       } }),
-      statGainsFromAdvance: assign((context, event) => {
+      statGains: assign((context, event) => {
         const formattedGains = {}
         event.gains.forEach(gain => {
           if(statGains.includes(gain.type)) {
@@ -138,7 +140,7 @@ export const tapestryGameStateMachine = Machine(
         })
         return formattedGains
       }),
-      territoryGainsFromAdvance: assign((context, event) => {
+      territoryGains: assign((context, event) => {
         const newAllTiles = [...context.allExplorationTiles]
         const newTerritory = [...context.territory]
         event.gains.forEach(gain => {

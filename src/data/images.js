@@ -140,6 +140,7 @@ export const IMAGES = {
   'worker.png': workerImage,
   'wild': wildImage,
   'tapestry.png': tapestryImage,
+  'tapestry': tapestryImage,
   'territory.png': territoryImage,
   'explore': exploreImage,
   'points4.png': points4Image,

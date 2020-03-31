@@ -11,6 +11,8 @@ export const advanceTurnStateMachine = Machine({
     spaceIndex: -1,
     gains: [],
     advancementCost: [],
+    bonus: [],
+    bonusCost: [],
     building: '',
     freeResource: false
   },
@@ -38,19 +40,19 @@ export const advanceTurnStateMachine = Machine({
       }
     },
     GainingBenefits: {
-      entry: 'assignGains',
+      entry: 'assignGainsAndBonus',
       on: {
         '': [
           { target: 'ChoosingGain', cond: 'gainLogicIsOR' },
           {
-            actions: sendParent(context => ({ type: 'gainsFromAdvance', gains: context.gains})),
+            actions: sendParent(context => ({ type: 'gains', gains: context.gains})),
             target: 'GainedBenefits'
           }],
       }
     },
     ChoosingGain: {
       on: {
-        chooseOneGainFromAdvance: {
+        chooseOneGain: {
          actions: assign({gains: (context, event) => event.gains }),
          target: 'GainedBenefits'
         }
@@ -61,6 +63,7 @@ export const advanceTurnStateMachine = Machine({
         '': [
           { target: 'PlacingBuilding', cond: 'buildingGainsExist' },
           { target: 'Exploring', cond: 'exploreGainsExist' },
+          { target: 'DecidingBonus', cond: 'bonusExists' },
           { target: 'AdvanceTurnOver' }
         ],
         PlaceBuilding: 'PlacingBuilding',
@@ -92,12 +95,45 @@ export const advanceTurnStateMachine = Machine({
         explored: { actions: ['explored', forwardTo('explore') ]}
       }
     },
+    DecidingBonus :{
+      on: {
+        yesBonus: 'PayingBonusCost',
+        noBonus: 'AdvanceTurnOver'
+      }
+    },
+    PayingBonusCost: {
+      entry: 'determineBonusCost',
+      invoke: {
+        id: 'payBonusCost',
+        src: resourcePayerStateMachine,
+        data: context => ({ cost: context.advancementCost }),
+        onDone: 'GainingBonus'
+      },
+      on: {
+        'PaidResource': { actions: forwardTo('payBonusCost') },
+        'updateCost': { actions: assign({bonusCost: (context, event) => event.cost }) },
+      },
+    },
+    GainingBonus: {
+      entry: 'overwriteGainWithBonus',
+      on: {
+        '': {
+            actions: sendParent(context => ({ type: 'gains', gains: context.gains })),
+            target: 'GainedBenefits'
+          },
+      }
+    },
     AdvanceTurnOver: {type: 'final'}
   }
 },
   {
     actions: {
-      assignGains: assign({gains: context => TRACKS[context.trackIndex].spaces[context.spaceIndex].gain}),
+      assignGainsAndBonus: assign(context => {
+        return {
+          gains: TRACKS[context.trackIndex].spaces[context.spaceIndex].gain,
+          bonus: TRACKS[context.trackIndex].spaces[context.spaceIndex].bonus
+        }
+      }),
       determineAdvancementCost: assign({advancementCost: (context, event) => {
         const trackSpace = context.spaceIndex
         const trackResource = TRACKS[context.trackIndex].resource
@@ -118,6 +154,19 @@ export const advanceTurnStateMachine = Machine({
 
         return advancementCost
       }}),
+      determineBonusCost: assign({bonusCost: (context, event) => {
+        const bonusCost = []
+        for(let i = 0; i < context.bonus['cost_qty']; i ++) {
+          bonusCost.push(context.bonus['cost'])
+        }
+        return bonusCost
+      }}),
+      overwriteGainWithBonus: assign((context, event) => {
+        return {
+          gains: [{type: context.bonus['gain'], qty: context.bonus['gain_qty']}],
+          bonus: undefined
+        }
+      }),
       setBuilding: assign({building: (context, event) => {
         let building = ''
         context.gains.forEach(gain => {
@@ -172,7 +221,8 @@ export const advanceTurnStateMachine = Machine({
         })
         return exploreGainsExist
       },
-      gainLogicIsOR: context => TRACKS[context.trackIndex].spaces[context.spaceIndex].gain_logic === 'OR'
+      gainLogicIsOR: context => TRACKS[context.trackIndex].spaces[context.spaceIndex].gain_logic === 'OR',
+      bonusExists: context => context.bonus !== undefined
     }
   }
 );
